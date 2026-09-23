@@ -47,7 +47,7 @@ for z,chord,twist in stations:
   a=2*math.pi*j/N; u=(1-math.cos(a))/2
   thick=5*.18*(.2969*math.sqrt(u)-.126*u-.3516*u*u+.2843*u**3-.1036*u**4)
   y=(u-.32)*chord; x=thick*chord*(1 if j<N/2 else -1)
-  if z<3:x=.45*math.sin(a);y=.45*math.cos(a)
+  if z<3:x=.45*math.sin(a);y=-.45*math.cos(a)
   t=math.radians(twist);verts.append((x*math.cos(t)-y*math.sin(t),y*math.cos(t)+x*math.sin(t)+.018*z,z))
 for k in range(len(stations)-1):
  for j in range(N):a=k*N+j;b=k*N+(j+1)%N;faces.append((a,b,b+N,a+N))
@@ -75,7 +75,7 @@ for i,pos in enumerate([(-49,-9,0),(49,23,0)],1):
  rotor=empty(pre+'Rotor',t,(-4.5,0,81));meta(rotor,tid,'rotor');rotor['rotation_axis']='X';rotor['speed_units']='radians_per_second'
  hub=sphere(pre+'Hub',rotor,(-.35,0,0),(1.9,1.25,1.25),white);meta(hub,tid,'hub')
  for k in range(3):
-  o=bpy.data.objects.new(pre+f'Blade_{k+1}',mesh);bpy.context.collection.objects.link(o);o.parent=rotor;o.rotation_euler[0]=k*math.tau/3+.15;meta(o,tid,f'blade_{k+1}')
+  o=bpy.data.objects.new(pre+f'Blade_{k+1}',mesh);bpy.context.collection.objects.link(o);o.parent=rotor;o.rotation_euler[0]=k*math.tau/3+.15;meta(o,tid,f'blade_{k+1}'); mod=o.modifiers.new('Smooth airfoil transitions','SUBSURF'); mod.levels=1; mod.render_levels=1
  cyl(pre+'SensorMast',nac,(3.7,0,2.7),.055,1.8,steel)
  sphere(pre+'Anemometer',nac,(3.7,0,3.6),(.22,.22,.15),dark)
 # Studio rig, excluded from exported selection.
@@ -84,7 +84,7 @@ scene.world.color=(.35,.35,.35)
 def aim(o,at):o.rotation_euler=(Vector(at)-o.location).to_track_quat('-Z','Y').to_euler()
 bpy.ops.object.light_add(type='AREA',location=(-70,-80,160));bpy.context.object.data.energy=160000;bpy.context.object.data.shape='DISK';bpy.context.object.data.size=100;aim(bpy.context.object,(0,0,45))
 bpy.ops.object.light_add(type='SUN',location=(0,0,100));bpy.context.object.rotation_euler=(.4,-.5,-.4);bpy.context.object.data.energy=2
-bpy.ops.object.camera_add(location=(-220,-300,170));cam=bpy.context.object;aim(cam,(0,6,57));cam.data.type='ORTHO';cam.data.ortho_scale=210;scene.camera=cam
+bpy.ops.object.camera_add(location=(-220,-300,170));cam=bpy.context.object;aim(cam,(0,6,57));cam.data.type='ORTHO';cam.data.ortho_scale=255;scene.camera=cam
 scene.render.resolution_x=1600;scene.render.resolution_y=1100;scene.render.resolution_percentage=100
 scene.view_settings.view_transform='AgX'
 bpy.ops.wm.save_as_mainfile(filepath=str(P/'models/wind_farm.blend'))
