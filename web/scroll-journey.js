@@ -29,7 +29,6 @@ function update() {
     card.style.setProperty('--popup-x', `${(1 - eased) * (index % 2 ? 110 : -110)}px`);
     card.style.setProperty('--popup-scale', .96 + eased * .04);
   });
-  journey.querySelector('.journey-percent').textContent = `${String(Math.round(progress * 100)).padStart(2, '0')}%`;
   if (Number.isFinite(video.duration)) {
     targetTime = progress * Math.max(0, video.duration - .05);
     seek();
