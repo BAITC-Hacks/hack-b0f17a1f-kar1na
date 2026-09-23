@@ -7,6 +7,8 @@ import pandas as pd
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
+from src.config import ROOT
 from src.config import TURBINES, RESULTS, MODELS, PROCESSED
 from src.agents.forecast_agent import ForecastAgent, AgentBusyError
 from src.data.preprocessing import read_hourly
@@ -122,3 +124,19 @@ def details(turbine_id: str,hours: int=Query(48,ge=24,le=48,json_schema_extra={"
         'weather':result['weather'],'model':{**result['model'],**model_metrics,
             'metrics_period':'January 2026','metrics_model':'frozen evaluation model (trained before December), not deployment refit'},
         'agent':result['agent'],'warnings':result['warnings']}
+
+
+@app.get('/api/history/{turbine_id}')
+def history(turbine_id: str):
+    """Daily SCADA means; hide days with less than 80% hourly coverage."""
+    known(turbine_id)
+    frame = read_hourly(turbine_id)[['power', 'wind_speed', 'temperature']]
+    daily = frame.resample('D').mean().where(frame.resample('D').count() >= 20)
+    return clean_json({'turbine_id': turbine_id, 'source': 'SCADA',
+                       'aggregation': 'daily_mean', 'timezone': 'UTC',
+                       'points': daily.reset_index().to_dict('records')})
+
+# Serve the built website and the original GLB from the same origin as the API.
+app.mount('/models', StaticFiles(directory=ROOT / '3d' / 'models'), name='models')
+if (ROOT / 'web' / 'dist').exists():
+    app.mount('/', StaticFiles(directory=ROOT / 'web' / 'dist', html=True), name='website')
