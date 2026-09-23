@@ -83,7 +83,7 @@
 
 /* Fade only the landscape, independently of the model and its controls. */
 #application #twin-viewport{background:none}
-#application #twin-viewport::before{content:'';position:absolute;inset:0;background:#0734ee url('/assets/dashboard-blueprint.png') center/cover;opacity:1;pointer-events:none}
+#application #twin-viewport::before{content:'';position:absolute;inset:0;background:url('/assets/dashboard-landscape.png') center/cover;opacity:.85;pointer-events:none}
 
 /* Soft, spacious analytics cards in WindAI's blue palette. */
 #application .lower-dashboard{margin:20px 2.5% 32px;padding:24px;border-radius:26px;background:radial-gradient(ellipse at 30% 5%,#dce9ff90,transparent 60%),linear-gradient(140deg,#eff5ff90,#f8faff);}
@@ -158,28 +158,27 @@
 @media(max-width:700px){.monitor-panel{align-items:flex-start;flex-direction:column}.copilot-panel .panel-top{align-items:flex-start;gap:12px;flex-direction:column}.copilot-actions .button{width:100%}}
 
 /* Editorial footer: white navigation, cobalt technical illustration, navy baseline. */
-#overview .overview-footer{display:block;padding:0;min-height:0;background:#fff;color:#082065;border-top:1px solid #7299ff}
-#overview .overview-footer .footer-links{display:grid;grid-template-columns:1fr 1fr .65fr;gap:8%;padding:42px 8.3%;margin:0;border:0;align-items:start}
-#overview .footer-link-group{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
-#overview .footer-link-group h2{font:500 12px 'DM Sans',Arial,sans-serif;letter-spacing:.24em;color:#2e4b92;margin:0 0 10px}
-#overview .overview-footer .footer-links a,#overview .footer-link-group>span{font-size:18px;line-height:1.3;letter-spacing:-.02em;text-transform:none;white-space:normal}
-#overview .footer-art{position:relative;isolation:isolate;overflow:hidden;height:14.3vw;min-height:205px;background:#073cf3;color:#fff}
-#overview .footer-blueprint{position:absolute;inset:0;width:100%;height:100%;z-index:-1}
-#overview .footer-art-label{position:absolute;font-size:clamp(7px,.59vw,12px);font-weight:500;line-height:1.5;letter-spacing:.26em}
-#overview .footer-label-clean{left:1.9%;top:9%}#overview .footer-label-coordinates{left:31.5%;top:24%}#overview .footer-label-forecast{left:46.5%;top:14%}#overview .footer-label-wind{right:2.4%;top:9%}#overview .footer-label-power{left:82%;top:3%}#overview .footer-label-point{left:80%;top:25%}
-#overview .footer-statement{position:absolute;bottom:-.065em;left:0;width:100%;display:flex;align-items:center;justify-content:space-between;gap:1vw;font-family:'DM Sans',Arial,sans-serif;font-size:9.65vw;font-weight:800;line-height:.9;letter-spacing:-.065em;white-space:nowrap}
-#overview .footer-statement i{display:block;width:1px;height:.65em;background:white;transform:rotate(21deg);flex-shrink:0;margin:0 1.4vw}
-#overview .footer-bottom{display:flex;align-items:center;justify-content:space-between;gap:24px;background:#072963;color:white;padding:23px 1.9%;font-size:12px;letter-spacing:.2em}
-#overview .footer-bottom a{display:inline-flex;align-items:center;gap:12px}#overview .footer-bottom a:hover{text-decoration:underline;text-underline-offset:5px}
-#overview .footer-bottom a>span:last-child{font-size:21px;line-height:1}
-@media(max-width:720px){#overview .overview-footer .footer-links{grid-template-columns:1fr 1fr;gap:30px 20px;padding:32px 6%}#overview .overview-footer .footer-links a,#overview .footer-link-group>span{font-size:15px}#overview .footer-link-group h2{font-size:10px;margin-bottom:6px}#overview .footer-art{height:190px;min-height:0}#overview .footer-art-label{font-size:7px;letter-spacing:.16em}#overview .footer-label-clean{left:6%;top:13%}#overview .footer-label-forecast{left:45%;top:13%}#overview .footer-label-wind{right:6%;top:13%}#overview .footer-label-coordinates{left:6%;top:48%}#overview .footer-label-power,#overview .footer-label-point{display:none}#overview .footer-bottom{padding:20px 6%;font-size:9px;letter-spacing:.12em;gap:16px}#overview .footer-bottom a{gap:6px;white-space:nowrap}}
+#application .overview-footer{display:block;padding:0;min-height:0;background:#fff;color:#082065;border-top:1px solid #7299ff}
+#application .overview-footer .footer-links{display:grid;grid-template-columns:1fr 1fr .65fr;gap:8%;padding:42px 8.3%;margin:0;border:0;align-items:start}
+#application .footer-link-group{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+#application .footer-link-group h2{font:500 12px 'DM Sans',Arial,sans-serif;letter-spacing:.24em;color:#2e4b92;margin:0 0 10px}
+#application .overview-footer .footer-links a,#application .footer-link-group>span{font-size:18px;line-height:1.3;letter-spacing:-.02em;text-transform:none;white-space:normal}
+#application .footer-art{position:relative;isolation:isolate;overflow:hidden;height:14.3vw;min-height:205px;background:#073cf3;color:#fff}
+#application .footer-blueprint{position:absolute;inset:0;width:100%;height:100%;z-index:-1}
+#application .footer-art-label{position:absolute;font-size:clamp(7px,.59vw,12px);font-weight:500;line-height:1.5;letter-spacing:.26em}
+#application .footer-label-clean{left:1.9%;top:9%}#application .footer-label-coordinates{left:31.5%;top:24%}#application .footer-label-forecast{left:46.5%;top:14%}#application .footer-label-wind{right:2.4%;top:9%}#application .footer-label-power{left:82%;top:3%}#application .footer-label-point{left:80%;top:25%}
+#application .footer-statement{position:absolute;bottom:-.065em;left:0;width:100%;display:flex;align-items:center;justify-content:space-between;gap:1vw;font-family:'DM Sans',Arial,sans-serif;font-size:9.65vw;font-weight:800;line-height:.9;letter-spacing:-.065em;white-space:nowrap}
+#application .footer-statement i{display:block;width:1px;height:.65em;background:white;transform:rotate(21deg);flex-shrink:0;margin:0 1.4vw}
+#application .footer-bottom{display:flex;align-items:center;justify-content:space-between;gap:24px;background:#072963;color:white;padding:23px 1.9%;font-size:12px;letter-spacing:.2em}
+#application .footer-bottom a{display:inline-flex;align-items:center;gap:12px}#application .footer-bottom a:hover{text-decoration:underline;text-underline-offset:5px}
+#application .footer-bottom a>span:last-child{font-size:21px;line-height:1}
+@media(max-width:720px){#application .overview-footer .footer-links{grid-template-columns:1fr 1fr;gap:30px 20px;padding:32px 6%}#application .overview-footer .footer-links a,#application .footer-link-group>span{font-size:15px}#application .footer-link-group h2{font-size:10px;margin-bottom:6px}#application .footer-art{height:190px;min-height:0}#application .footer-art-label{font-size:7px;letter-spacing:.16em}#application .footer-label-clean{left:6%;top:13%}#application .footer-label-forecast{left:45%;top:13%}#application .footer-label-wind{right:6%;top:13%}#application .footer-label-coordinates{left:6%;top:48%}#application .footer-label-power,#application .footer-label-point{display:none}#application .footer-bottom{padding:20px 6%;font-size:9px;letter-spacing:.12em;gap:16px}#application .footer-bottom a{gap:6px;white-space:nowrap}}
 @media(prefers-reduced-motion:reduce){html:root{scroll-behavior:auto}}
 
-/* Crisp cobalt collage and white drafting model. */
-#application #twin-viewport::after{display:none}
-#application .turbine-panel>.panel-top{color:#fff}
-#application .turbine-panel>.panel-top h2,#application .turbine-panel>.panel-top .online,#application .twin-watermark{color:#fff;text-shadow:0 1px 8px #0028b8}
-#application .twin-watermark{font-weight:600;letter-spacing:.23em}
+/* Light landscape with soft focus behind the interactive model. */
+#application .turbine-panel>.panel-top h2{color:#0c1635}
+#application .turbine-panel>.panel-top .online{color:#008b74}
+#application .twin-watermark{color:#4c6ba9;text-shadow:none}
 
 /* Contextual assistant occupies the full right column beside the digital twin. */
 #application .turbine-assistant{grid-column:3;grid-row:1/3;position:relative;z-index:3;min-width:0;height:660px;display:flex;flex-direction:column;padding:22px;background:linear-gradient(155deg,#fff 0%,#f4f8ff 100%);border:1px solid #c6d6f8;overflow:hidden}
@@ -218,26 +217,38 @@
 @media(max-width:900px){#application .turbine-assistant{grid-column:1/-1;grid-row:2;height:auto;min-height:540px;max-height:720px}.assistant-scroll{min-height:220px}#application .dashboard-grid{grid-template-columns:minmax(160px,.8fr) minmax(280px,1.5fr)}}
 @media(max-width:600px){#application .turbine-assistant{order:1;height:auto;min-height:580px;max-height:720px;width:100%;padding:18px}#application .telemetry-panel{order:2}}
 
-/* The overview collage is a page-level silhouette, continuous behind the header. */
-.overview-art{display:none;pointer-events:none}
-@media(min-width:1101px){
-  #application{position:relative;isolation:isolate;overflow:hidden}
-  #application:has(#overview:not([hidden])) .overview-art{
-    display:block;position:absolute;top:0;z-index:-1;
-    background:#0734ee url('/assets/dashboard-blueprint.png') center/100% 100% no-repeat;
-    clip-path:polygon(82.6% 0,100% 0,86.956% var(--panel-top),86.956% 100%,0 100%,8.7% var(--panel-bottom),0 var(--panel-bottom),0 var(--panel-top),57.4% var(--panel-top));
-
-  }
-  #application:has(#overview:not([hidden])) .app-header,
-  #application:has(#overview:not([hidden])) .data-toolbar{background:transparent;position:relative;z-index:3}
-  #application:has(#overview:not([hidden])) .app-meta{background:#fbfdfff2;padding:8px;border-radius:3px}
-  #application:has(#overview:not([hidden])) .dashboard-grid{grid-template-columns:minmax(190px,1.05fr) minmax(360px,2.9fr) minmax(310px,1.77fr);padding-bottom:72px}
-  #application #twin-viewport::before{display:none}
-  #application .turbine-panel{border:0}
-  #application .turbine-panel .twin-controls{max-width:540px}
-}
-
 #application .turbine-assistant>.assistant-shortcuts{flex-shrink:0;margin:12px 0 0}
 
 .assistant-contextbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
 #application .assistant-contextbar .segmented button{font-size:9px;padding:5px 9px}
+
+/* One continuous dashboard with native section anchors. */
+html{scroll-behavior:smooth}
+#application{overflow:clip}
+#application .app-header{position:sticky!important;top:0;z-index:30!important;background:#f8fbfff2!important;backdrop-filter:blur(16px)}
+#application .view{scroll-margin-top:100px}
+#application .app-nav a{display:block;padding:9px 16px;color:#4d639a;font-size:14px;border-radius:5px;text-decoration:none;position:relative}
+#application .app-nav a.active{color:#063bff}
+#application .app-nav a.active:after{content:'';position:absolute;bottom:0;left:50%;width:5px;height:5px;background:#073bff;border-radius:50%}
+#application .app-nav a:hover{background:#e8efff}
+#application .content-view{border-top:1px solid #cfdbef;padding-top:55px;padding-bottom:55px}
+#application #twin-viewport::after{content:'';display:block;position:absolute;inset:0;z-index:0;backdrop-filter:blur(10px);background:#e9f1ff26;pointer-events:none}
+#application #twin-viewport canvas{position:relative;z-index:1}
+#application #model-status,#application .twin-watermark{z-index:2}
+.agent-capabilities{margin-bottom:28px}.capability-intro h2{font-size:24px;color:#183565}.capability-intro p{color:#62789c;line-height:1.6;max-width:760px}
+.capability-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:22px}
+.capability-grid>button,.capability-grid>a{display:flex;flex-direction:column;gap:12px;text-align:left;border:1px solid #c8d7f1;background:#ffffffdf;color:#17376b;padding:22px;text-decoration:none;font:inherit;cursor:pointer;border-radius:10px;transition:background .2s,transform .2s}
+.capability-grid>button:hover,.capability-grid>a:hover{background:#eaf1ff;transform:translateY(-2px)}
+.capability-grid span{font-size:10px;letter-spacing:.12em;color:#3567ce}.capability-grid strong{font-size:17px}.capability-grid small{font-size:12px;line-height:1.5;color:#677e9f}
+.agent-export{display:flex;align-items:center;flex-wrap:wrap;gap:18px;margin:24px 0;color:#4f6b95;font-size:13px}.agent-export p{flex:1;min-width:220px}.agent-export a{color:#235adb}
+@media(max-width:850px){#application .view{scroll-margin-top:145px}.capability-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#application .app-nav a{padding:9px 12px}}
+@media(max-width:540px){.capability-grid{grid-template-columns:1fr}.capability-grid>button,.capability-grid>a{padding:18px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.capability-grid>button,.capability-grid>a{transition:none}}
+/* Keep the renderer's intrinsic canvas size from growing its flex parent. */
+#application .turbine-panel{height:660px;min-height:0}
+#application #twin-viewport{height:100%;min-height:0;flex:1 1 0;overflow:hidden}
+#application #twin-viewport canvas{position:absolute}
+@media(max-width:540px){#application .turbine-panel{height:540px}}
+
+#application #twin-viewport::before{filter:blur(9px);transform:scale(1.04)}
+

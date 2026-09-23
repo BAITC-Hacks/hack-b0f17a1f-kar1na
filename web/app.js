@@ -7,8 +7,12 @@ const number=(v,d=2)=>Number.isFinite(v)?v.toFixed(d):'—';
 const date=v=>v?new Intl.DateTimeFormat('en-GB',{timeZone:'Etc/GMT-5',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(v))+' · Astana UTC+05':'—';
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 async function api(path,options={}){const r=await fetch(path,options);if(!r.ok){const body=await r.json().catch(()=>({}));throw Error(typeof body.detail==='string'?body.detail:`API error ${r.status}`);}return r.json();}
-function navigate(){const route=location.hash.slice(1),inApp=['overview','analytics','agent'].includes(route);$('#landing').hidden=inApp;$('#application').hidden=!inApp;$$('.view').forEach(v=>v.hidden=v.id!==route);$$('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===route));if(route==='overview'&&state.data){assistant.update(state.data);assistant.activate();}}
-addEventListener('hashchange',navigate);$$('[data-launch]').forEach(b=>b.onclick=()=>location.hash='overview');$('#home-brand').onclick=()=>location.hash='landing';$$('[data-view]').forEach(b=>b.onclick=()=>location.hash=b.dataset.view);navigate();
+const sections=['overview','analytics','agent'];
+function setActiveSection(id){$$('[data-view]').forEach(link=>{const active=link.dataset.view===id;link.classList.toggle('active',active);if(active)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');});}
+function navigate(){const route=location.hash.slice(1),inApp=sections.includes(route);$('#landing').hidden=inApp;$('#application').hidden=!inApp;$$('.view').forEach(v=>v.hidden=false);if(inApp){setActiveSection(route);requestAnimationFrame(()=>document.getElementById(route).scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'}));if(state.data)assistant.activate();}}
+addEventListener('hashchange',navigate);$$('[data-launch]').forEach(b=>b.onclick=()=>location.hash='overview');$('#home-brand').onclick=()=>location.hash='landing';navigate();
+let scrollTick=false;
+addEventListener('scroll',()=>{if(scrollTick||$('#application').hidden)return;scrollTick=true;requestAnimationFrame(()=>{const offset=$('.app-header').getBoundingClientRect().height+80;let active='overview';for(const id of sections)if(document.getElementById(id).getBoundingClientRect().top<=offset)active=id;setActiveSection(active);scrollTick=false;});},{passive:true});
 function chart(values,{low,high,min=0,max=1,timestamps}={}){
  if(!values.length||!values.some(Number.isFinite))return '<p class="error-state">No observations available.</p>';
  const x=i=>40+670*i/Math.max(1,values.length-1),y=v=>12+190*(1-(v-min)/(max-min||1));
@@ -35,7 +39,7 @@ function select(id){if(state.id===id)return;state.id=id;load();}
 $$('[data-turbine]').forEach(b=>b.onclick=()=>select(`turbine_${+b.dataset.turbine+1}`));$$('[data-range]').forEach(b=>b.onclick=()=>{if(state.hours===+b.dataset.range)return;state.hours=+b.dataset.range;load();});$$('[data-history]').forEach(b=>b.onclick=()=>{state.history=b.dataset.history;renderHistory();});$('#timeline-slider').oninput=renderTimeline;$('#forecast-mode').onchange=e=>{state.mode=e.target.value;load();};$('#refresh-data').onclick=()=>load();$('#run-agent').onclick=()=>load(true);$('#view-execution').onclick=()=>location.hash='agent';
 createTwin(select,selection=>assistant.inspect(selection)).then(result=>{twin=result;twin?.select(state.id);renderTimeline();});load();
 
-$('#export-forecast').onclick=()=>{location.href=`/api/export/${state.id}?hours=${state.hours}&mode=${state.mode}`;};
+$('#agent-export').onclick=$('#export-forecast').onclick=()=>{location.href=`/api/export/${state.id}?hours=${state.hours}&mode=${state.mode}`;};
 async function renderValidation(){
  try{const data=await api('/api/validation/metrics');$('#validation-evidence').innerHTML='<div class="evidence-table-wrap"><table><thead><tr><th>Турбина</th><th>MAE модели</th><th>MAE базового</th><th>Снижение MAE</th><th>Покрытие интервала</th></tr></thead><tbody>'+Object.entries(data.turbines).map(([id,r])=>`<tr><td>${escape(id)}</td><td>${number(r.model.mae,4)}</td><td>${number(r.baseline.mae,4)}</td><td>${number((1-r.model.mae/r.baseline.mae)*100,1)}%</td><td>${number(r.interval_coverage*100,1)}%</td></tr>`).join('')+'</tbody></table></div>';}
  catch(e){$('#validation-evidence').textContent=e.message;}
@@ -44,7 +48,7 @@ async function renderMonitor(){try{const d=await api('/api/agent/status'),m=d.mo
 $('#check-updates').onclick=async()=>{const b=$('#check-updates');b.disabled=true;$('#monitor-status').textContent='Проверяю погоду и входные данные…';try{await api('/api/agent/check-updates',{method:'POST'});await renderMonitor();}catch(e){$('#monitor-status').textContent=e.message;}finally{b.disabled=false;}};
 $('#copilot-form').onsubmit=async e=>{
  e.preventDefault();const button=$('#run-copilot'),token=state.request;
- button.disabled=true;$('#copilot-status').textContent='Агент работает…';$('#copilot-answer').textContent='Проверяю данные, рассчитываю прогноз и оцениваю риски. Обычно это занимает до минуты.';$('#copilot-tools').textContent='';$('#copilot-error').hidden=true;
+ button.disabled=true;$$('[data-agent-task]').forEach(b=>b.disabled=true);$('#copilot-status').textContent='Агент работает…';$('#copilot-answer').textContent='Проверяю данные, рассчитываю прогноз и оцениваю риски. Обычно это занимает до минуты.';$('#copilot-tools').textContent='';$('#copilot-error').hidden=true;
  const body={turbine_id:state.id,hours:state.hours,mode:state.mode,message:$('#copilot-prompt').value};
  try{const d=await api('/api/agent/run',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});if(token!==state.request)return;
   $('#copilot-status').textContent=d.status==='completed'?'Завершено · OpenAI':d.status==='degraded'?'Резервный расчёт':'Ошибка расчёта';
@@ -52,10 +56,10 @@ $('#copilot-form').onsubmit=async e=>{
   if(d.llm_error){$('#copilot-error').hidden=false;$('#copilot-error').textContent=d.llm_error;}
   $('#copilot-tools').innerHTML=d.tools.map(t=>`<article><strong>${escape(t.tool)} · ${escape(t.status)}</strong><time>${escape(date(t.timestamp))}</time><pre>${escape(JSON.stringify(t.result,null,2))}</pre></article>`).join('');
   if(d.forecast&&state.data){state.data={...state.data,...d.forecast};render();}
- }catch(error){if(token===state.request){$('#copilot-status').textContent='Ошибка';$('#copilot-answer').textContent=error.message;}}finally{button.disabled=false;}
+ }catch(error){if(token===state.request){$('#copilot-status').textContent='Ошибка';$('#copilot-answer').textContent=error.message;}}finally{button.disabled=false;$$('[data-agent-task]').forEach(b=>b.disabled=false);}
 };
+$$('[data-agent-task]').forEach(button=>button.onclick=()=>{if($('#run-copilot').disabled)return;$('#copilot-prompt').value=button.dataset.agentTask;$('#copilot-form').requestSubmit();$('#copilot-title').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'center'});});
 renderValidation();renderMonitor();setInterval(()=>{if(!document.hidden)renderMonitor();},30000);
 
 // Stay on Overview when returning to the top of the dashboard.
 document.querySelector('[data-overview-top]').addEventListener('click',event=>{event.preventDefault();window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});});
-import './overview-art.js';

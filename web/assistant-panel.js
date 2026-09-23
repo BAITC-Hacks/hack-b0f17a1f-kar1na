@@ -8,7 +8,7 @@ export function createAssistantPanel(getState,onForecast){
  const local=t=>new Intl.DateTimeFormat('ru-RU',{timeZone:'Etc/GMT-5',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}).format(new Date(t));
  let component='overview',data=null,dataKey='',serial=0,timer=null,busy=false,pending=null,updating=false;
  const cache=new Map();
- async function api(path,body){const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const json=await r.json();if(!r.ok)throw Error(typeof json.detail==='string'?json.detail:'Не удалось выполнить запрос');return json;}
+ async function api(path,body){const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const json=await r.json().catch(()=>({}));if(r.status===405||r.status===404)throw Error('Сервер не поддерживает эту функцию агента. Перезапустите backend с актуальным кодом и обновите страницу.');if(!r.ok)throw Error(typeof json.detail==='string'?json.detail:'Не удалось выполнить запрос');return json;}
  function setBusy(value){busy=value;$('#assistant-send').disabled=value;document.querySelectorAll('[data-assistant-action]').forEach(b=>b.disabled=value);}
  function paintFacts(){
   const s=getState();$('#assistant-turbine').textContent=`Турбина ${s.id.endsWith('1')?'01':'02'}`;
@@ -47,17 +47,17 @@ export function createAssistantPanel(getState,onForecast){
    $('#assistant-state').textContent=r.llm_error?'Данные доступны · ИИ недоступен':`По данным ${task.payload.turbine_id.replace('_',' ')} · ${local(new Date())}`;
    if(r.llm_error){$('#assistant-error').textContent=r.llm_error;$('#assistant-error').hidden=false;}
    if(r.context){const missing=r.context.component_info.missing;$('#assistant-source').innerHTML+=`<p>Нет данных: ${esc(missing.join(', '))}.</p><a href="${esc(r.context.component_role_source)}" target="_blank" rel="noopener noreferrer">Принцип работы · U.S. DOE ↗</a>`;}
-  }catch(error){if(task.token===serial){$('#assistant-answer').textContent='Не удалось получить пояснение. Данные турбины остаются доступны выше.';$('#assistant-error').textContent=error.message;$('#assistant-error').hidden=false;$('#assistant-state').textContent='Повторите запрос';$('#agent-status').textContent='Ошибка';}}
+  }catch(error){if(task.token===serial){$('#assistant-response-label').textContent='Пояснение недоступно';$('#assistant-answer').textContent='Не удалось получить пояснение. Данные турбины остаются доступны выше.';$('#assistant-error').textContent=error.message;$('#assistant-error').hidden=false;$('#assistant-state').textContent='Повторите запрос';$('#agent-status').textContent='Ошибка';}}
   finally{setBusy(false);if(pending)drain();}
  }
  function schedule(){clearTimeout(timer);timer=setTimeout(()=>request(),350);}
  $('#assistant-form').onsubmit=e=>{e.preventDefault();const q=$('#assistant-question').value.trim();if(!q)return;request(q);$('#assistant-question').value='';};
  $('#assistant-question').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();if(!busy)$('#assistant-form').requestSubmit();}};
  document.querySelectorAll('[data-assistant-action]').forEach(b=>b.onclick=()=>{if(b.dataset.assistantAction==='component')request(`Расскажи о выбранном узле «${labels[component]}» и какие данные этой турбины доступны.`);else request(b.dataset.assistantAction==='risks'?'Оцени риски прогноза выбранной турбины и качество данных.':'Построй прогноз выбранной турбины, объясни пик и сравни точность с базовым прогнозом.',true);});
- $('#dashboard-language').addEventListener('change',()=>{if(data&&location.hash==='#overview')schedule();});
+ $('#dashboard-language').addEventListener('change',()=>{if(data&&!document.querySelector('#application').hidden)schedule();});
  return {
   clear(){serial++;pending=null;clearTimeout(timer);component='overview';data=null;dataKey='';paintFacts();$('#assistant-answer').textContent='Загружаю данные выбранной турбины…';$('#assistant-response-label').textContent='Анализ данных';$('#agent-status').textContent='Загрузка';$('#assistant-state').textContent='Ожидание данных';},
-  update(value){const changed=dataKey!==`${value.run_id}:${getState().hours}:${getState().mode}`;data=value;dataKey=`${value.run_id}:${getState().hours}:${getState().mode}`;paintFacts();if(changed&&!updating&&location.hash==='#overview')schedule();},
+  update(value){const changed=dataKey!==`${value.run_id}:${getState().hours}:${getState().mode}`;data=value;dataKey=`${value.run_id}:${getState().hours}:${getState().mode}`;paintFacts();if(changed&&!updating&&!document.querySelector('#application').hidden)schedule();},
   activate(){if(data)schedule();},
   inspect(selection){if(selection.turbine_id!==getState().id)return;const next=labels[selection.component]?selection.component:'overview';if(next===component)return;component=next;serial++;paintFacts();if(data)request();}
  };
