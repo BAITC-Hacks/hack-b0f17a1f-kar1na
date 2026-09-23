@@ -227,3 +227,43 @@ def test_backtest_artifact_no_labels_faked():
     assert (pd.to_datetime(df.weather_availability_bound,utc=True)<=pd.to_datetime(df.forecast_origin,utc=True)).all()
     assert (pd.to_datetime(df.model_trained_until,utc=True)<=pd.to_datetime(df.forecast_origin,utc=True)).all()
     assert (df.groupby(['turbine_id','forecast_origin']).size()==48).all()
+
+
+def test_future_interval_calibration_rejected(history,origin,weather):
+    bundle=load_model('turbine_1').copy()
+    bundle['calibration_end_exclusive']=(origin+pd.Timedelta(days=1)).isoformat()
+    with pytest.raises(ValueError,match='calibration cutoff'):
+        predict(bundle,history,origin,weather.frame)
+
+
+def test_agent_fallback_is_explicit(origin,tmp_path,monkeypatch):
+    class UnavailableProvider:
+        def get_forecast(self,*args):
+            raise WeatherError('test upstream outage')
+    monkeypatch.setenv('WEATHER_ALLOW_FALLBACK','true')
+    a=ForecastAgent(tmp_path)
+    result=a.run('turbine_1',origin=origin,provider=UnavailableProvider())
+    assert result['weather']['is_fallback'] is True
+    assert result['warnings']
+    assert result['agent']['status']=='COMPLETED'
+
+
+def test_status_visible_while_weather_is_pending(origin,weather,tmp_path):
+    from concurrent.futures import ThreadPoolExecutor
+    entered,release=threading.Event(),threading.Event()
+    class SlowProvider:
+        def get_forecast(self,*args):
+            entered.set()
+            assert release.wait(timeout=5)
+            return weather
+    a=ForecastAgent(tmp_path)
+    with ThreadPoolExecutor(max_workers=1) as pool:
+        future=pool.submit(a.run,'turbine_1',48,'replay',origin,None,SlowProvider())
+        try:
+            assert entered.wait(timeout=5)
+            status=a.status('turbine_1')
+            assert status['status']=='FETCHING_WEATHER'
+            assert status['steps'][0]['timestamp']
+        finally:
+            release.set()
+        assert future.result(timeout=5)['agent']['status']=='COMPLETED'

@@ -1,0 +1,23 @@
+{
+  "verified_at": "2026-09-23T08:34:56.380586+00:00",
+  "python": "3.9.6",
+  "pipeline": "python scripts/run_pipeline.py completed: EDA, training, January validation, February replay, reports, tests",
+  "http_checks": 17,
+  "http_all_200": true,
+  "live_weather_sources": {
+    "turbine_1": "open_meteo_live",
+    "turbine_2": "open_meteo_live"
+  },
+  "raw_sha256_match": true,
+  "limitations": [
+    "No February SCADA labels in either input CSV",
+    "Fixed-lead weather archive does not return exact historical publication times",
+    "Live prediction skill not measured without current actuals"
+  ],
+  "tests": {
+    "command": "python -m pytest -q",
+    "passed": 33,
+    "failed": 0,
+    "duration_seconds": 26.09
+  }
+}

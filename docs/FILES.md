@@ -35,6 +35,7 @@
 - `results/validation_forecasts.png`
 - `results/validation_metrics.json`
 - `results/validation_predictions.csv`
+- `results/verification.json`
 - `scripts/_bootstrap.py`
 - `scripts/analyze_data.py`
 - `scripts/fetch_weather.py`
