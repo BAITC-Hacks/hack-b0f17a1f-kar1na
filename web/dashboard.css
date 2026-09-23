@@ -299,3 +299,33 @@ html{scroll-behavior:smooth}
 #application .turbine-panel>.panel-top .online{flex-shrink:0;padding-top:5px}
 
 @media(max-width:600px){#application .turbine-panel>.panel-top .twin-image-heading{transform:translateX(-20px)}}
+
+/* A subtle central veil softens the scenery beneath the sharp 3D canvas. */
+#application #twin-viewport::after{
+ content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
+ background:rgba(17,24,39,.12);
+ -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+ -webkit-mask-image:radial-gradient(ellipse 45% 42% at 50% 52%,#000 0%,#000 24%,transparent 100%);
+ mask-image:radial-gradient(ellipse 45% 42% at 50% 52%,#000 0%,#000 24%,transparent 100%);
+}
+#application .view-heading h1,
+#application .assistant-heading h2,
+#application .peak-gauge-panel h2,
+#application .weather-detail-panel h3,
+#application .timeline-panel h3,
+#application .capability-intro h2{color:#244be0}
+
+/* Native turbine cursor: its hub is the click point, with no tracking delay. */
+@media (hover:hover) and (pointer:fine){
+ html,body,body *{cursor:url('/assets/turbine-cursor.svg') 16 15,auto!important}
+}
+
+.animated-turbine-cursor{position:fixed;left:0;top:0;width:32px;height:32px;pointer-events:none;z-index:2147483647;visibility:hidden}
+.animated-turbine-cursor svg{display:block;overflow:visible}
+.cursor-rotor{transform-origin:16px 15px;animation:cursor-rotor-spin 1.8s linear infinite}
+@keyframes cursor-rotor-spin{to{transform:rotate(360deg)}}
+@media (hover:hover) and (pointer:fine){
+ html.turbine-cursor-active,html.turbine-cursor-active body,html.turbine-cursor-active body *{cursor:none!important}
+ .turbine-cursor-active .animated-turbine-cursor{visibility:visible}
+}
+@media(prefers-reduced-motion:reduce){.cursor-rotor{animation:none}}
