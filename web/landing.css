@@ -21,3 +21,5 @@
 /* Cobalt diamond seam between the landing hero and the scroll film. */
 #landing .scroll-journey:before{height:64px;top:0;background-color:transparent;background-image:conic-gradient(from 45deg,#123cf0 0deg 90deg,transparent 90deg 180deg,#123cf0 180deg 270deg,transparent 270deg 360deg);background-size:32px 32px;mask-image:linear-gradient(#000 0%,#000 70%,transparent 100%);-webkit-mask-image:linear-gradient(#000 0%,#000 70%,transparent 100%);z-index:3}
 @media(max-width:720px){#landing .scroll-journey:before{height:44px;background-size:24px 24px}}
+#landing .diamond-white-fade{position:absolute;top:0;left:0;right:0;height:190px;z-index:1;pointer-events:none;background:linear-gradient(to bottom,#fff 0%,rgba(255,255,255,.96) 18%,rgba(255,255,255,.68) 42%,rgba(255,255,255,.24) 72%,transparent 100%)}
+@media(max-width:720px){#landing .diamond-white-fade{height:135px}}
