@@ -2,25 +2,38 @@
 import json
 import logging
 import os
+import io
+from contextlib import asynccontextmanager
 from typing import Literal, Optional
 import pandas as pd
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from src.config import ROOT
-from src.config import TURBINES, RESULTS, MODELS, PROCESSED
+from src.config import TURBINES, RESULTS, MODELS, PROCESSED, LOCAL_TZ, DISPLAY_TIMEZONE, TIMEZONE_LABEL
+from src.agents.copilot import Copilot
+from src.agents.monitor import ForecastMonitor
 from src.agents.forecast_agent import ForecastAgent, AgentBusyError
 from src.data.preprocessing import read_hourly
 from src.services.weather_provider import WeatherError, WeatherResult
-from src.api.schemas import ForecastResponse, RecalculateRequest
+from src.api.schemas import ForecastResponse, RecalculateRequest, AgentRequest
 from src.utils import clean_json
 
 logging.basicConfig(level=logging.INFO,format='%(asctime)s %(levelname)s %(name)s %(message)s')
-app=FastAPI(title='AlemWind Forecast API',version='1.0.0',description='Normalized hourly wind power, 24/48h; UTC timestamps.')
+@asynccontextmanager
+async def lifespan(app):
+    monitor.start()
+    yield
+    monitor.stop()
+
+app=FastAPI(title='AlemWind Forecast API',version='2.0.0',lifespan=lifespan,
+            description='Normalized hourly wind power, 24/48h; UTC transport, Astana UTC+05 display.')
 app.add_middleware(CORSMiddleware,allow_origins=os.getenv('CORS_ORIGINS','http://localhost:3000,http://localhost:5173,http://127.0.0.1:5173').split(','),
     allow_credentials=False,allow_methods=['GET','POST','OPTIONS'],allow_headers=['Content-Type'])
 agent=ForecastAgent()
+copilot=Copilot(agent)
+monitor=ForecastMonitor(agent)
 
 @app.exception_handler(WeatherError)
 async def weather_error(request,exc):
@@ -51,7 +64,10 @@ def artifact(name):
 def health():
     artifacts={t:{'model':(MODELS/f'{t}.joblib').exists(),'processed_data':(PROCESSED/f'{t}_hourly.csv').exists()} for t in TURBINES}
     return {'status':'ok','ready':all(all(v.values()) for v in artifacts.values()),'artifacts':artifacts,
-            'default_mode':os.getenv('FORECAST_MODE','replay'),'timezone':'UTC','power_unit':'normalized'}
+            'default_mode':os.getenv('FORECAST_MODE','replay'),'timezone':'UTC',
+            'display_timezone':DISPLAY_TIMEZONE,'timezone_label':TIMEZONE_LABEL,
+            'openai_configured':bool(os.getenv('OPENAI_API_KEY')),
+            'openai_model':os.getenv('OPENAI_MODEL','gpt-4.1-mini'),'power_unit':'normalized'}
 
 @app.get('/api/turbines')
 def turbines():
@@ -91,7 +107,15 @@ def backtest(turbine_id: str,limit: int=Query(200,ge=1,le=3000),offset: int=Quer
 
 @app.get('/api/agent/status')
 def agent_status():
-    return {'agents':agent.status(),'poll_interval_ms':500}
+    return {'agents':agent.status(),'monitor':monitor.status(),'poll_interval_ms':1000}
+
+@app.post('/api/agent/run')
+def run_agent(request: AgentRequest):
+    return copilot.run(request.turbine_id,request.hours,request.mode,request.forecast_origin,request.message)
+
+@app.post('/api/agent/check-updates')
+def check_updates():
+    return monitor.tick()
 
 @app.post('/api/forecast/recalculate',response_model=ForecastResponse)
 def recalculate(request: RecalculateRequest):
@@ -123,17 +147,33 @@ def details(turbine_id: str,hours: int=Query(48,ge=24,le=48,json_schema_extra={"
         'mode':result['mode'],'forecast_summary':result['forecast_summary'],'forecast':result['forecast'],
         'weather':result['weather'],'model':{**result['model'],**model_metrics,
             'metrics_period':'January 2026','metrics_model':'frozen evaluation model (trained before December), not deployment refit'},
-        'agent':result['agent'],'warnings':result['warnings']}
+        'agent':result['agent'],'warnings':result['warnings'],'run_id':result['run_id'],
+        'revision':result['revision'],'assessment':result['assessment'],'display_timezone':TIMEZONE_LABEL}
+
+
+@app.get('/api/export/{turbine_id}')
+def export_forecast(turbine_id: str,hours: int=Query(48,ge=24,le=48),mode: Literal['replay','live']='replay'):
+    known(turbine_id)
+    result=agent.run(turbine_id,hours,mode)
+    frame=pd.DataFrame(result['forecast'])
+    frame.insert(1,'timestamp_astana',pd.to_datetime(frame.timestamp,utc=True).dt.tz_convert(DISPLAY_TIMEZONE))
+    frame['forecast_origin']=result['forecast_origin']
+    frame['turbine_id']=turbine_id
+    frame['unit']='normalized'
+    frame['run_id']=result['run_id']
+    frame['weather_source']=result['weather']['source']
+    return Response(frame.to_csv(index=False),media_type='text/csv',
+                    headers={'Content-Disposition':f'attachment; filename="{turbine_id}_{hours}h.csv"'})
 
 
 @app.get('/api/history/{turbine_id}')
 def history(turbine_id: str):
     """Daily SCADA means; hide days with less than 80% hourly coverage."""
     known(turbine_id)
-    frame = read_hourly(turbine_id)[['power', 'wind_speed', 'temperature']]
+    frame = read_hourly(turbine_id)[['power', 'wind_speed', 'temperature']].tz_convert(LOCAL_TZ)
     daily = frame.resample('D').mean().where(frame.resample('D').count() >= 20)
     return clean_json({'turbine_id': turbine_id, 'source': 'SCADA',
-                       'aggregation': 'daily_mean', 'timezone': 'UTC',
+                       'aggregation': 'daily_mean', 'timezone': 'UTC+05:00',
                        'points': daily.reset_index().to_dict('records')})
 
 # Serve the built website and the original GLB from the same origin as the API.

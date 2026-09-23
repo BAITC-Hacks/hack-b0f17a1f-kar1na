@@ -140,3 +140,19 @@
 
 #application:lang(ru) .app-nav,#application:lang(kk) .app-nav{gap:12px}
 #application:lang(ru) .twin-controls button,#application:lang(kk) .twin-controls button{font-size:9px}
+
+/* Operational AI controls share the dashboard's existing panel language. */
+.copilot-panel,.monitor-panel,.validation-panel{margin-bottom:24px}
+.copilot-panel label{display:block;margin:20px 0 8px;font-weight:600}
+.copilot-panel textarea{display:block;width:100%;box-sizing:border-box;resize:vertical;min-height:88px;border:1px solid #c7d4e9;border-radius:12px;background:#f7faff;color:#132746;padding:14px;font:inherit;line-height:1.5}
+.copilot-actions{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin:16px 0}
+#copilot-context,#copilot-status{font-size:13px;color:#435b80}
+#copilot-answer{white-space:pre-wrap;line-height:1.7;overflow-wrap:anywhere;padding:20px;background:#f2f6fe;border-radius:12px;margin-top:20px}
+#copilot-error{color:#9b421d;background:#fff3e9;padding:12px;border-radius:8px}
+#copilot-evidence{margin-top:20px}#copilot-evidence summary{cursor:pointer;font-weight:600}
+#copilot-tools article{border-top:1px solid #dbe3f0;margin-top:14px;padding-top:14px}#copilot-tools time{display:block;font-size:12px;color:#536783;margin-top:4px}
+#copilot-tools pre{font-size:12px;max-height:260px;overflow:auto;background:#f5f8fd;padding:14px;border-radius:8px;white-space:pre-wrap;overflow-wrap:anywhere}
+.monitor-panel{display:flex;justify-content:space-between;align-items:center;gap:20px}.monitor-panel p{margin:8px 0 0;font-size:13px}
+.evidence-table-wrap{overflow-x:auto}.validation-panel table{width:100%;border-collapse:collapse;margin-top:18px;text-align:left;font-size:14px}.validation-panel td,.validation-panel th{padding:13px 16px;border-bottom:1px solid #dbe3f0;white-space:nowrap}
+#data-notice:not(:empty){padding:14px 18px;margin:12px 0 20px;border:1px solid #ead8b4;border-radius:10px;background:#fff9ed;color:#6d511d;font-size:13px;line-height:1.6}
+@media(max-width:700px){.monitor-panel{align-items:flex-start;flex-direction:column}.copilot-panel .panel-top{align-items:flex-start;gap:12px;flex-direction:column}.copilot-actions .button{width:100%}}

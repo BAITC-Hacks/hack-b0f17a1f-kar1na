@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 ROOT = Path(__file__).resolve().parents[1]
 load_dotenv(ROOT / '.env')
 LOCAL_TZ = timezone(timedelta(hours=int(os.getenv('DATA_UTC_OFFSET_HOURS', '5'))))
+DISPLAY_TIMEZONE = 'Asia/Almaty'  # IANA zone used for Astana; UTC+05 in 2026.
+TIMEZONE_LABEL = 'Астана · UTC+05:00'
 RAW = ROOT / 'data/raw'
 PROCESSED = ROOT / 'data/processed'
 MODELS = ROOT / 'models'

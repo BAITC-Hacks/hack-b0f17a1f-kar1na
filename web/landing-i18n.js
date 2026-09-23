@@ -1,6 +1,11 @@
 import {initDashboardLanguage} from './dashboard-i18n.js';
 // Translate text nodes in place so links, typography and event handlers stay intact.
 const translations = [
+ ['PROJECT','ПРОЕКТ','ЖОБА'],['CONNECT','СВЯЗЬ','БАЙЛАНЫС'],
+ ['About the model','О модели','Модель туралы'],['Forecast archive','Архив прогнозов','Болжамдар мұрағаты'],
+ ['Methodology','Методология','Әдістеме'],['SCADA sources','Источники SCADA','SCADA дереккөздері'],
+ ['Time zone UTC+05','Часовой пояс UTC+05','Уақыт белдеуі UTC+05'],['Contact','Контакты','Байланыс'],
+ ['BACK TO TOP','НАВЕРХ','ЖОҒАРЫ'],
  ['About','О проекте','Жоба туралы'],
  ['How It Works','Как это работает','Қалай жұмыс істейді'],
  ['Technology','Технологии','Технологиялар'],
@@ -52,6 +57,7 @@ const walker = document.createTreeWalker(landing, NodeFilter.SHOW_TEXT);
 const nodes = [];
 while (walker.nextNode()) {
  const node = walker.currentNode;
+ if (node.parentElement.closest('[translate="no"]')) continue;
  const original = node.textContent;
  if (dictionary.has(original.trim())) nodes.push({node, original, key: original.trim()});
 }

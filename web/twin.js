@@ -14,7 +14,7 @@ export async function createTwin(onSelect){
  const environment=pmrem.fromScene(room,.04);scene.environment=environment.texture;scene.environmentIntensity=.45;room.dispose();pmrem.dispose();
  const camera=new THREE.PerspectiveCamera(40,1,.1,1800);camera.position.set(-220,155,285);
  const orbit=new OrbitControls(camera,renderer.domElement);orbit.target.set(0,55,0);orbit.enableDamping=true;orbit.maxPolarAngle=Math.PI*.49;
- scene.add(new THREE.HemisphereLight(0xdcefff,0x718096,2.1));const sun=new THREE.DirectionalLight(0xfff5e8,3.2);sun.position.set(-100,180,70);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-100;sun.shadow.camera.right=100;sun.shadow.camera.top=160;sun.shadow.camera.bottom=-100;sun.shadow.camera.far=500;sun.shadow.normalBias=.06;scene.add(sun);
+ scene.add(new THREE.HemisphereLight(0xdcefff,0x718096,1.15));const sun=new THREE.DirectionalLight(0xfff5e8,2.6);sun.position.set(-100,180,70);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-100;sun.shadow.camera.right=100;sun.shadow.camera.top=160;sun.shadow.camera.bottom=-100;sun.shadow.camera.far=500;sun.shadow.normalBias=.06;scene.add(sun);
  const bodyClip={value:new THREE.Vector4()};
  // Extend the transparent render surface without changing the panel's framing.
  new ResizeObserver(()=>{
@@ -25,7 +25,7 @@ export async function createTwin(onSelect){
    const pixelRatio=renderer.getPixelRatio();bodyClip.value.set(bleed*pixelRatio,bleed*pixelRatio,(bleed+w)*pixelRatio,(bleed+h)*pixelRatio);
    Object.assign(renderer.domElement.style,{width:`${w+2*bleed}px`,height:`${h+2*bleed}px`,left:`${-bleed}px`,top:`${-bleed}px`});
  }).observe(host);
- const gltf=await new GLTFLoader().loadAsync('/models/wind_farm.glb');scene.add(gltf.scene);gltf.scene.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});const farm=createWindFarmControls(THREE,gltf);let selected='turbine_1',zoomTarget=null,cameraTransition=null;
+ const gltf=await new GLTFLoader().loadAsync('/models/wind_farm.glb');scene.add(gltf.scene);gltf.scene.traverse(o=>{if(o.userData.component_id==='rotor')o.rotateX(-.65);if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});const farm=createWindFarmControls(THREE,gltf);let selected='turbine_1',zoomTarget=null,cameraTransition=null;
  const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
  function moveCamera(target,position,immediate=false){
    zoomTarget=null;
@@ -59,9 +59,12 @@ export async function createTwin(onSelect){
    for(const [key,root] of Object.entries(roots))if(root)root.visible=key===id;
    const info=assembledViews[id];
 
-   const height=info.size.y, width=Math.max(info.size.x,info.size.z);
-   const distance=Math.max(height,width/Math.max(camera.aspect,.5)) / (2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))) * 1.12;
-   moveCamera(info.center,info.center.clone().add(new THREE.Vector3(-.65,.12,1).normalize().multiplyScalar(distance)),immediate);
+   // A close, assembled portrait: hub near the center, blade tips beyond the panel.
+   // Use the cached assembled dimensions so inspection never changes the reset view.
+   const target=componentViews[id].generator.center.clone();
+   target.y-=2;
+   const distance=info.size.y / (2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))) * .55;
+   moveCamera(target,target.clone().add(new THREE.Vector3(-1,.06,1.1).normalize().multiplyScalar(distance)),immediate);
  }
  portrait(selected,true);
  function focus(info){zoomTarget=null;const size=Math.max(info.size.x,info.size.y,info.size.z);moveCamera(info.center,info.center.clone().add(new THREE.Vector3(-1,.55,1.4).normalize().multiplyScalar(size*2.2+5)));}

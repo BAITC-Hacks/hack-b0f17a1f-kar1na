@@ -51,3 +51,12 @@ class RecalculateRequest(BaseModel):
         if self.weather is not None and len(self.weather)!=self.hours:
             raise ValueError('Weather length must equal hours')
         return self
+
+
+class AgentRequest(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    turbine_id: Literal['turbine_1','turbine_2'] = 'turbine_1'
+    hours: Literal[24,48] = 48
+    mode: Literal['replay','live'] = 'replay'
+    forecast_origin: Optional[AwareDatetime] = None
+    message: str = Field(default='Построй прогноз и оцени риски.', min_length=1, max_length=1500)

@@ -29,6 +29,8 @@ coverage.xml
 
 # Generated output and logs
 results/forecasts/
+results/agent_runs/
+results/monitor/
 *.log
 
 # Editor and OS files

@@ -1,31 +1,36 @@
 import * as THREE from 'three';
+import {weatherTurbine} from './twin-materials.js';
 
 export function createBlueprint(root, bodyClip) {
+  weatherTurbine(root);
   const parts = [];
   const meshes = [];
   root.traverse(object => { if (object.isMesh) meshes.push(object); });
   const clipMaterial = (material, blade) => {
     if (blade) return;
+    const surfaceShader = material.onBeforeCompile;
+    const surfaceKey = material.customProgramCacheKey();
     material.onBeforeCompile = shader => {
+      surfaceShader.call(material, shader);
       shader.uniforms.bodyClip = bodyClip;
       shader.fragmentShader = shader.fragmentShader
         .replace('#include <common>', '#include <common>\nuniform vec4 bodyClip;')
         .replace('#include <clipping_planes_fragment>', `#include <clipping_planes_fragment>
           if(gl_FragCoord.x<bodyClip.x || gl_FragCoord.y<bodyClip.y || gl_FragCoord.x>bodyClip.z || gl_FragCoord.y>bodyClip.w) discard;`);
     };
-    material.customProgramCacheKey = () => 'blueprint-panel-clip-v1';
+    material.customProgramCacheKey = () => `${surfaceKey}-blueprint-panel-clip-v2`;
   };
   for (const mesh of meshes) {
     const blade = /^blade_\d+$/.test(mesh.userData.component_id ?? '');
-    mesh.castShadow = false;
-    mesh.receiveShadow = false;
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
     for (const material of [mesh.material].flat()) clipMaterial(material, blade);
     const lineMaterial = new THREE.LineBasicMaterial({color:0x2455df, transparent:true, opacity:0.8, depthWrite:false});
     clipMaterial(lineMaterial, blade);
     const outline = new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry, 24), lineMaterial);
     outline.raycast = () => {};
     mesh.add(outline);
-    parts.push({mesh, outline, opacity:0.94, color:new THREE.Color(0xf1f6ff), lineOpacity:0.85, lineColor:new THREE.Color(0x3562ce)});
+    parts.push({mesh, outline, opacity:0.94, color:new THREE.Color(0xe5e8e6), lineOpacity:0.85, lineColor:new THREE.Color(0x3562ce)});
   }
   let initialized=false;
   const setState = (component = null, exploded = false) => {
@@ -38,18 +43,18 @@ export function createBlueprint(root, bodyClip) {
       }
       const inspecting = !!component || exploded;
       const faded = inspecting && !active;
-      part.targetOpacity=faded ? 0.09 : 0.94;
-      part.targetColor=new THREE.Color(active && inspecting ? 0xd3e4ff : 0xf1f6ff);
-      part.targetLineOpacity=faded ? 0.14 : 0.85;
+      part.targetOpacity=faded ? 0.09 : 1;
+      part.targetColor=new THREE.Color(active && inspecting ? 0xd3e4ff : 0xe5e8e6);
+      part.targetLineOpacity=faded ? 0.14 : 0.48;
       part.targetLineColor=new THREE.Color(active && inspecting ? 0x003bff : 0x3562ce);
       if(!initialized){part.opacity=part.targetOpacity;part.color.copy(part.targetColor);part.lineOpacity=part.targetLineOpacity;part.lineColor.copy(part.targetLineColor);}
       for (const material of [mesh.material].flat()) {
         material.color.copy(part.color);
         material.emissive?.setHex(0x153365);
-        material.emissiveIntensity = 0.12;
-        material.roughness = 1;
-        material.metalness = 0;
-        material.envMapIntensity = 0;
+        material.emissiveIntensity = 0.015;
+        material.roughness = 0.82;
+        material.metalness = 0.08;
+        material.envMapIntensity = 0.38;
         material.transparent = true;
         material.opacity = part.opacity;
         material.depthWrite = !faded;

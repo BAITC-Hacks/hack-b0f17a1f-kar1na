@@ -11,7 +11,8 @@ import uuid
 from typing import Optional
 import numpy as np
 import pandas as pd
-from src.config import TURBINES, RESULTS, utc
+from src.config import TURBINES, RESULTS, MODELS, TIMEZONE_LABEL, utc
+from src.agents.assessment import assess_forecast, compare_forecasts
 from src.data.preprocessing import read_hourly
 from src.data.features import make_features, HISTORY_FEATURES
 from src.models.predict import load_model, predict
@@ -83,6 +84,11 @@ class ForecastAgent:
                     warnings.append(f'Weather fallback: {exc}')
             self._step(turbine_id,'VALIDATING_DATA','Check hourly coverage, units, finite values and physical bounds')
             validate_weather(weather.frame,origin,hours)
+            # Validate causality for every provider, including injected integrations.
+            bound=weather.metadata.get('latest_availability_bound') or weather.metadata.get('issued_at')
+            if mode=='replay' and not weather.metadata.get('is_fallback'):
+                if bound is None or utc(bound)>origin:
+                    raise WeatherError('Replay weather requires an availability bound at/before origin')
             observed=history.dropna(subset=['power','wind_speed','temperature'])
             latest=observed.index[-1] if len(observed) else None
             age=(origin-latest-pd.Timedelta(hours=1)).total_seconds()/3600 if latest is not None else None
@@ -105,10 +111,20 @@ class ForecastAgent:
             if len(forecast)!=hours or not np.isfinite(forecast.to_numpy()).all():
                 raise ValueError('Forecast failed horizon/finite-value validation')
             fingerprint=hashlib.sha256(weather.frame.to_csv().encode()).hexdigest()
+            model_hash=hashlib.sha256((MODELS/f'{turbine_id}.joblib').read_bytes()).hexdigest()
+            history_hash=hashlib.sha256(history.tail(24).to_csv().encode()).hexdigest()
+            input_hash=hashlib.sha256(f'{fingerprint}:{model_hash}:{history_hash}:{origin}:{hours}:{mode}'.encode()).hexdigest()
+            previous=None
+            # Keep independent revision chains for each origin, mode and horizon.
+            context_key=hashlib.sha256(f'{turbine_id}:{origin}:{hours}:{mode}'.encode()).hexdigest()[:20]
+            context_path=self.result_dir/f'{turbine_id}_context_{context_key}.json'
+            if context_path.exists():
+                previous=json.loads(context_path.read_text())
             rows=[{'timestamp':ts.isoformat(),**r.to_dict()} for ts,r in forecast.iterrows()]
             peak=forecast.predicted_power.idxmax()
             payload={'turbine_id':turbine_id,'run_id':run_id,'generated_at':pd.Timestamp.now(tz='UTC').isoformat(),
                 'forecast_origin':origin.isoformat(),'horizon_hours':hours,'mode':mode,
+                'display_timezone':TIMEZONE_LABEL,'input_sha256':input_hash,
                 'power_unit':'normalized','timestamp_convention':'UTC interval start; each point covers one hour',
                 'forecast':rows,'weather':{**weather.metadata,'input_sha256':fingerprint},
                 'forecast_summary':{'next_24h_average':float(forecast.predicted_power.iloc[:24].mean()),
@@ -118,6 +134,17 @@ class ForecastAgent:
                 'history_latest_timestamp':latest.isoformat() if latest is not None else None,
                 'history_age_hours':age,'sanity_checks':checks,'warnings':warnings,
                 'agent':self.status(turbine_id)}
+            payload['model']['sha256']=model_hash
+            payload['revision']=compare_forecasts(previous,payload)
+            payload['assessment']=assess_forecast(payload)
+            if previous and previous.get('input_sha256')==input_hash:
+                self._step(turbine_id,'COMPLETED','Inputs unchanged; reuse the validated forecast version')
+                previous['agent']=self.status(turbine_id)
+                previous['unchanged']=True
+                previous['agent']['run_id']=previous['run_id']
+                with self._state_lock:
+                    self._status[turbine_id]['run_id']=previous['run_id']
+                return clean_json(previous)
             # Validate response before marking complete or publishing a result.
             from src.api.schemas import ForecastResponse
             ForecastResponse.model_validate(payload)
@@ -127,6 +154,7 @@ class ForecastAgent:
             payload['agent']=self.status(turbine_id)
             write_json(path,payload)
             write_json(self.result_dir/f'{turbine_id}_latest.json',payload)
+            write_json(context_path,payload)
             return clean_json(payload)
         except Exception as exc:
             self._step(turbine_id,'FAILED',str(exc))

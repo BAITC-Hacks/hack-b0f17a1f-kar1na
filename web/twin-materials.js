@@ -35,7 +35,7 @@ export function weatherTurbine(root) {
           float grain = wearNoise(wp * 85.0);
           float streaks = smoothstep(0.56,0.85,wearNoise(wp * vec3(14.0,0.35,14.0)));
           float scuffs = smoothstep(0.67,0.87,wearNoise(wp * vec3(48.0,3.0,48.0)));
-          float wear = 0.10 * mottling + 0.17 * streaks + 0.11 * scuffs;
+          float wear = 0.10 * mottling + 0.08 * streaks + 0.05 * scuffs;
           diffuseColor.rgb *= 1.0 - wear;
           diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * vec3(0.83,0.87,0.91), streaks * 0.3);
           diffuseColor.rgb *= 0.97 + grain * 0.06;
@@ -44,7 +44,7 @@ export function weatherTurbine(root) {
           roughnessFactor = clamp(roughnessFactor + 0.16 * streaks + 0.12 * grain, 0.45, 0.98);
         `);
       };
-      material.customProgramCacheKey = () => 'windai-weathered-v1';
+      material.customProgramCacheKey = () => 'windai-weathered-v2';
       material.needsUpdate = true;
     }
   });
