@@ -85,16 +85,16 @@ class Copilot:
         self.result_dir = result_dir or RESULTS / 'agent_runs'
         self._lock = threading.Lock()
 
-    def run(self, turbine_id, hours=48, mode='replay', origin=None, message='Построй прогноз и оцени риски.'):
+    def run(self, turbine_id, hours=48, mode='replay', origin=None, message='Построй прогноз и оцени риски.', language='ru'):
         from src.agents.forecast_agent import AgentBusyError
         if not self._lock.acquire(blocking=False):
             raise AgentBusyError('ИИ-агент уже выполняет запрос. Дождитесь завершения.')
         try:
-            return self._run(turbine_id, hours, mode, origin, message)
+            return self._run(turbine_id, hours, mode, origin, message, language)
         finally:
             self._lock.release()
 
-    def _run(self, turbine_id, hours, mode, origin, message):
+    def _run(self, turbine_id, hours, mode, origin, message, language):
         origin = utc(origin) if origin else (pd.Timestamp.now(tz='UTC').ceil('h') if mode == 'live'
                     else utc(os.getenv('REPLAY_ORIGIN', '2026-02-01T00:00:00+05:00')))
         context = {'turbine_id': turbine_id, 'hours': hours, 'mode': mode,
@@ -161,7 +161,7 @@ class Copilot:
         try:
             for step in range(7):
                 response = self.client.create(model=os.getenv('OPENAI_MODEL', 'gpt-4.1-mini'),
-                    instructions=INSTRUCTIONS, input=transcript, tools=TOOLS, store=False,
+                    instructions=INSTRUCTIONS + f"\nЯзык ответа: {language}. Следуй этому выбору, даже если запрос на другом языке.", input=transcript, tools=TOOLS, store=False,
                     parallel_tool_calls=False, max_output_tokens=900)
                 if response.get('status') in ('failed', 'incomplete'):
                     raise OpenAIUnavailable('OpenAI не завершил ответ; выполнен резервный расчёт.')
@@ -203,6 +203,11 @@ class Copilot:
                 answer = f"Расчёт модели завершён. Средняя мощность {a['mean_power']:.3f}, пик {a['peak_power']:.3f} (0–1). "
                 answer += f"Время пика по Астане: {a['peak_time_astana']}. "
                 answer += ' '.join(i['message'] for i in a['issues'])
+                if language == 'en':
+                    answer = f"Model calculation completed. Mean power {a['mean_power']:.3f}, peak {a['peak_power']:.3f} (0–1). Peak time in Astana: {a['peak_time_astana']}. Data summary only; AI is unavailable. Review forecast warnings and tool results."
+                elif language == 'kk':
+                    answer = f"Модель есебі аяқталды. Орташа қуат {a['mean_power']:.3f}, ең жоғары қуат {a['peak_power']:.3f} (0–1). Астана уақыты бойынша шыңы: {a['peak_time_astana']}. Бұл деректер жиынтығы; ЖИ қолжетімсіз. Болжам ескертулері мен құрал нәтижелерін тексеріңіз."
+
             else:
                 answer = 'Прогноз не получен. Проверьте ошибки инструментов и доступность входных данных.'
         payload = clean_json({'agent_run_id': uuid.uuid4().hex, 'status': 'completed' if forecast and not error else 'degraded' if forecast else 'failed',

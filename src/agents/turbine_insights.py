@@ -71,6 +71,12 @@ class TurbineInsights:
         if obs:
             fallback+=f"Последняя доступная SCADA: мощность {obs['power']:.3f} (0–1), ветер {obs['wind_speed']:.1f} м/с, температура воздуха {obs['ambient_temperature']:.1f} °C. "
         fallback+='Состояние отдельных узлов по этим данным определить нельзя.'
+        if language in ('en', 'kk'):
+            fallback = ('Component condition cannot be determined from these data. '
+                        if language == 'en' else 'Бұл деректерден бөлшектердің күйін анықтау мүмкін емес. ')
+            if obs:
+                fallback += (f"Latest archived SCADA: power {obs['power']:.3f} (0–1), wind {obs['wind_speed']:.1f} m/s, air temperature {obs['ambient_temperature']:.1f} °C."
+                             if language == 'en' else f"Соңғы мұрағаттық SCADA: қуат {obs['power']:.3f} (0–1), жел {obs['wind_speed']:.1f} м/с, ауа температурасы {obs['ambient_temperature']:.1f} °C.")
         answer,error,engine=fallback,None,'data_summary'
         try:
             import os

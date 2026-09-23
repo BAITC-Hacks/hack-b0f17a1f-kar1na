@@ -25,7 +25,7 @@ const translations = [
  ['Forecast the energy','Энергия будущего —','Болашақ энергияны'],['ahead.','в вашем прогнозе.','болжаңыз.'],
  ['WindAI turns turbine history and local weather forecasts into a clear, hourly view of expected power generation. Explore two turbines and the decisions behind each forecast.','WindAI превращает историю работы турбин и местные прогнозы погоды в понятный почасовой прогноз выработки. Изучите две турбины и узнайте, на чём основан каждый прогноз.','WindAI турбиналардың жұмыс тарихы мен жергілікті ауа райы болжамын энергия өндірудің түсінікті сағаттық болжамына айналдырады. Екі турбинаны зерттеп, әр болжамның негізін біліңіз.'],
  ['02 / HOW IT WORKS','02 / КАК ЭТО РАБОТАЕТ','02 / ҚАЛАЙ ЖҰМЫС ІСТЕЙДІ'],
- ['From weather signal','От данных о погоде','Ауа райы деректерінен'],['to power forecast.','к прогнозу энергии.','энергия болжамына дейін.'],
+ ['From weather signal','От данных о погоде','Ауа райы деректерінен'],['to power forecast.','к прогнозу мощности.','қуат болжамына дейін.'],
  ['Weather Forecast','Прогноз погоды','Ауа райы болжамы'],['Hourly conditions at turbine coordinates','Почасовая погода в точке расположения турбины','Турбина орналасқан жердегі сағаттық ауа райы'],
  ['Data Processing','Обработка данных','Деректерді өңдеу'],['Prepare historical and forecast inputs','Подготовка исторических и прогнозных данных','Тарихи және болжамдық деректерді дайындау'],
  ['ML Prediction','ML-прогноз','ML болжамы'],['Estimate normalized hourly power','Расчёт нормализованной почасовой мощности','Нормаланған сағаттық қуатты есептеу'],
@@ -72,6 +72,7 @@ function setLanguage(language) {
  for (const {node, original, key} of nodes) node.textContent = original.replace(key, dictionary.get(key)[lang]);
  for (const [node, attribute, labels] of attributes) node.setAttribute(attribute, labels[lang]);
  try { localStorage.setItem('windai-language', lang); } catch { /* Private browsing can disable storage. */ }
+ dispatchEvent(new Event('windai-language-change'));
  dispatchEvent(new Event('resize'));
 }
 let savedLanguage = 'en';

@@ -42,3 +42,4 @@ Thumbs.db
 
 # Frontend dependencies
 node_modules/
+.vercel/

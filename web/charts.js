@@ -1,6 +1,7 @@
+import {translated} from './dashboard-i18n.js';
 // SVG charts retain missing observations and never smooth measured values.
 const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const formatDate = (value, historical) => new Intl.DateTimeFormat('en-GB', {
+const formatDate = (value, historical) => new Intl.DateTimeFormat(document.documentElement.lang==='kk'?'kk-KZ':document.documentElement.lang==='ru'?'ru-RU':'en-GB', {
   timeZone:'Etc/GMT-5', day:'2-digit', month:'short', ...(historical ? {year:'numeric'} : {hour:'2-digit',minute:'2-digit',hour12:false})
 }).format(new Date(value));
 let serial = 0;
@@ -28,7 +29,7 @@ export function mountChart(host, values, {low, high, min=0, max=1, timestamps=[]
     const ticks=width<440?3:5;
     const labels=Array.from({length:ticks},(_,i)=>{
       const n=Math.round((values.length-1)*i/(ticks-1)),stamp=timestamps[n]&&new Date(timestamps[n]);
-      const fmt=options=>new Intl.DateTimeFormat('en-GB',{timeZone:'Etc/GMT-5',...options}).format(stamp);
+      const fmt=options=>new Intl.DateTimeFormat(document.documentElement.lang==='kk'?'kk-KZ':document.documentElement.lang==='ru'?'ru-RU':'en-GB',{timeZone:'Etc/GMT-5',...options}).format(stamp);
       const text=stamp?(historical?fmt({month:'short',year:'numeric'}):fmt({hour:'2-digit',minute:'2-digit',hour12:false})):`+${n}h`;
       const second=stamp&&!historical?`<tspan x="${x(n)}" dy="14" class="plot-zone">${escape(fmt({day:'2-digit',month:'short'}))}</tspan>`:'';
       return `<text x="${x(n)}" y="${height-(second?23:14)}" text-anchor="${i===0?'start':i===ticks-1?'end':'middle'}" class="plot-label">${escape(text)}${second}</text>`;
@@ -36,7 +37,7 @@ export function mountChart(host, values, {low, high, min=0, max=1, timestamps=[]
     const dots=values.length<=48 ? values.map((v,i)=>Number.isFinite(v)?`<circle cx="${x(i)}" cy="${y(v)}" r="2.6" fill="${color}" stroke="white" stroke-width="1.2"/>`:'').join('') : '';
     host.innerHTML=`<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${escape(label)} ${historical?'daily history':'hourly forecast'}, ${escape(unit)}. Dates in Astana UTC+05. Missing observations shown as gaps.">
       <defs><linearGradient id="${id}-band" x1="0" y1="0" x2="0" y2="1"><stop stop-color="${color}" stop-opacity=".19"/><stop offset="1" stop-color="${color}" stop-opacity=".035"/></linearGradient></defs>
-      <text x="${left}" y="19" class="plot-unit">${escape(label)} · ${escape(unit)}</text><text x="${width-right}" y="19" text-anchor="end" class="plot-zone">UTC+05</text>
+      <text x="${left}" y="19" class="plot-unit">${escape(translated(label))} · ${escape(translated(unit))}</text><text x="${width-right}" y="19" text-anchor="end" class="plot-zone">UTC+05</text>
       ${grid}${band}${paths.map(d=>`<path d="${d}" fill="none" stroke="${color}" stroke-width="${historical?1.6:2.5}" stroke-linejoin="round" stroke-linecap="round"/>`).join('')}${dots}${labels}
       <g class="plot-cursor" visibility="hidden"><line y1="${top}" y2="${base}" stroke="${color}" stroke-dasharray="3 4" opacity=".5"/><circle r="5" fill="${color}" stroke="white" stroke-width="2"/></g>
       </svg><div class="plot-tooltip" hidden></div><div class="plot-interaction" tabindex="0" role="slider" aria-label="Inspect ${escape(label)} data. Use left and right arrow keys." aria-valuemin="0" aria-valuemax="${values.length-1}" aria-valuenow="0"></div>`;
@@ -44,8 +45,8 @@ export function mountChart(host, values, {low, high, min=0, max=1, timestamps=[]
     function inspect(index) {
       selected=Math.max(0,Math.min(values.length-1,index));
       const v=values[selected],time=timestamps[selected]?formatDate(timestamps[selected],historical):`+${selected}h`;
-      const value=Number.isFinite(v)?`${v.toFixed(3)} ${unit}`:'No observation';
-      tip.innerHTML=`<span>${escape(time)} · UTC+05</span><strong>${escape(value)}</strong>${low&&Number.isFinite(low[selected])&&Number.isFinite(high[selected])?`<small>Interval ${low[selected].toFixed(3)} – ${high[selected].toFixed(3)}</small>`:''}`;
+      const value=Number.isFinite(v)?`${v.toFixed(3)} ${unit}`:translated('No observation');
+      tip.innerHTML=`<span>${escape(time)} · UTC+05</span><strong>${escape(value)}</strong>${low&&Number.isFinite(low[selected])&&Number.isFinite(high[selected])?`<small>${document.documentElement.lang==='ru'?'Интервал':document.documentElement.lang==='kk'?'Аралық':'Interval'} ${low[selected].toFixed(3)} – ${high[selected].toFixed(3)}</small>`:''}`;
       tip.hidden=false;tip.style.left=`${Math.max(4,Math.min(width-tip.offsetWidth-4,x(selected)-tip.offsetWidth/2))}px`;
       tip.style.top='28px';
       cursor.setAttribute('visibility','visible');const line=cursor.querySelector('line'),dot=cursor.querySelector('circle');

@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: alemwind-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m uvicorn src.api.main:app --host 0.0.0.0 --port $PORT --workers 1
+    healthCheckPath: /api/health
+    envVars:
+      - key: FORECAST_MODE
+        value: replay
+      - key: WEATHER_ALLOW_FALLBACK
+        value: "false"
+      - key: WEATHER_OFFLINE
+        value: "false"
+      - key: AGENT_MONITOR_ENABLED
+        value: "false"
+      - key: CORS_ORIGINS
+        sync: false

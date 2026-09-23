@@ -1,4 +1,5 @@
 import {mountChart,clearChart} from './charts.js';
+import {backendUrl} from './backend.js';
 import {createTwin} from './twin.js';
 import {createAssistantPanel} from './assistant-panel.js';
 import {createOverviewMotion} from './overview-motion.js';
@@ -7,9 +8,9 @@ const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const state={id:'turbine_1',hours:24,mode:'replay',history:'power',data:null,historical:null,request:0};let twin;
 const assistant=createAssistantPanel(()=>state,result=>{if(state.data){state.data={...state.data,...result};render();}});
 const number=(v,d=2)=>Number.isFinite(v)?v.toFixed(d):'—';
-const date=v=>v?new Intl.DateTimeFormat('en-GB',{timeZone:'Etc/GMT-5',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(v))+' · Astana UTC+05':'—';
+const date=v=>v?new Intl.DateTimeFormat(document.documentElement.lang==='kk'?'kk-KZ':document.documentElement.lang==='ru'?'ru-RU':'en-GB',{timeZone:'Etc/GMT-5',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(v))+' · Astana UTC+05':'—';
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-async function api(path,options={}){const r=await fetch(path,options);if(!r.ok){const body=await r.json().catch(()=>({}));throw Error(typeof body.detail==='string'?body.detail:`API error ${r.status}`);}return r.json();}
+async function api(path,options={}){const r=await fetch(backendUrl(path),options);if(!r.ok){const body=await r.json().catch(()=>({}));throw Error(typeof body.detail==='string'?body.detail:`API error ${r.status}`);}return r.json();}
 const sections=['overview','analytics','agent'];
 function setActiveSection(id){$$('[data-view]').forEach(link=>{const active=link.dataset.view===id;link.classList.toggle('active',active);if(active)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');});}
 function navigate(){const route=location.hash.slice(1),inApp=sections.includes(route),enteringApp=inApp&&$('#application').hidden;$('#landing').hidden=inApp;$('#application').hidden=!inApp;$$('.view').forEach(v=>v.hidden=false);if(inApp){if(enteringApp)revealOverview();setActiveSection(route);requestAnimationFrame(()=>document.getElementById(route).scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'}));if(state.data)assistant.activate();}}
@@ -33,7 +34,7 @@ function select(id){if(state.id===id)return;state.id=id;load();}
 $$('[data-turbine]').forEach(b=>b.onclick=()=>select(`turbine_${+b.dataset.turbine+1}`));$$('[data-range]').forEach(b=>b.onclick=()=>{if(state.hours===+b.dataset.range)return;state.hours=+b.dataset.range;load();});$$('[data-history]').forEach(b=>b.onclick=()=>{state.history=b.dataset.history;renderHistory();});$('#timeline-slider').oninput=renderTimeline;$('#forecast-mode').onchange=e=>{state.mode=e.target.value;load();};$('#refresh-data').onclick=()=>load();$('#run-agent').onclick=()=>load(true);$('#view-execution').onclick=()=>location.hash='agent';
 createTwin(select,selection=>assistant.inspect(selection)).then(result=>{twin=result;twin?.select(state.id);renderTimeline();});load();
 
-$('#agent-export').onclick=$('#export-forecast').onclick=()=>{location.href=`/api/export/${state.id}?hours=${state.hours}&mode=${state.mode}`;};
+$('#agent-export').onclick=$('#export-forecast').onclick=()=>{location.href=backendUrl(`/api/export/${state.id}?hours=${state.hours}&mode=${state.mode}`);};
 async function renderValidation(){
  try{const data=await api('/api/validation/metrics');$('#validation-evidence').innerHTML='<div class="evidence-table-wrap"><table><thead><tr><th>Турбина</th><th>MAE модели</th><th>MAE базового</th><th>Снижение MAE</th><th>Покрытие интервала</th></tr></thead><tbody>'+Object.entries(data.turbines).map(([id,r])=>`<tr><td>${escape(id)}</td><td>${number(r.model.mae,4)}</td><td>${number(r.baseline.mae,4)}</td><td>${number((1-r.model.mae/r.baseline.mae)*100,1)}%</td><td>${number(r.interval_coverage*100,1)}%</td></tr>`).join('')+'</tbody></table></div>';}
  catch(e){$('#validation-evidence').textContent=e.message;}
@@ -43,7 +44,7 @@ $('#check-updates').onclick=async()=>{const b=$('#check-updates');b.disabled=tru
 $('#copilot-form').onsubmit=async e=>{
  e.preventDefault();const button=$('#run-copilot'),token=state.request;
  button.disabled=true;$$('[data-agent-task]').forEach(b=>b.disabled=true);$('#copilot-status').textContent='Агент работает…';$('#copilot-answer').textContent='Проверяю данные, рассчитываю прогноз и оцениваю риски. Обычно это занимает до минуты.';$('#copilot-tools').textContent='';$('#copilot-error').hidden=true;
- const body={turbine_id:state.id,hours:state.hours,mode:state.mode,message:$('#copilot-prompt').value};
+ const body={turbine_id:state.id,hours:state.hours,mode:state.mode,message:$('#copilot-prompt').value,language:document.documentElement.lang};
  try{const d=await api('/api/agent/run',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});if(token!==state.request)return;
   $('#copilot-status').textContent=d.status==='completed'?'Завершено · OpenAI':d.status==='degraded'?'Резервный расчёт':'Ошибка расчёта';
   $('#copilot-answer').textContent=d.answer;
@@ -57,3 +58,5 @@ renderValidation();renderMonitor();setInterval(()=>{if(!document.hidden)renderMo
 
 // Stay on Overview when returning to the top of the dashboard.
 document.querySelector('[data-overview-top]').addEventListener('click',event=>{event.preventDefault();window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});});
+
+addEventListener('windai-language-change',()=>{if(state.data){render();renderHistory();}});

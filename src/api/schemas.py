@@ -54,6 +54,7 @@ class RecalculateRequest(BaseModel):
 
 
 class AgentRequest(BaseModel):
+    language: Literal['ru','en','kk'] = 'ru'
     model_config = ConfigDict(extra='forbid')
     turbine_id: Literal['turbine_1','turbine_2'] = 'turbine_1'
     hours: Literal[24,48] = 48

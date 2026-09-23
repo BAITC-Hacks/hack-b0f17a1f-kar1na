@@ -112,7 +112,7 @@ def agent_status():
 
 @app.post('/api/agent/run')
 def run_agent(request: AgentRequest):
-    return copilot.run(request.turbine_id,request.hours,request.mode,request.forecast_origin,request.message)
+    return copilot.run(request.turbine_id,request.hours,request.mode,request.forecast_origin,request.message,request.language)
 
 @app.post('/api/agent/check-updates')
 def check_updates():

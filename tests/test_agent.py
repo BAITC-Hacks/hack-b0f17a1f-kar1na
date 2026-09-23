@@ -165,3 +165,17 @@ def test_agent_api_export_and_secret_absence(monkeypatch,tmp_path):
     assert r.status_code==200 and 'timestamp_astana' in r.text and '+05:00' in r.text
     assert len(r.text.strip().splitlines())==25
     assert 'OPENAI_API_KEY' not in c.get('/api/health').text
+
+
+@pytest.mark.parametrize('language', ['en', 'kk'])
+def test_selected_language_reaches_model_and_no_key_summary(tmp_path, monkeypatch, language):
+    client = ToolClient()
+    agent = ForecastAgent(tmp_path/'f')
+    Copilot(agent, client, tmp_path/'a').run('turbine_1', hours=24, language=language)
+    assert f'Язык ответа: {language}.' in client.requests[0]['instructions']
+    monkeypatch.delenv('OPENAI_API_KEY', raising=False)
+    result = Copilot(agent, result_dir=tmp_path/'a').run('turbine_1', hours=24, language=language)
+    assert result['status'] == 'degraded'
+    assert result['engine'] == 'deterministic_recovery'
+    assert len(result['forecast']['forecast']) == 24
+    assert ('Model calculation completed.' if language == 'en' else 'Модель есебі аяқталды.') in result['answer']

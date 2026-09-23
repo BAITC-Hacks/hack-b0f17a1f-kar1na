@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {backendUrl} from './backend.js';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {createBlueprint} from './twin-blueprint.js';
@@ -25,7 +26,7 @@ export async function createTwin(onSelect,onInspect=()=>{}){
    const pixelRatio=renderer.getPixelRatio();bodyClip.value.set(bleed*pixelRatio,bleed*pixelRatio,(bleed+w)*pixelRatio,(bleed+h)*pixelRatio);
    Object.assign(renderer.domElement.style,{width:`${w+2*bleed}px`,height:`${h+2*bleed}px`,left:`${-bleed}px`,top:`${-bleed}px`});
  }).observe(host);
- const gltf=await new GLTFLoader().loadAsync('/models/wind_farm.glb');scene.add(gltf.scene);gltf.scene.traverse(o=>{if(o.userData.component_id==='rotor')o.rotateX(-.65);if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});const farm=createWindFarmControls(THREE,gltf);let selected='turbine_1',zoomTarget=null,cameraTransition=null;
+ const gltf=await new GLTFLoader().loadAsync(backendUrl('/models/wind_farm.glb'));scene.add(gltf.scene);gltf.scene.traverse(o=>{if(o.userData.component_id==='rotor')o.rotateX(-.65);if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});const farm=createWindFarmControls(THREE,gltf);let selected='turbine_1',zoomTarget=null,cameraTransition=null;
  const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
  function moveCamera(target,position,immediate=false){
    zoomTarget=null;
