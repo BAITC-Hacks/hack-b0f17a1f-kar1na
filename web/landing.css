@@ -44,3 +44,15 @@
 /* Match the closing headline to the opening editorial typography. */
 #landing .closing-copy h2{font-family:'Libre Caslon Display','Times New Roman',serif;font-style:italic;font-weight:400;letter-spacing:-.06em;line-height:.95}
 #landing .closing-copy h2 em{font-family:inherit;font-style:italic;font-weight:400}
+/* A restrained cobalt wash over the film, beneath the existing shade and cards. */
+#landing .journey-shade{background:linear-gradient(0deg,rgba(0,37,213,.05),rgba(0,37,213,.05)),linear-gradient(90deg,#07192c45,#07192c10 50%,#07192c45)}
+#landing .landing-head-actions{display:flex;align-items:center;gap:20px}
+#landing .language-select{font:600 12px Manrope,Arial,sans-serif;color:#0025d5;background:transparent;border:1px solid #0025d530;border-radius:0;padding:10px 6px;cursor:pointer}
+#landing .language-select:focus-visible{outline:2px solid #0025d5;outline-offset:3px}
+#landing:lang(ru) .hero-inner h1,#landing:lang(kk) .hero-inner h1{font-size:clamp(64px,6.1vw,112px)}
+#landing:lang(ru) .closing-copy h2,#landing:lang(kk) .closing-copy h2{font-size:clamp(52px,5.5vw,100px)}
+#landing:not(:lang(en)) .closing-copy h2 em{white-space:normal}
+#landing:not(:lang(en)) .landing-head nav{letter-spacing:.04em;gap:24px}
+#landing:not(:lang(en)) .hero-inner .eyebrow{white-space:normal}
+@media(min-width:721px) and (max-width:1100px){#landing .landing-head{padding:0 3%;gap:16px}#landing:not(:lang(en)) .landing-head nav{gap:14px;font-size:10px}#landing .landing-head-actions{gap:10px}#landing .landing-head .button{font-size:11px;padding:12px;gap:12px}}
+@media(max-width:720px){#landing .landing-head{height:auto;min-height:76px;gap:12px;flex-wrap:wrap;padding-top:12px;padding-bottom:12px}#landing .landing-head-actions{gap:10px}#landing .language-select{font-size:11px;padding:8px 3px}#landing:lang(ru) .hero-inner h1,#landing:lang(kk) .hero-inner h1{font-size:clamp(64px,13vw,94px)}#landing:lang(ru) .closing-copy h2,#landing:lang(kk) .closing-copy h2{font-size:clamp(44px,9vw,65px)}#landing:not(:lang(en)) .hero-bottom div{flex-wrap:wrap;justify-content:center}#landing:not(:lang(en)) .hero-bottom{height:auto;min-height:88px}}
