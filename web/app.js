@@ -53,3 +53,6 @@ $('#copilot-form').onsubmit=async e=>{
  }catch(error){if(token===state.request){$('#copilot-status').textContent='Ошибка';$('#copilot-answer').textContent=error.message;}}finally{button.disabled=false;}
 };
 renderValidation();renderMonitor();setInterval(()=>{if(!document.hidden)renderMonitor();},30000);
+
+// Stay on Overview when returning to the top of the dashboard.
+document.querySelector('[data-overview-top]').addEventListener('click',event=>{event.preventDefault();window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});});

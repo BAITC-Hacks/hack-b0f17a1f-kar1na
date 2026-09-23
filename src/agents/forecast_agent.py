@@ -113,7 +113,8 @@ class ForecastAgent:
             fingerprint=hashlib.sha256(weather.frame.to_csv().encode()).hexdigest()
             model_hash=hashlib.sha256((MODELS/f'{turbine_id}.joblib').read_bytes()).hexdigest()
             history_hash=hashlib.sha256(history.tail(24).to_csv().encode()).hexdigest()
-            input_hash=hashlib.sha256(f'{fingerprint}:{model_hash}:{history_hash}:{origin}:{hours}:{mode}'.encode()).hexdigest()
+            provenance={k:v for k,v in weather.metadata.items() if k!='retrieved_at'}
+            input_hash=hashlib.sha256(f'{fingerprint}:{model_hash}:{history_hash}:{origin}:{hours}:{mode}:{json.dumps(provenance,sort_keys=True)}'.encode()).hexdigest()
             previous=None
             # Keep independent revision chains for each origin, mode and horizon.
             context_key=hashlib.sha256(f'{turbine_id}:{origin}:{hours}:{mode}'.encode()).hexdigest()[:20]

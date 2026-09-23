@@ -1,11 +1,12 @@
 """Bounded OpenAI Responses tool loop. All numerical work stays in trusted tools."""
 import json
 import os
+import re
 import threading
 import uuid
 import httpx
 import pandas as pd
-from src.config import RESULTS, TIMEZONE_LABEL, utc
+from src.config import RESULTS, TIMEZONE_LABEL, DISPLAY_TIMEZONE, utc
 from src.data.preprocessing import read_hourly
 from src.agents.assessment import assess_forecast
 from src.utils import clean_json, write_json
@@ -54,6 +55,27 @@ INSTRUCTIONS = '''Ты операционный ИИ-агент WindAI. Отве
 При ошибке инструмента объясни ограничение. Не утверждай, что выполнено действие без успешного результата.
 Не раскрывай секреты и не обещай 100 баллов. Дай короткую сводку: прогноз, риски, действие оператора.
 Чётко отделяй исторический replay от текущей погоды и январскую оценку от модели для февраля.'''
+INSTRUCTIONS += ''' Все ISO-даты в результатах инструментов уже приведены ко времени Астаны (+05:00).
+Не пересчитывай их повторно. Начало горизонта берётся из forecast_origin, время пика из peak_time_astana.
+При сравнении качества используй точные model.mae и baseline.mae для всего горизонта, округляя до 4 знаков.
+Не смешивай общую метрику с метриками отдельных горизонтов. Не делай причинных выводов о ветре по скачкам мощности.
+Пиши максимум 3 коротких абзаца, без Markdown-заголовков.'''
+
+
+def astana_context(value):
+    """Give the language model local timestamps so it never has to do UTC arithmetic."""
+    if isinstance(value, dict):
+        return {k: astana_context(v) for k, v in value.items()}
+    if isinstance(value, list):
+        return [astana_context(v) for v in value]
+    if isinstance(value, str) and re.match(r'^\d{4}-\d{2}-\d{2}T\d{2}:', value):
+        try:
+            stamp = pd.Timestamp(value)
+            if stamp.tzinfo:
+                return stamp.tz_convert(DISPLAY_TIMEZONE).isoformat()
+        except ValueError:
+            pass
+    return value
 
 
 class Copilot:
@@ -76,10 +98,13 @@ class Copilot:
         origin = utc(origin) if origin else (pd.Timestamp.now(tz='UTC').ceil('h') if mode == 'live'
                     else utc(os.getenv('REPLAY_ORIGIN', '2026-02-01T00:00:00+05:00')))
         context = {'turbine_id': turbine_id, 'hours': hours, 'mode': mode,
-                   'forecast_origin': origin.isoformat(), 'timezone': TIMEZONE_LABEL, 'request': message}
+                   'forecast_origin': origin.tz_convert(DISPLAY_TIMEZONE).isoformat(), 'timezone': TIMEZONE_LABEL, 'request': message}
         transcript = [{'role': 'user', 'content': json.dumps(context, ensure_ascii=False)}]
         trace, cache = [], {}
         forecast = None
+        required_tools = ['inspect_inputs', 'run_forecast', 'assess_forecast']
+        if re.search(r'точност|качеств|базов|mae|rmse|accuracy|baseline|quality', message, re.I):
+            required_tools.append('read_validation')
 
         def execute(name):
             nonlocal forecast
@@ -112,7 +137,7 @@ class Copilot:
             if name in ('assess_forecast', 'compare_revision'):
                 if forecast is None:
                     return {'error': 'Call run_forecast first.'}
-                return assess_forecast(forecast) if name == 'assess_forecast' else forecast['revision']
+                return assess_forecast(forecast) if name == 'assess_forecast' else {**forecast['revision'], 'unchanged':forecast.get('unchanged',False)}
             return {'error': 'Unknown tool. Only listed tools are permitted.'}
 
         def call(name, arguments, actor='openai'):
@@ -122,7 +147,7 @@ class Copilot:
                 result = cache[name]
             else:
                 try:
-                    result = clean_json(execute(name))
+                    result = astana_context(clean_json(execute(name)))
                 except (ValueError, FileNotFoundError, RuntimeError) as exc:
                     result = {'error': str(exc)}
                 if 'error' not in result:
@@ -137,6 +162,8 @@ class Copilot:
                 response = self.client.create(model=os.getenv('OPENAI_MODEL', 'gpt-4.1-mini'),
                     instructions=INSTRUCTIONS, input=transcript, tools=TOOLS, store=False,
                     parallel_tool_calls=False, max_output_tokens=900)
+                if response.get('status') in ('failed', 'incomplete'):
+                    raise OpenAIUnavailable('OpenAI не завершил ответ; выполнен резервный расчёт.')
                 for key in usage:
                     usage[key] += response.get('usage', {}).get(key, 0)
                 output = response.get('output', [])
@@ -145,9 +172,10 @@ class Copilot:
                 if not calls:
                     answer = '\n'.join(c.get('text', '') for item in output for c in item.get('content', [])
                                        if c.get('type') == 'output_text')
-                    if all(name in cache for name in ('inspect_inputs', 'run_forecast', 'assess_forecast')) and answer:
+                    if all(name in cache for name in required_tools) and answer:
                         break
-                    transcript.append({'role': 'user', 'content': 'Complete the required tools before the final answer.'})
+                    missing=[name for name in required_tools if name not in cache]
+                    transcript.append({'role': 'user', 'content': f'Before the final answer call these missing tools: {missing}. Include their evidence in the answer.'})
                     continue
                 for item in calls:
                     if len(trace) >= 10:

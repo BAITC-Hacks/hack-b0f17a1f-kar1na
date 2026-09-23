@@ -1,0 +1,58 @@
+{
+  "timezone": "Астана UTC+05:00",
+  "february_runs": 56,
+  "forecast_rows": 2688,
+  "february_actuals_available": false,
+  "causality_checks": "passed",
+  "secrets_check": "passed",
+  "january": {
+    "turbine_1": {
+      "model": {
+        "n": 1464,
+        "mae": 0.24638823607157687,
+        "normalized_mae": 0.24638823607157687,
+        "rmse": 0.3091695458604397,
+        "r2": 0.15684714414890955
+      },
+      "baseline": {
+        "n": 1464,
+        "mae": 0.3351639344262295,
+        "normalized_mae": 0.3351639344262295,
+        "rmse": 0.4585258247880607,
+        "r2": -0.8545583443983529
+      },
+      "mae_reduction_percent": 26.487246757807824,
+      "interval_coverage": 0.8811475409836066
+    },
+    "turbine_2": {
+      "model": {
+        "n": 1464,
+        "mae": 0.2554511882570004,
+        "normalized_mae": 0.2554511882570004,
+        "rmse": 0.32066226825766053,
+        "r2": 0.09497983441491142
+      },
+      "baseline": {
+        "n": 1464,
+        "mae": 0.33280168488160294,
+        "normalized_mae": 0.33280168488160294,
+        "rmse": 0.45656062838600997,
+        "r2": -0.834676297172688
+      },
+      "mae_reduction_percent": 23.24221905670959,
+      "interval_coverage": 0.8784153005464481
+    }
+  },
+  "artifact_sha256": {
+    "results/backtest_predictions.csv": "64503b0c9013cd4ee3947ea05d0d4294deafd0053595f15c79337fba39276eb9",
+    "results/validation_predictions.csv": "aeedc16cd9511c81f3b889ed3fea5a97d949d7d653ce935053e5d57e10fb04fc",
+    "models/turbine_1.joblib": "0edda02d1072ea9dce6945d6fc3a45772250e489c4a062d3a0a4779c32c00529",
+    "models/turbine_2.joblib": "0ba1527561b5e98791fe64279b75a66498b64707b257651efb13f0037084ac04"
+  },
+  "limitations": [
+    "No February labels; no February skill claim.",
+    "Fixed 72h weather lead with 12h publication allowance; exact release time is not supplied.",
+    "Normalized power; no rated capacities for conversion to MWh.",
+    "Local service, single worker; external production hosting needs access controls."
+  ]
+}

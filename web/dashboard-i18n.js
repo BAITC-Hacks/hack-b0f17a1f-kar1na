@@ -1,5 +1,11 @@
 // Text-node translation preserves controls and updates arriving from the API.
 const rows = [
+ ['PROJECT','ПРОЕКТ','ЖОБА'],['CONNECT','СВЯЗЬ','БАЙЛАНЫС'],
+ ['About the model','О модели','Модель туралы'],['Forecast archive','Архив прогнозов','Болжамдар мұрағаты'],
+ ['Methodology','Методология','Әдістеме'],['SCADA sources','Источники SCADA','SCADA дереккөздері'],
+ ['Time zone UTC+05','Часовой пояс UTC+05','Уақыт белдеуі UTC+05'],['Contact','Контакты','Байланыс'],
+ ['BACK TO TOP','НАВЕРХ','ЖОҒАРЫ'],
+ ['DATA','ДАННЫЕ','ДЕРЕКТЕР'],
  ['Overview','Обзор','Шолу'],['Analytics','Аналитика','Талдау'],['AI Agent','ИИ-агент','ЖИ-агент'],
  ['Forecast mode','Режим прогноза','Болжам режимі'],['Replay · February 2026','Архив · Февраль 2026','Мұрағат · Ақпан 2026'],['Live weather forecast','Актуальный прогноз погоды','Ағымдағы ауа райы болжамы'],['Refresh forecast','Обновить прогноз','Болжамды жаңарту'],
  ['Power Output','Выработка энергии','Энергия өндіру'],['Wind Speed','Скорость ветра','Жел жылдамдығы'],['Temperature','Температура','Температура'],['Digital Twin','Цифровой двойник','Цифрлық егіз'],['DIGITAL TWIN','ЦИФРОВОЙ ДВОЙНИК','ЦИФРЛЫҚ ЕГІЗ'],['DATA / MOTION / ENERGY','ДАННЫЕ / ДВИЖЕНИЕ / ЭНЕРГИЯ','ДЕРЕКТЕР / ҚОЗҒАЛЫС / ЭНЕРГИЯ'],
@@ -37,7 +43,7 @@ export function initDashboardLanguage(onChange) {
    observer.disconnect();
    const walker=document.createTreeWalker(app,NodeFilter.SHOW_TEXT);
    while(walker.nextNode()){
-     const node=walker.currentNode;if(node.parentElement.closest('#dashboard-language,script,style'))continue;
+     const node=walker.currentNode;if(node.parentElement.closest('#dashboard-language,script,style,[translate="no"]'))continue;
      const current=node.textContent;let record=originals.get(node);
      if(!record||record.rendered!==current)record={source:current};
      const key=record.source.trim();const result=record.source.replace(key,translate(key));

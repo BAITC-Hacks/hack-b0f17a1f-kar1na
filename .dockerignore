@@ -1,0 +1,12 @@
+.git
+.env
+.env.*
+.venv
+web/node_modules
+web/dist
+results/forecasts
+results/agent_runs
+results/monitor
+__pycache__
+.pytest_cache
+*.log

@@ -65,6 +65,7 @@ class OpenMeteoProvider:
         self.offline = (os.getenv('WEATHER_OFFLINE', 'false').lower() == 'true') if offline is None else offline
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         self._memory = {}
+        self._provenance = {}
 
     def _fetch(self, params: dict, url: str, live=False) -> dict:
         key = hashlib.sha256(json.dumps([url, params], sort_keys=True).encode()).hexdigest()
@@ -122,6 +123,8 @@ class OpenMeteoProvider:
                           'wind_speed_unit': 'ms', 'timezone': 'UTC'}
                 package = self._fetch(params, ARCHIVE_URL)
                 self._memory[key] = self._frame(package, '_previous_day3')
+                self._provenance[key] = {'request_url': package['url'], 'retrieved_at': package['retrieved_at'],
+                    'response_sha256': hashlib.sha256(json.dumps(package['response'], sort_keys=True).encode()).hexdigest()}
             pieces.append(self._memory[key])
         if not pieces:
             raise WeatherError('Empty archive interval')
@@ -142,6 +145,10 @@ class OpenMeteoProvider:
                         'latest_availability_bound': available_bound.isoformat(),
                         'availability_basis': 'fixed lead API semantics; exact publication time not supplied',
                         'exact_run_id': None, 'is_fallback': False}
+            metadata['archive_requests'] = [receipt for key,receipt in self._provenance.items()
+                if key[0]==latitude and key[1]==longitude
+                and pd.Timestamp(key[2])<=times[-1]
+                and pd.Timestamp(key[2])+pd.offsets.MonthBegin(1)>times[0]]
         else:
             now = pd.Timestamp.now(tz='UTC')
             if origin < now.floor('h') or origin > now.ceil('h'):

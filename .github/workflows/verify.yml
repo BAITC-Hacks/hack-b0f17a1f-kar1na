@@ -1,0 +1,23 @@
+name: Verify forecast and website
+on: [push, pull_request]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      WEATHER_OFFLINE: 'true'
+      AGENT_MONITOR_ENABLED: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: pip install -r requirements.txt
+      - run: python -m pytest -q
+      - run: python scripts/verify_submission.py
+      - run: npm ci && npm run build
+        working-directory: web
