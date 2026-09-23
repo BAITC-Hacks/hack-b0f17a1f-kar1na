@@ -1,5 +1,7 @@
 import {createTwin} from './twin.js';
 import {createAssistantPanel} from './assistant-panel.js';
+import {createOverviewMotion} from './overview-motion.js';
+const revealOverview = createOverviewMotion();
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const state={id:'turbine_1',hours:24,mode:'replay',history:'power',data:null,historical:null,request:0};let twin;
 const assistant=createAssistantPanel(()=>state,result=>{if(state.data){state.data={...state.data,...result};render();}});
@@ -9,7 +11,7 @@ const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>'
 async function api(path,options={}){const r=await fetch(path,options);if(!r.ok){const body=await r.json().catch(()=>({}));throw Error(typeof body.detail==='string'?body.detail:`API error ${r.status}`);}return r.json();}
 const sections=['overview','analytics','agent'];
 function setActiveSection(id){$$('[data-view]').forEach(link=>{const active=link.dataset.view===id;link.classList.toggle('active',active);if(active)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');});}
-function navigate(){const route=location.hash.slice(1),inApp=sections.includes(route);$('#landing').hidden=inApp;$('#application').hidden=!inApp;$$('.view').forEach(v=>v.hidden=false);if(inApp){setActiveSection(route);requestAnimationFrame(()=>document.getElementById(route).scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'}));if(state.data)assistant.activate();}}
+function navigate(){const route=location.hash.slice(1),inApp=sections.includes(route),enteringApp=inApp&&$('#application').hidden;$('#landing').hidden=inApp;$('#application').hidden=!inApp;$$('.view').forEach(v=>v.hidden=false);if(inApp){if(enteringApp)revealOverview();setActiveSection(route);requestAnimationFrame(()=>document.getElementById(route).scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'}));if(state.data)assistant.activate();}}
 addEventListener('hashchange',navigate);$$('[data-launch]').forEach(b=>b.onclick=()=>location.hash='overview');$('#home-brand').onclick=()=>location.hash='landing';navigate();
 let scrollTick=false;
 addEventListener('scroll',()=>{if(scrollTick||$('#application').hidden)return;scrollTick=true;requestAnimationFrame(()=>{const offset=$('.app-header').getBoundingClientRect().height+80;let active='overview';for(const id of sections)if(document.getElementById(id).getBoundingClientRect().top<=offset)active=id;setActiveSection(active);scrollTick=false;});},{passive:true});
