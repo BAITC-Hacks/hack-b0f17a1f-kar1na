@@ -1,7 +1,9 @@
-import bpy, math, json
+import bpy, math, json, sys
 from pathlib import Path
 from mathutils import Vector
 P=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(P/'scripts'))
+from turbine_details import build_details
 bpy.ops.object.select_all(action='SELECT'); bpy.ops.object.delete(use_global=False)
 bpy.context.scene.unit_settings.system='METRIC'
 def material(name,color,metal=0,rough=.4):
@@ -40,7 +42,7 @@ def meta(o,tid,cid):o['turbine_id']=tid;o['component_id']=cid
 root=empty('WindFarm'); root['digital_twin_type']='wind_farm'
 box('Ground',root,(0,7,-1),(190,105,1.6),concrete,2)
 # Span stations: circular root to twisted, tapered aerodynamic profile.
-stations=[(1.1,.65,0),(2.3,.8,0),(4,1.65,18),(7,2.5,16),(12,2.3,12),(20,1.8,8),(29,1.2,4),(37,.65,1),(42,.12,0),(42.4,.015,0)]
+stations=[(1.1,.65,0),(2.3,.8,0),(4,1.65,18),(7,3.15,16),(12,2.85,12),(20,2.25,8),(29,1.5,4),(34,1.05,2),(35,1,2),(37,.75,1),(38,.65,1),(39,.52,1),(40,.38,0),(42,.12,0),(42.4,.015,0)]
 verts=[];faces=[];N=24
 for z,chord,twist in stations:
  for j in range(N):
@@ -53,7 +55,7 @@ for k in range(len(stations)-1):
  for j in range(N):a=k*N+j;b=k*N+(j+1)%N;faces.append((a,b,b+N,a+N))
 faces.extend([tuple(reversed(range(N))),tuple((len(stations)-1)*N+j for j in range(N))])
 mesh=bpy.data.meshes.new('Twisted airfoil blade');mesh.from_pydata(verts,[],faces);mesh.materials.append(blade_mat);mesh.materials.append(red)
-for p in mesh.polygons:p.use_smooth=True;p.material_index=1 if p.center.z>39 else 0
+for p in mesh.polygons:p.use_smooth=True;p.material_index=1 if (35<p.center.z<37 or 39<p.center.z<41) else 0
 for i,pos in enumerate([(-49,-9,0),(49,23,0)],1):
  tid=f'turbine_{i}';pre=f'T{i}_';t=empty(f'Turbine_{i}',root,pos);t['assembly_id']=tid;t['turbine_id']=tid;t['selectable']=True;t['component_type']='wind_turbine'
  cyl(pre+'Foundation',t,(0,0,.4),5,1.2,concrete)
@@ -63,23 +65,15 @@ for i,pos in enumerate([(-49,-9,0),(49,23,0)],1):
  for j in range(12):
   a=j*math.tau/12;cyl(pre+f'Anchor_{j}',t,(3.5*math.cos(a),3.5*math.sin(a),1.08),.13,.18,steel)
  nac=empty(pre+'Nacelle',t,(0,0,81));meta(nac,tid,'nacelle')
- shell=box(pre+'NacelleShell',nac,(1.4,0,0),(10,4.3,4.1),white,.9);meta(shell,tid,'nacelle_shell')
- cyl(pre+'YawBearing',t,(0,0,79.7),1.7,.7,steel)
- for cid,name,x,r,l,mat in [('main_shaft','MainShaft',-2.4,.42,3.7,steel),('gearbox','Gearbox',.0,1.25,2.0,gold),('generator','Generator',3.0,1.15,2.8,teal)]:
-  o=cyl(pre+name,nac,(x,0,0),r,l,mat,axis='X');meta(o,tid,cid)
-  if cid=='generator':
-   for k in range(9):cyl(pre+f'CoolingFin_{k}',o,(-1.2+k*.3,0,0),1.23,.07,teal,axis='Z').rotation_euler=(0,0,0)
- # Cooling rings are local to X-oriented generator: local Z follows shaft.
- for o in list(bpy.data.objects):
-  if o.name.startswith(pre+'CoolingFin_'):o.location=(0,0,-1.2+int(o.name.split('_')[-1])*.3)
+ shell=build_details(pre,tid,t,nac,(empty,box,cyl,sphere,meta,white,steel,teal,gold,dark,red))
  rotor=empty(pre+'Rotor',t,(-4.5,0,81));meta(rotor,tid,'rotor');rotor['rotation_axis']='X';rotor['speed_units']='radians_per_second'
- hub=sphere(pre+'Hub',rotor,(-.35,0,0),(1.9,1.25,1.25),white);meta(hub,tid,'hub')
+ hub=sphere(pre+'Hub',rotor,(-.5,0,0),(2.15,1.32,1.32),white);meta(hub,tid,'hub')
  for k in range(3):
+  pitch=empty(pre+f'PitchBearing_{k+1}',rotor);pitch.rotation_euler[0]=k*math.tau/3+.15
+  cyl(pre+f'BladeRootCollar_{k+1}',pitch,(0,0,1.25),.5,.32,steel)
   o=bpy.data.objects.new(pre+f'Blade_{k+1}',mesh);bpy.context.collection.objects.link(o);o.parent=rotor;o.rotation_euler[0]=k*math.tau/3+.15;meta(o,tid,f'blade_{k+1}'); mod=o.modifiers.new('Smooth airfoil transitions','SUBSURF'); mod.levels=1; mod.render_levels=1
- cyl(pre+'SensorMast',nac,(3.7,0,2.7),.055,1.8,steel)
- sphere(pre+'Anemometer',nac,(3.7,0,3.6),(.22,.22,.15),dark)
 # Studio rig, excluded from exported selection.
-scene=bpy.context.scene;scene.render.engine='CYCLES';scene.cycles.samples=24
+scene=bpy.context.scene;scene.render.engine='CYCLES';scene.cycles.samples=40
 scene.world.color=(.35,.35,.35)
 def aim(o,at):o.rotation_euler=(Vector(at)-o.location).to_track_quat('-Z','Y').to_euler()
 bpy.ops.object.light_add(type='AREA',location=(-70,-80,160));bpy.context.object.data.energy=160000;bpy.context.object.data.shape='DISK';bpy.context.object.data.size=100;aim(bpy.context.object,(0,0,45))
@@ -87,12 +81,27 @@ bpy.ops.object.light_add(type='SUN',location=(0,0,100));bpy.context.object.rotat
 bpy.ops.object.camera_add(location=(-220,-300,170));cam=bpy.context.object;aim(cam,(0,6,57));cam.data.type='ORTHO';cam.data.ortho_scale=255;scene.camera=cam
 scene.render.resolution_x=1600;scene.render.resolution_y=1100;scene.render.resolution_percentage=100
 scene.view_settings.view_transform='AgX'
+# Blender timeline: assembled → exploded, same geometry and hierarchy.
+scene.render.fps=30;scene.frame_end=60
+scene.timeline_markers.new('ASSEMBLED',frame=1);scene.timeline_markers.new('EXPLODED',frame=60)
+for o in root.children_recursive:
+ if o.get('explodable'):
+  original=o.location.copy();o.keyframe_insert(data_path='location',frame=1)
+  e=o['exploded_position'];o.location=(e[0],-e[2],e[1]);o.keyframe_insert(data_path='location',frame=60);o.location=original
+scene.frame_set(1)
 bpy.ops.wm.save_as_mainfile(filepath=str(P/'models/wind_farm.blend'))
 bpy.ops.object.select_all(action='DESELECT');root.select_set(True)
 for o in root.children_recursive:o.select_set(True)
 bpy.ops.export_scene.gltf(filepath=str(P/'models/wind_farm.glb'),use_selection=True,export_format='GLB',export_extras=True,export_animations=False,export_apply=True)
 scene.render.filepath=str(P/'renders/assembled.png');bpy.ops.render.render(write_still=True)
 # Cutaway preview by hiding shell only in this unsaved render state.
-for i in [1,2]:bpy.data.objects[f'T{i}_NacelleShell'].hide_render=True
+for i in [1,2]:
+ for o in bpy.data.objects[f'T{i}_NacelleShell'].children_recursive:o.hide_render=True
 cam.location=(-19,-24,94);aim(cam,(-48,-9,81));cam.data.ortho_scale=17
 scene.render.filepath=str(P/'renders/inspection.png');bpy.ops.render.render(write_still=True)
+
+for i in [1,2]:
+ for o in bpy.data.objects[f'T{i}_NacelleShell'].children_recursive:o.hide_render=False
+scene.frame_set(60)
+cam.location=(-68,-38,100);aim(cam,(-48,-9,82));cam.data.ortho_scale=28
+scene.render.filepath=str(P/'renders/exploded.png');bpy.ops.render.render(write_still=True)

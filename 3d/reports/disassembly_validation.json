@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "movable_assembly_count": 36,
+  "checks": {
+    "movable_assemblies": true,
+    "endpoints_match_metadata": true,
+    "reassemble_world_transforms": true,
+    "same_geometry": true
+  }
+}

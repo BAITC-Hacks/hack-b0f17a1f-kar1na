@@ -99,7 +99,7 @@ class OpenMeteoProvider:
             hourly = package['response']['hourly']
             frame = pd.DataFrame({'wind_speed': hourly[WIND_VARIABLE+suffix],
                                   'temperature': hourly['temperature_2m'+suffix]},
-                                 index=pd.to_datetime(hourly['time'], utc=True))
+                                 index=pd.to_datetime(hourly['time'], utc=True), dtype=float)
             frame.index.name = 'timestamp'
             return frame
         except (KeyError, ValueError) as exc:

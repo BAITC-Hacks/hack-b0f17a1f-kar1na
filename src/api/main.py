@@ -61,11 +61,11 @@ def turbine(turbine_id: str):
 
 # Static paths before variable paths.
 @app.get('/api/forecast/all',response_model=list[ForecastResponse])
-def forecast_all(hours: Literal[24,48]=48,mode: Optional[Literal['replay','live']]=None):
+def forecast_all(hours: int=Query(48,ge=24,le=48,json_schema_extra={"enum":[24,48]}),mode: Optional[Literal['replay','live']]=None):
     return [agent.run(t,hours,mode) for t in TURBINES]
 
 @app.get('/api/forecast/{turbine_id}',response_model=ForecastResponse)
-def forecast(turbine_id: str,hours: Literal[24,48]=48,mode: Optional[Literal['replay','live']]=None):
+def forecast(turbine_id: str,hours: int=Query(48,ge=24,le=48,json_schema_extra={"enum":[24,48]}),mode: Optional[Literal['replay','live']]=None):
     known(turbine_id)
     return agent.run(turbine_id,hours,mode)
 
@@ -104,7 +104,7 @@ def recalculate(request: RecalculateRequest):
     return agent.run(request.turbine_id,request.hours,request.mode,request.forecast_origin,override)
 
 @app.get('/api/turbines/{turbine_id}/details')
-def details(turbine_id: str,hours: Literal[24,48]=48,mode: Optional[Literal['replay','live']]=None):
+def details(turbine_id: str,hours: int=Query(48,ge=24,le=48,json_schema_extra={"enum":[24,48]}),mode: Optional[Literal['replay','live']]=None):
     cfg=known(turbine_id)
     result=agent.run(turbine_id,hours,mode)
     history=read_hourly(turbine_id)
