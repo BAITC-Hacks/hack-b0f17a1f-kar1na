@@ -18,6 +18,8 @@ def predict(bundle: dict, history: pd.DataFrame, origin, weather: pd.DataFrame):
     origin = utc(origin)
     if utc(bundle['trained_until']) > origin:
         raise ValueError('Model training cutoff is after forecast origin (leakage)')
+    if utc(bundle['calibration_end_exclusive']) > origin:
+        raise ValueError('Interval calibration cutoff is after forecast origin (leakage)')
     x = make_features(history, origin, weather)
     if list(x.columns) != bundle['feature_names']:
         raise ValueError('Model feature schema mismatch')

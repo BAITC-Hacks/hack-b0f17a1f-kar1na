@@ -22,7 +22,7 @@ def empty(name,parent=None,loc=(0,0,0)):
  o=bpy.data.objects.new(name,None); bpy.context.collection.objects.link(o); o.parent=parent; o.location=loc; return o
 def finish(o,name,parent,mat):
  o.name=name; o.parent=parent; o.data.materials.append(mat)
- for p in o.data.polygons:p.use_smooth=True
+ for p in o.data.polygons:p.use_smooth=len(p.vertices)<=4
  return o
 def box(name,parent,loc,size,mat,bevel=.15):
  bpy.ops.mesh.primitive_cube_add(size=1,location=loc); o=bpy.context.object; o.scale=size; bpy.ops.object.transform_apply(location=False,rotation=False,scale=True)
@@ -72,6 +72,21 @@ for i,pos in enumerate([(-49,-9,0),(49,23,0)],1):
   pitch=empty(pre+f'PitchBearing_{k+1}',rotor);pitch.rotation_euler[0]=k*math.tau/3+.15
   cyl(pre+f'BladeRootCollar_{k+1}',pitch,(0,0,1.25),.5,.32,steel)
   o=bpy.data.objects.new(pre+f'Blade_{k+1}',mesh);bpy.context.collection.objects.link(o);o.parent=rotor;o.rotation_euler[0]=k*math.tau/3+.15;meta(o,tid,f'blade_{k+1}'); mod=o.modifiers.new('Smooth airfoil transitions','SUBSURF'); mod.levels=1; mod.render_levels=1
+# Batch repeated static details by parent and material, preserving movable assemblies.
+from collections import defaultdict
+batches=defaultdict(list)
+for o in list(root.children_recursive):
+ if o.type=='MESH' and not o.get('component_id') and not o.children and len(o.data.materials)==1:
+  batches[(o.parent,o.data.materials[0])].append(o)
+for (parent,mat),objects in batches.items():
+ if len(objects)<6:continue
+ bpy.ops.object.select_all(action='DESELECT')
+ for o in objects:
+  bpy.context.view_layer.objects.active=o
+  for mod in list(o.modifiers):bpy.ops.object.modifier_apply(modifier=mod.name)
+  o.select_set(True)
+ bpy.context.view_layer.objects.active=objects[0];bpy.ops.object.join()
+ bpy.context.object.name=parent.name+'_'+mat.name.replace(' ','')+'_Details'
 # Studio rig, excluded from exported selection.
 scene=bpy.context.scene;scene.render.engine='CYCLES';scene.cycles.samples=40
 scene.world.color=(.35,.35,.35)

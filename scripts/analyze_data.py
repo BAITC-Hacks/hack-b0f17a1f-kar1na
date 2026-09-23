@@ -34,16 +34,24 @@ def main():
         fig.colorbar(hb, ax=ax, label='Hourly samples (log scale)')
     fig.savefig(out / 'power_curves.png', dpi=160)
     plt.close(fig)
-    fig, axes = plt.subplots(3, 1, figsize=(13, 9), constrained_layout=True)
+    fig, axes = plt.subplots(4, 1, figsize=(13, 11), constrained_layout=True)
     for field, ax in zip(NUMERIC, axes):
         for turbine, hourly in frames.items():
-            hourly[field].resample('MS').mean().plot(ax=ax, label=turbine)
-        ax.set(ylabel=field, xlabel='Month (UTC)', title=f'Monthly mean {field} (gaps retained)')
+            monthly=hourly[field].resample('MS')
+            coverage=monthly.count()/monthly.size()
+            monthly.mean().where(coverage>=.8).plot(ax=ax, label=turbine)
+        ax.set(ylabel=field, xlabel='Month (UTC)', title=f'Monthly mean {field} (months with <80% coverage omitted)')
         ax.legend()
+    for turbine,hourly in frames.items():
+        monthly=hourly.power.resample('MS')
+        (monthly.count()/monthly.size()).plot(ax=axes[3],label=turbine)
+    axes[3].set(ylabel='Observed fraction',xlabel='Month (UTC)',title='Monthly power coverage',ylim=(0,1.05))
+    axes[3].legend()
     fig.savefig(out / 'turbine_comparison.png', dpi=160)
     plt.close(fig)
     fig, axes = plt.subplots(1,2,figsize=(10,4),constrained_layout=True)
     for ax, (turbine, hourly) in zip(axes, frames.items()):
+        ax.grid(False)
         corr = hourly[NUMERIC].corr()
         im = ax.imshow(corr, vmin=-1,vmax=1,cmap='RdBu_r')
         ax.set(xticks=range(3), yticks=range(3), xticklabels=NUMERIC, yticklabels=NUMERIC,title=turbine)

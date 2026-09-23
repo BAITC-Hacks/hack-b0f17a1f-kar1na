@@ -157,7 +157,7 @@ class OpenMeteoProvider:
         metadata.update({'wind_height_m': 80, 'temperature_height_m': 2,
                          'requested_latitude': latitude, 'requested_longitude': longitude,
                          'wind_unit': 'm/s', 'temperature_unit': 'C',
-                         'reference': 'https://open-meteo.com/en/docs/previous-runs-api'})
+                         'reference': 'https://open-meteo.com/en/docs/previous-runs-api' if self.mode=='archive' else 'https://open-meteo.com/en/docs'})
         return WeatherResult(frame, metadata)
 
 class PersistenceWeatherProvider:
