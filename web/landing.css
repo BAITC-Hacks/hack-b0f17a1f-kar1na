@@ -18,11 +18,27 @@
 #landing .scroll-journey{background:#fff;overflow:clip}#landing .journey-stage{z-index:0}#landing .journey-white{display:none}#landing .journey-shade{background:linear-gradient(90deg,#07192c45,#07192c10 50%,#07192c45)}#landing .scroll-journey:before,#landing .scroll-journey:after{content:'';position:absolute;left:0;width:100%;height:180px;z-index:1;pointer-events:none}#landing .scroll-journey:before{top:0;background:linear-gradient(#fff,rgba(255,255,255,.65) 22%,transparent)}#landing .scroll-journey:after{bottom:0;background:linear-gradient(transparent,#f7faff)}#landing .scroll-journey .section,#landing .scroll-journey .twin-story{position:relative;z-index:2;display:flex;align-items:center;justify-content:flex-start;min-height:100svh;padding:100px 7%;pointer-events:none}#landing .scroll-journey .section:nth-of-type(even),#landing .scroll-journey .twin-story{justify-content:flex-end}#landing .scroll-journey .intro{min-height:90svh}#landing .scroll-journey .twin-story{min-height:90svh;padding-bottom:120px}#landing .journey-popup{width:min(570px,49%);background:linear-gradient(135deg,#f8fbfff5,#eaf2ffe8);border:1px solid #ffffffd9;border-radius:22px;padding:32px 34px;box-shadow:0 24px 70px #04142830,inset 0 1px #fff;backdrop-filter:blur(22px);color:#102541;pointer-events:auto;opacity:var(--popup-opacity,1);transform:translate3d(var(--popup-x,0px),0,0) scale(var(--popup-scale,1));will-change:transform,opacity}#landing .journey-popup:before{content:'';position:absolute;top:30px;left:-7px;width:13px;height:13px;transform:rotate(45deg);background:#f7faff;border-left:1px solid #fff;border-bottom:1px solid #fff}#landing .section:nth-of-type(even) .journey-popup:before,#landing .twin-story .journey-popup:before{left:auto;right:-7px}#landing .scroll-journey .journey-popup .section-index{font-size:10px;color:#315ed4;letter-spacing:.2em;margin:0 0 22px;display:block}#landing .scroll-journey .journey-popup h2{font-family:Manrope,Arial,sans-serif;font-size:clamp(28px,2.7vw,42px);font-weight:600;line-height:1.13;letter-spacing:-.05em;margin:0 0 20px;color:#0d203c}#landing .scroll-journey .journey-popup h2 em{color:#245de2}#landing .scroll-journey .journey-popup p{color:#50617b;font-size:15px;line-height:1.7;margin:0}#landing .scroll-journey .process-lines{margin-top:22px}#landing .scroll-journey .process-lines>div{background:transparent;backdrop-filter:none;padding:13px 0;grid-template-columns:26px 1fr;gap:5px 10px;border-color:#234a8b24}#landing .scroll-journey .process-lines strong{font-size:17px;color:#183658}#landing .scroll-journey .process-lines small{grid-column:2;color:#586c88;font-size:12px}#landing .scroll-journey .process-lines span{color:#3d6add}#landing .scroll-journey .agent-story{grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}#landing .scroll-journey .agent-story article{padding:13px;background:#ffffff80;border:1px solid #315dcc20;border-radius:10px;backdrop-filter:none}#landing .scroll-journey .agent-story h3{color:#19395d;font-size:14px;margin:8px 0}#landing .scroll-journey .agent-story p{font-size:12px;line-height:1.5}#landing .scroll-journey .agent-story span{color:#3563cd}#landing .journey-popup .twin-copy .button{margin-top:25px;font-size:11px;letter-spacing:.1em}#landing .final-cta:before{content:'';position:absolute;inset:0 0 auto;height:100px;background:linear-gradient(#f7faff,transparent);pointer-events:none;z-index:0}
 @media(max-width:720px){#landing .scroll-journey .section,#landing .scroll-journey .twin-story{padding:90px 6%;min-height:105svh;flex-direction:row;align-items:center}#landing .journey-popup{width:100%;padding:25px 23px;border-radius:18px}#landing .scroll-journey .journey-popup h2{font-size:31px}#landing .scroll-journey .journey-popup p{font-size:14px}#landing .scroll-journey .agent-story p{font-size:12px}#landing .scroll-journey:before,#landing .scroll-journey:after{height:110px}}
 @media(prefers-reduced-motion:reduce){#landing .journey-popup{transform:none!important;opacity:1!important;will-change:auto}}
-/* Cobalt diamond seam between the landing hero and the scroll film. */
-#landing .scroll-journey:before{height:64px;top:0;background-color:transparent;background-image:conic-gradient(from 45deg,#123cf0 0deg 90deg,transparent 90deg 180deg,#123cf0 180deg 270deg,transparent 270deg 360deg);background-size:32px 32px;mask-image:linear-gradient(#000 0%,#000 70%,transparent 100%);-webkit-mask-image:linear-gradient(#000 0%,#000 70%,transparent 100%);z-index:3}
-@media(max-width:720px){#landing .scroll-journey:before{height:44px;background-size:24px 24px}}
-#landing .diamond-white-fade{position:absolute;top:0;left:0;right:0;height:190px;z-index:1;pointer-events:none;background:linear-gradient(to bottom,#fff 0%,rgba(255,255,255,.96) 18%,rgba(255,255,255,.68) 42%,rgba(255,255,255,.24) 72%,transparent 100%)}
-@media(max-width:720px){#landing .diamond-white-fade{height:135px}}
+/* Crisp cobalt seams sit above independent white fades at both film edges. */
+#landing .scroll-journey:before,
+#landing .scroll-journey:after{
+  height:64px;
+  background-color:transparent;
+  background-image:conic-gradient(from 45deg,#123cf0 0deg 90deg,transparent 90deg 180deg,#123cf0 180deg 270deg,transparent 270deg 360deg);
+  background-size:32px 32px;
+  z-index:3;
+}
+#landing .scroll-journey:before{top:0}
+#landing .scroll-journey:after{bottom:0}
+#landing .diamond-white-fade{
+  position:absolute;top:0;left:0;right:0;height:190px;z-index:1;pointer-events:none;
+  background:linear-gradient(to bottom,#fff 0%,rgba(255,255,255,.96) 18%,rgba(255,255,255,.68) 42%,rgba(255,255,255,.24) 72%,transparent 100%);
+}
+#landing .diamond-white-fade--bottom{top:auto;bottom:0;transform:rotate(180deg)}
+#landing .final-cta:before{background:linear-gradient(#fff,transparent)}
+@media(max-width:720px){
+  #landing .scroll-journey:before,#landing .scroll-journey:after{height:48px;background-size:24px 24px}
+  #landing .diamond-white-fade{height:135px}
+}
 #landing .landing-head .brand .windai-logo{display:block;width:156px;height:auto;color:#061024}#landing .footer-brand .windai-logo{display:block;width:205px;height:auto;color:#061024}.app-identity .brand .windai-logo{display:block;width:133px;height:auto;color:#edf5ff}.windai-logo{overflow:visible;flex-shrink:0}
 @media(max-width:720px){#landing .landing-head .brand .windai-logo{width:128px}#landing .footer-brand .windai-logo{width:165px}.app-identity .brand .windai-logo{width:115px}}
 /* Match the closing headline to the opening editorial typography. */
