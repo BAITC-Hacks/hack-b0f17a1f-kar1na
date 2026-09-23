@@ -17,9 +17,18 @@ function update() {
   const rect = journey.getBoundingClientRect();
   const progress = clamp(-rect.top / Math.max(1, rect.height - innerHeight));
   journey.style.setProperty('--journey-progress', progress);
-  // Dissolve from the white hero and back into the white closing artwork.
-  const white = Math.max(1 - progress / .1, (progress - .91) / .09, 0);
-  journey.style.setProperty('--journey-white', clamp(white));
+  // Spatial fades at the edges keep the film visible throughout the story.
+  journey.style.setProperty('--journey-white', 0);
+  journey.querySelectorAll('.journey-popup').forEach((card, index) => {
+    const box = card.getBoundingClientRect();
+    const enter = clamp((innerHeight - box.top) / (innerHeight * .32));
+    const leave = clamp(box.bottom / (innerHeight * .22));
+    const amount = reducedMotion.matches ? 1 : Math.min(enter, leave);
+    const eased = amount * amount * (3 - 2 * amount);
+    card.style.setProperty('--popup-opacity', eased);
+    card.style.setProperty('--popup-x', `${(1 - eased) * (index % 2 ? 110 : -110)}px`);
+    card.style.setProperty('--popup-scale', .96 + eased * .04);
+  });
   journey.querySelector('.journey-percent').textContent = `${String(Math.round(progress * 100)).padStart(2, '0')}%`;
   if (Number.isFinite(video.duration)) {
     targetTime = progress * Math.max(0, video.duration - .05);
@@ -38,20 +47,5 @@ addEventListener('resize', schedule);
 addEventListener('hashchange', schedule);
 reducedMotion.addEventListener('change', schedule);
 
-const targets = journey.querySelectorAll('.section-index, h2, .intro p, .process-lines > div, .agent-story article, .twin-copy p, .twin-copy .button');
-if ('IntersectionObserver' in window) {
-  const observer = new IntersectionObserver(entries => {
-    for (const entry of entries) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-revealed');
-        observer.unobserve(entry.target);
-      }
-    }
-  }, {threshold:.12, rootMargin:'0px 0px -6% 0px'});
-  targets.forEach((element, i) => {
-    element.classList.add('scroll-reveal');
-    element.style.setProperty('--reveal-delay', `${(i % 3) * 65}ms`);
-    observer.observe(element);
-  });
-}
+// Reveal whole cards from alternating sides, in both scroll directions.
 schedule();
