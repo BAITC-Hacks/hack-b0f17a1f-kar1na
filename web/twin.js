@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {weatherTurbine} from './twin-materials.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {createWindFarmControls} from '../3d/web/wind_farm_controls.mjs';
 export async function createTwin(onSelect){
@@ -9,9 +10,9 @@ export async function createTwin(onSelect){
  const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.toneMapping=THREE.ACESFilmicToneMapping;host.append(renderer.domElement);
  const camera=new THREE.PerspectiveCamera(40,1,.1,1800);camera.position.set(-220,155,285);
  const orbit=new OrbitControls(camera,renderer.domElement);orbit.target.set(0,55,0);orbit.enableDamping=true;orbit.maxPolarAngle=Math.PI*.49;
- scene.add(new THREE.HemisphereLight(0xdcefff,0x7b8c83,3));const sun=new THREE.DirectionalLight(0xffeedb,3);sun.position.set(-100,180,70);scene.add(sun);
+ scene.add(new THREE.HemisphereLight(0xdcefff,0x718096,2.1));const sun=new THREE.DirectionalLight(0xfff5e8,3.2);sun.position.set(-100,180,70);scene.add(sun);
  new ResizeObserver(()=>{const w=host.clientWidth,h=host.clientHeight;if(!w||!h)return;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h,false);}).observe(host);
- const gltf=await new GLTFLoader().loadAsync('/models/wind_farm.glb');scene.add(gltf.scene);const farm=createWindFarmControls(THREE,gltf);let selected='turbine_1';
+ const gltf=await new GLTFLoader().loadAsync('/models/wind_farm.glb');scene.add(gltf.scene);const farm=createWindFarmControls(THREE,gltf);weatherTurbine(gltf.scene);let selected='turbine_1';
  const roots={turbine_1:gltf.scene.getObjectByName('Turbine_1'),turbine_2:gltf.scene.getObjectByName('Turbine_2')};
  const ground=gltf.scene.getObjectByName('Ground');if(ground)ground.visible=false;
  function portrait(id){
