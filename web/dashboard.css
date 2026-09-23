@@ -53,3 +53,34 @@
 
 #application .dashboard-grid{padding-top:12px}
 #application .telemetry-panel{padding-top:0}
+/* Reference composition: full turbine with inspection dock at its feet. */
+#application .turbine-info>h2,#application .turbine-info>p{display:none}
+#application .telemetry-panel .select-row{margin-bottom:16px}
+#application .metric-trio{gap:14px;margin-top:0}
+#application .metric-trio>div{min-height:170px;display:flex;flex-direction:column;justify-content:center}
+#application .metric-trio b{font-size:52px}
+#application .turbine-panel{position:relative;overflow:hidden}
+#application .turbine-panel .twin-controls{position:absolute;z-index:3;bottom:30px;left:50%;transform:translateX(-50%);width:90%;max-width:440px;padding:10px 12px;border:1px solid #cbd8f5;border-radius:22px;background:#ffffffec;box-shadow:0 6px 24px #183b6b18;justify-content:center;gap:5px}
+#application .turbine-panel .twin-controls button{border:0;border-radius:12px;padding:7px 9px}
+#application .turbine-panel .twin-controls label{display:flex;align-items:center;gap:10px;width:100%;padding:0 6px}
+#application .turbine-panel .twin-controls input{flex:1;width:auto}
+#application .turbine-panel .twin-controls small{display:none}
+#application .forecast-panel .chart{height:245px;min-height:245px}
+#application .forecast-panel .chart-key{padding:15px 0}
+#application .agent-panel{align-self:end;min-height:110px;display:flex;flex-direction:column;justify-content:center}
+#application .agent-panel .agent-result{display:none}
+#application .agent-panel .panel-top h2{font-size:12px}
+#application .overview-details .execution-steps{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+@media(min-width:1101px){#application .dashboard-grid{grid-template-columns:minmax(190px,1fr) minmax(350px,2.35fr) minmax(310px,1.65fr);grid-template-rows:auto 1fr}#application .turbine-panel{height:660px;min-height:660px}#application .dashboard-top-metrics{height:124px;top:-138px}#application .forecast-panel{margin-top:138px}#application .dashboard-top-metrics>div{padding:18px}#application .dashboard-top-metrics b{font-size:36px;margin:8px 0}}
+@media(max-width:600px){#application .metric-trio>div{min-height:115px}#application .metric-trio b{font-size:32px}#application .turbine-panel .twin-controls{bottom:32px;width:94%;padding:8px}#application .turbine-panel .twin-controls button{font-size:9px;padding:6px}}
+
+/* Let the rotor extend beyond the artwork while keeping controls accessible. */
+#application .turbine-panel,#application #twin-viewport{overflow:visible}
+#application #twin-viewport canvas{position:absolute;z-index:1;max-width:none}
+#application .turbine-panel .twin-controls{z-index:4}
+#application .turbine-panel>.panel-top,#application .twin-watermark,#application #model-status{z-index:2}
+#application .telemetry-panel,#application .forecast-panel,#application .agent-panel{position:relative;z-index:2}
+
+/* Fade only the landscape, independently of the model and its controls. */
+#application #twin-viewport{background:none}
+#application #twin-viewport::before{content:'';position:absolute;inset:0;background:url('/assets/dashboard-landscape.png') center/cover;opacity:.45;pointer-events:none}
