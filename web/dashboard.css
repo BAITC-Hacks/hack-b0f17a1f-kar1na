@@ -258,3 +258,20 @@ html{scroll-behavior:smooth}
 @media(max-width:540px){#application .turbine-panel{height:540px}}
 
 #application #twin-viewport::before{filter:blur(9px);transform:scale(1.04)}
+
+/* Data plots: quiet grid, distinct series and readable scales at every width. */
+#application .chart{position:relative;min-width:0;background:linear-gradient(180deg,#fff9,#f6f9ff66);border-radius:10px}
+#application .chart svg{overflow:hidden}
+#application .plot-grid{stroke:#dce4f0;stroke-width:1;stroke-dasharray:3 5}
+#application .plot-label{fill:#61728d;font-size:11px;font-variant-numeric:tabular-nums}
+#application .plot-unit{fill:#354963;font-size:11px;font-weight:600;letter-spacing:.02em}
+#application .plot-zone{fill:#7b8ba0;font-size:10px;letter-spacing:.04em}
+#application .plot-interaction{position:absolute;inset:0;cursor:crosshair;border-radius:10px;outline:none}
+#application .plot-interaction:focus-visible{outline:2px solid #315bea;outline-offset:3px}
+#application .plot-tooltip{position:absolute;z-index:3;pointer-events:none;padding:11px 14px;border:1px solid #dbe4f2;border-radius:9px;background:#fffffff5;box-shadow:0 8px 26px #19356120;min-width:160px;color:#20304a;font-variant-numeric:tabular-nums}
+#application .plot-tooltip span,#application .plot-tooltip small{display:block;font-size:10px;color:#64748b;line-height:1.6}
+#application .plot-tooltip strong{display:block;font-size:19px;font-weight:600;margin:3px 0}
+#application .chart-empty{display:grid;place-items:center;height:100%;color:#73829a;font-size:13px}
+#application .chart-key .line-key{background:#315bea;height:3px;width:22px;border-radius:2px}
+#application .chart-key .band-key{background:#315bea20;border:1px solid #315bea40;border-radius:3px;width:22px;height:10px}
+@media(max-width:600px){#application .panel-top{flex-wrap:wrap;gap:12px}#application .history-tabs{flex-wrap:wrap}#application .chart{min-height:240px}#application .plot-label{font-size:10px}}
