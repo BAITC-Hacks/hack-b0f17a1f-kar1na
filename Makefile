@@ -1,4 +1,4 @@
-.PHONY: install build serve test verify reproduce agent
+.PHONY: install build serve test verify reproduce agent check-scada
 
 install:
 	python3 -m venv .venv
@@ -23,3 +23,6 @@ reproduce:
 
 agent:
 	.venv/bin/python scripts/run_agent.py
+
+check-scada:
+	WEATHER_OFFLINE=true .venv/bin/python scripts/check_scada_outage.py
