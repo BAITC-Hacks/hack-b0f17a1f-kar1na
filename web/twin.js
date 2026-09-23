@@ -4,7 +4,7 @@ import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {createBlueprint} from './twin-blueprint.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {createWindFarmControls} from '../3d/web/wind_farm_controls.mjs';
-export async function createTwin(onSelect){
+export async function createTwin(onSelect,onInspect=()=>{}){
  const host=document.querySelector('#twin-viewport'),status=document.querySelector('#model-status');
  try{
  const scene=new THREE.Scene();scene.background=null;
@@ -68,11 +68,11 @@ export async function createTwin(onSelect){
  }
  portrait(selected,true);
  function focus(info){zoomTarget=null;const size=Math.max(info.size.x,info.size.y,info.size.z);moveCamera(info.center,info.center.clone().add(new THREE.Vector3(-1,.55,1.4).normalize().multiplyScalar(size*2.2+5)));}
- document.querySelector('#camera-reset').onclick=()=>{farm.resetInspection();farm.setNacelleExploded(selected,0,reducedMotion.matches?0:.75);setBlueprint();portrait(selected);document.querySelector('#disassembly').value=0;};
- document.querySelector('#inspect-reset').onclick=()=>{farm.resetInspection();farm.setNacelleExploded(selected,0,reducedMotion.matches?0:.75);setBlueprint();portrait(selected);document.querySelector('#disassembly').value=0;};
- document.querySelectorAll('[data-component]').forEach(b=>b.onclick=()=>{farm.setNacelleExploded(selected,0,reducedMotion.matches?0:.75);farm.inspectComponent(selected,b.dataset.component);setBlueprint(b.dataset.component);document.querySelector('#disassembly').value=0;focus(componentViews[selected][b.dataset.component]);});
- document.querySelector('#disassembly').oninput=e=>{const amount=+e.target.value;farm.resetInspection();farm.setNacelleExploded(selected,amount,reducedMotion.matches?0:.18);setBlueprint(null,amount>0);};
- let down;renderer.domElement.addEventListener('pointerdown',e=>down=[e.clientX,e.clientY]);renderer.domElement.addEventListener('pointerup',e=>{if(!down||Math.hypot(e.clientX-down[0],e.clientY-down[1])>5)return;const r=renderer.domElement.getBoundingClientRect(),ray=new THREE.Raycaster();ray.setFromCamera(new THREE.Vector2((e.clientX-r.left)/r.width*2-1,1-(e.clientY-r.top)/r.height*2),camera);for(const hit of ray.intersectObjects(scene.children,true)){const id=farm.getTurbineId(hit.object);if(id){if(id!==selected)onSelect(id);break;}}});
+ document.querySelector('#camera-reset').onclick=()=>{farm.resetInspection();farm.setNacelleExploded(selected,0,reducedMotion.matches?0:.75);setBlueprint();portrait(selected);document.querySelector('#disassembly').value=0;onInspect({turbine_id:selected,component:'overview'});};
+ document.querySelector('#inspect-reset').onclick=()=>{farm.resetInspection();farm.setNacelleExploded(selected,0,reducedMotion.matches?0:.75);setBlueprint();portrait(selected);document.querySelector('#disassembly').value=0;onInspect({turbine_id:selected,component:'overview'});};
+ document.querySelectorAll('[data-component]').forEach(b=>b.onclick=()=>{farm.setNacelleExploded(selected,0,reducedMotion.matches?0:.75);farm.inspectComponent(selected,b.dataset.component);setBlueprint(b.dataset.component);document.querySelector('#disassembly').value=0;focus(componentViews[selected][b.dataset.component]);onInspect({turbine_id:selected,component:b.dataset.component});});
+ document.querySelector('#disassembly').oninput=e=>{const amount=+e.target.value;farm.resetInspection();farm.setNacelleExploded(selected,amount,reducedMotion.matches?0:.18);setBlueprint(null,amount>0);onInspect({turbine_id:selected,component:amount>0?'nacelle':'overview'});};
+ let down;renderer.domElement.addEventListener('pointerdown',e=>down=[e.clientX,e.clientY]);renderer.domElement.addEventListener('pointerup',e=>{if(!down||Math.hypot(e.clientX-down[0],e.clientY-down[1])>5)return;const r=renderer.domElement.getBoundingClientRect(),ray=new THREE.Raycaster();ray.setFromCamera(new THREE.Vector2((e.clientX-r.left)/r.width*2-1,1-(e.clientY-r.top)/r.height*2),camera);for(const hit of ray.intersectObjects(scene.children,true)){const id=farm.getTurbineId(hit.object);if(id){if(id!==selected)onSelect(id);else onInspect({turbine_id:selected,component:'overview'});break;}}});
  const clock=new THREE.Clock();renderer.setAnimationLoop(()=>{const dt=Math.min(clock.getDelta(),.1);if(!host.clientWidth)return;farm.update(dt);setBlueprint.update(reducedMotion.matches?1:dt);
  if(cameraTransition){
    const t=cameraTransition;t.elapsed+=dt;const progress=Math.min(1,t.elapsed/.9);

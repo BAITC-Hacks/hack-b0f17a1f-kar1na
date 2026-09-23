@@ -180,3 +180,64 @@
 #application .turbine-panel>.panel-top{color:#fff}
 #application .turbine-panel>.panel-top h2,#application .turbine-panel>.panel-top .online,#application .twin-watermark{color:#fff;text-shadow:0 1px 8px #0028b8}
 #application .twin-watermark{font-weight:600;letter-spacing:.23em}
+
+/* Contextual assistant occupies the full right column beside the digital twin. */
+#application .turbine-assistant{grid-column:3;grid-row:1/3;position:relative;z-index:3;min-width:0;height:660px;display:flex;flex-direction:column;padding:22px;background:linear-gradient(155deg,#fff 0%,#f4f8ff 100%);border:1px solid #c6d6f8;overflow:hidden}
+#application .assistant-heading{display:flex;gap:12px;align-items:center;padding-bottom:18px;border-bottom:1px solid #dce6f7}
+.assistant-symbol{display:grid;place-items:center;flex:0 0 42px;height:42px;border:1px solid #a8c0fb;border-radius:12px;color:#1247f5;font-size:30px;background:#edf3ff}
+.assistant-eyebrow{font-size:8px;letter-spacing:.18em;color:#6b82ad}
+#application .assistant-heading h2{font-size:20px;text-transform:none;letter-spacing:-.04em;margin:4px 0 0}
+#application .assistant-badge{font-size:10px;border-radius:20px;color:#2454b8;padding:6px 9px;background:#e8f0ff;margin-left:auto;white-space:nowrap}
+.assistant-selection{display:flex;justify-content:space-between;gap:8px;font-size:10px;color:#607cac;padding:14px 0}
+#assistant-turbine{font-weight:700;color:#214fac}
+.assistant-scroll{flex:1;min-height:0;overflow:auto;padding-right:4px;scrollbar-width:thin;scrollbar-color:#c5d4ef transparent}
+.assistant-kicker{font-size:8px;color:#6481b5;letter-spacing:.2em}
+#application .assistant-topic h3{font-size:23px;letter-spacing:-.04em;margin:7px 0 6px;color:#102957}
+#application .assistant-topic p{font-size:11px;line-height:1.6;margin:0;color:#6a7d9d}
+.assistant-facts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
+.assistant-facts>div{background:#edf3fe;border:1px solid #dce6fa;padding:12px;border-radius:9px}
+#application .assistant-facts small{display:block;font-size:9px;color:#5573a8}
+.assistant-facts b{display:block;font-size:22px;color:#123872;letter-spacing:-.04em;margin-top:7px;font-weight:600}.assistant-facts em{font-size:10px;font-weight:400;font-style:normal;color:#5573a8}
+.assistant-response{padding:16px;background:#fff;border:1px solid #e1e9f8;border-radius:12px}
+.assistant-response-head{display:flex;align-items:center;gap:7px;color:#35588f;font-size:10px;font-weight:600}
+.assistant-pulse{width:6px;height:6px;border-radius:50%;background:#3d6ef5;box-shadow:0 0 0 3px #ebf1ff}
+#application #assistant-answer{font-size:12px;line-height:1.75;color:#29456f;white-space:pre-wrap;overflow-wrap:anywhere;margin:10px 0 0}
+#application #assistant-error{font-size:10px;line-height:1.5;color:#9b541f;margin:10px 0 0}
+.assistant-shortcuts{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0}
+#application .assistant-shortcuts button{font:inherit;font-size:10px;background:#fff;border:1px solid #ccdafa;border-radius:20px;padding:8px 12px;color:#2254b3;cursor:pointer}
+#application .assistant-shortcuts button:hover{background:#e8efff;border-color:#8daaf0}.assistant-shortcuts button:disabled{opacity:.5}
+.assistant-source{font-size:10px;color:#6f83a5;line-height:1.7;margin-bottom:12px}.assistant-source summary{cursor:pointer}.assistant-source a{color:#275be1}
+.assistant-compose{position:relative;display:flex;align-items:center;gap:8px;padding:10px 10px 10px 14px;background:#fff;border:1px solid #b8caf2;border-radius:12px;margin-top:14px;flex-shrink:0}
+#application .assistant-compose textarea{width:100%;border:0;outline:0;resize:none;min-height:38px;background:transparent;color:#25426f;font:inherit;font-size:11px;line-height:1.6}
+#application .assistant-compose:focus-within{border-color:#2c60f5;box-shadow:0 0 0 2px #3862f51a}
+#application .assistant-compose button{flex:0 0 32px;height:32px;border:0;border-radius:9px;background:#2454ef;color:white;font-size:20px;cursor:pointer}.assistant-compose button:disabled{opacity:.45}
+.assistant-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-top:12px;font-size:9px;color:#7488ad}
+#application .assistant-footer button{background:none;border:0;color:#315ccc;font-size:9px;white-space:nowrap;cursor:pointer}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(min-width:901px) and (max-width:1100px){#application .dashboard-grid{grid-template-columns:minmax(145px,.85fr) minmax(280px,1.7fr) minmax(270px,1.5fr);gap:12px}#application .turbine-assistant{grid-column:3;grid-row:1/3;padding:16px;height:650px}#application .turbine-panel,#application .telemetry-panel{grid-row:1/3}.assistant-selection{font-size:9px}}
+@media(max-width:900px){#application .turbine-assistant{grid-column:1/-1;grid-row:2;height:auto;min-height:540px;max-height:720px}.assistant-scroll{min-height:220px}#application .dashboard-grid{grid-template-columns:minmax(160px,.8fr) minmax(280px,1.5fr)}}
+@media(max-width:600px){#application .turbine-assistant{order:1;height:auto;min-height:580px;max-height:720px;width:100%;padding:18px}#application .telemetry-panel{order:2}}
+
+/* The overview collage is a page-level silhouette, continuous behind the header. */
+.overview-art{display:none;pointer-events:none}
+@media(min-width:1101px){
+  #application{position:relative;isolation:isolate;overflow:hidden}
+  #application:has(#overview:not([hidden])) .overview-art{
+    display:block;position:absolute;top:0;z-index:-1;
+    background:#0734ee url('/assets/dashboard-blueprint.png') center/100% 100% no-repeat;
+    clip-path:polygon(82.6% 0,100% 0,86.956% var(--panel-top),86.956% 100%,0 100%,8.7% var(--panel-bottom),0 var(--panel-bottom),0 var(--panel-top),57.4% var(--panel-top));
+
+  }
+  #application:has(#overview:not([hidden])) .app-header,
+  #application:has(#overview:not([hidden])) .data-toolbar{background:transparent;position:relative;z-index:3}
+  #application:has(#overview:not([hidden])) .app-meta{background:#fbfdfff2;padding:8px;border-radius:3px}
+  #application:has(#overview:not([hidden])) .dashboard-grid{grid-template-columns:minmax(190px,1.05fr) minmax(360px,2.9fr) minmax(310px,1.77fr);padding-bottom:72px}
+  #application #twin-viewport::before{display:none}
+  #application .turbine-panel{border:0}
+  #application .turbine-panel .twin-controls{max-width:540px}
+}
+
+#application .turbine-assistant>.assistant-shortcuts{flex-shrink:0;margin:12px 0 0}
+
+.assistant-contextbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+#application .assistant-contextbar .segmented button{font-size:9px;padding:5px 9px}
