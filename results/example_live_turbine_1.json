@@ -1,0 +1,476 @@
+{
+  "turbine_id": "turbine_1",
+  "generated_at": "2026-09-23T08:33:03.472388Z",
+  "forecast_origin": "2026-09-23T09:00:00Z",
+  "horizon_hours": 48,
+  "forecast": [
+    {
+      "timestamp": "2026-09-23T09:00:00Z",
+      "wind_speed": 4.02,
+      "temperature": 27.6,
+      "predicted_power": 0.24804615388206933,
+      "lower_power": 0.0,
+      "upper_power": 0.7588130430833477
+    },
+    {
+      "timestamp": "2026-09-23T10:00:00Z",
+      "wind_speed": 5.62,
+      "temperature": 27.7,
+      "predicted_power": 0.28549284923198515,
+      "lower_power": 0.0,
+      "upper_power": 0.7962597384332636
+    },
+    {
+      "timestamp": "2026-09-23T11:00:00Z",
+      "wind_speed": 6.54,
+      "temperature": 26.7,
+      "predicted_power": 0.3487181655045539,
+      "lower_power": 0.0,
+      "upper_power": 0.8594850547058324
+    },
+    {
+      "timestamp": "2026-09-23T12:00:00Z",
+      "wind_speed": 6.75,
+      "temperature": 25.1,
+      "predicted_power": 0.4102371202235023,
+      "lower_power": 0.0,
+      "upper_power": 0.9210040094247807
+    },
+    {
+      "timestamp": "2026-09-23T13:00:00Z",
+      "wind_speed": 7.43,
+      "temperature": 22.3,
+      "predicted_power": 0.3930017557319531,
+      "lower_power": 0.0,
+      "upper_power": 0.9037686449332316
+    },
+    {
+      "timestamp": "2026-09-23T14:00:00Z",
+      "wind_speed": 6.91,
+      "temperature": 21.6,
+      "predicted_power": 0.39716558194429774,
+      "lower_power": 0.0,
+      "upper_power": 0.9079324711455762
+    },
+    {
+      "timestamp": "2026-09-23T15:00:00Z",
+      "wind_speed": 6.55,
+      "temperature": 21.5,
+      "predicted_power": 0.3549877931001844,
+      "lower_power": 0.0,
+      "upper_power": 0.8657546823014628
+    },
+    {
+      "timestamp": "2026-09-23T16:00:00Z",
+      "wind_speed": 6.22,
+      "temperature": 20.9,
+      "predicted_power": 0.3153678876478393,
+      "lower_power": 0.0,
+      "upper_power": 0.8261347768491177
+    },
+    {
+      "timestamp": "2026-09-23T17:00:00Z",
+      "wind_speed": 6.05,
+      "temperature": 19.9,
+      "predicted_power": 0.29519305058678,
+      "lower_power": 0.0,
+      "upper_power": 0.8059599397880585
+    },
+    {
+      "timestamp": "2026-09-23T18:00:00Z",
+      "wind_speed": 5.66,
+      "temperature": 18.9,
+      "predicted_power": 0.26241623517702145,
+      "lower_power": 0.0,
+      "upper_power": 0.7731831243782998
+    },
+    {
+      "timestamp": "2026-09-23T19:00:00Z",
+      "wind_speed": 4.79,
+      "temperature": 18.0,
+      "predicted_power": 0.20237556037154733,
+      "lower_power": 0.0,
+      "upper_power": 0.7131424495728258
+    },
+    {
+      "timestamp": "2026-09-23T20:00:00Z",
+      "wind_speed": 3.7,
+      "temperature": 17.1,
+      "predicted_power": 0.1608439088870213,
+      "lower_power": 0.0,
+      "upper_power": 0.6716107980882997
+    },
+    {
+      "timestamp": "2026-09-23T21:00:00Z",
+      "wind_speed": 2.72,
+      "temperature": 16.1,
+      "predicted_power": 0.1381083685010667,
+      "lower_power": 0.0,
+      "upper_power": 0.6488752577023451
+    },
+    {
+      "timestamp": "2026-09-23T22:00:00Z",
+      "wind_speed": 2.19,
+      "temperature": 16.0,
+      "predicted_power": 0.1381083685010667,
+      "lower_power": 0.0,
+      "upper_power": 0.6488752577023451
+    },
+    {
+      "timestamp": "2026-09-23T23:00:00Z",
+      "wind_speed": 2.01,
+      "temperature": 15.8,
+      "predicted_power": 0.13724174483581578,
+      "lower_power": 0.0,
+      "upper_power": 0.6480086340370942
+    },
+    {
+      "timestamp": "2026-09-24T00:00:00Z",
+      "wind_speed": 0.95,
+      "temperature": 15.1,
+      "predicted_power": 0.11506651256580626,
+      "lower_power": 0.0,
+      "upper_power": 0.6258334017670847
+    },
+    {
+      "timestamp": "2026-09-24T01:00:00Z",
+      "wind_speed": 0.42,
+      "temperature": 15.9,
+      "predicted_power": 0.10702502917269503,
+      "lower_power": 0.0,
+      "upper_power": 0.6177919183739735
+    },
+    {
+      "timestamp": "2026-09-24T02:00:00Z",
+      "wind_speed": 1.04,
+      "temperature": 19.6,
+      "predicted_power": 0.10702502917269503,
+      "lower_power": 0.0,
+      "upper_power": 0.6177919183739735
+    },
+    {
+      "timestamp": "2026-09-24T03:00:00Z",
+      "wind_speed": 1.53,
+      "temperature": 21.3,
+      "predicted_power": 0.12103868760231255,
+      "lower_power": 0.0,
+      "upper_power": 0.631805576803591
+    },
+    {
+      "timestamp": "2026-09-24T04:00:00Z",
+      "wind_speed": 1.65,
+      "temperature": 22.9,
+      "predicted_power": 0.12604138613903462,
+      "lower_power": 0.0,
+      "upper_power": 0.636808275340313
+    },
+    {
+      "timestamp": "2026-09-24T05:00:00Z",
+      "wind_speed": 1.34,
+      "temperature": 24.3,
+      "predicted_power": 0.11202772770941706,
+      "lower_power": 0.0,
+      "upper_power": 0.6227946169106955
+    },
+    {
+      "timestamp": "2026-09-24T06:00:00Z",
+      "wind_speed": 1.0,
+      "temperature": 25.7,
+      "predicted_power": 0.1195695180602488,
+      "lower_power": 0.0,
+      "upper_power": 0.6303364072615273
+    },
+    {
+      "timestamp": "2026-09-24T07:00:00Z",
+      "wind_speed": 1.21,
+      "temperature": 26.1,
+      "predicted_power": 0.12373552096436498,
+      "lower_power": 0.0,
+      "upper_power": 0.6345024101656435
+    },
+    {
+      "timestamp": "2026-09-24T08:00:00Z",
+      "wind_speed": 2.89,
+      "temperature": 27.2,
+      "predicted_power": 0.15159412691402746,
+      "lower_power": 0.0,
+      "upper_power": 0.662361016115306
+    },
+    {
+      "timestamp": "2026-09-24T09:00:00Z",
+      "wind_speed": 4.62,
+      "temperature": 27.6,
+      "predicted_power": 0.19540708177643182,
+      "lower_power": 0.0,
+      "upper_power": 0.6769222753778416
+    },
+    {
+      "timestamp": "2026-09-24T10:00:00Z",
+      "wind_speed": 6.43,
+      "temperature": 27.4,
+      "predicted_power": 0.27218192490947807,
+      "lower_power": 0.0,
+      "upper_power": 0.7536971185108878
+    },
+    {
+      "timestamp": "2026-09-24T11:00:00Z",
+      "wind_speed": 7.96,
+      "temperature": 26.8,
+      "predicted_power": 0.3653473124195573,
+      "lower_power": 0.0,
+      "upper_power": 0.846862506020967
+    },
+    {
+      "timestamp": "2026-09-24T12:00:00Z",
+      "wind_speed": 7.29,
+      "temperature": 25.3,
+      "predicted_power": 0.35432635324756423,
+      "lower_power": 0.0,
+      "upper_power": 0.8358415468489739
+    },
+    {
+      "timestamp": "2026-09-24T13:00:00Z",
+      "wind_speed": 5.88,
+      "temperature": 21.8,
+      "predicted_power": 0.28767705559315904,
+      "lower_power": 0.0,
+      "upper_power": 0.7691922491945687
+    },
+    {
+      "timestamp": "2026-09-24T14:00:00Z",
+      "wind_speed": 3.89,
+      "temperature": 21.4,
+      "predicted_power": 0.21438722032747237,
+      "lower_power": 0.0,
+      "upper_power": 0.6959024139288821
+    },
+    {
+      "timestamp": "2026-09-24T15:00:00Z",
+      "wind_speed": 4.14,
+      "temperature": 20.6,
+      "predicted_power": 0.21438722032747237,
+      "lower_power": 0.0,
+      "upper_power": 0.6959024139288821
+    },
+    {
+      "timestamp": "2026-09-24T16:00:00Z",
+      "wind_speed": 5.69,
+      "temperature": 20.8,
+      "predicted_power": 0.2556960157264928,
+      "lower_power": 0.0,
+      "upper_power": 0.7372112093279025
+    },
+    {
+      "timestamp": "2026-09-24T17:00:00Z",
+      "wind_speed": 6.23,
+      "temperature": 20.7,
+      "predicted_power": 0.2582235568722665,
+      "lower_power": 0.0,
+      "upper_power": 0.7397387504736762
+    },
+    {
+      "timestamp": "2026-09-24T18:00:00Z",
+      "wind_speed": 6.0,
+      "temperature": 19.8,
+      "predicted_power": 0.26273571922852024,
+      "lower_power": 0.0,
+      "upper_power": 0.74425091282993
+    },
+    {
+      "timestamp": "2026-09-24T19:00:00Z",
+      "wind_speed": 5.8,
+      "temperature": 19.0,
+      "predicted_power": 0.1922905293057328,
+      "lower_power": 0.0,
+      "upper_power": 0.6738057229071425
+    },
+    {
+      "timestamp": "2026-09-24T20:00:00Z",
+      "wind_speed": 6.55,
+      "temperature": 18.6,
+      "predicted_power": 0.2525920094489521,
+      "lower_power": 0.0,
+      "upper_power": 0.7341072030503618
+    },
+    {
+      "timestamp": "2026-09-24T21:00:00Z",
+      "wind_speed": 7.63,
+      "temperature": 18.1,
+      "predicted_power": 0.2685988539495812,
+      "lower_power": 0.0,
+      "upper_power": 0.7501140475509909
+    },
+    {
+      "timestamp": "2026-09-24T22:00:00Z",
+      "wind_speed": 8.03,
+      "temperature": 17.9,
+      "predicted_power": 0.2931123586773653,
+      "lower_power": 0.0,
+      "upper_power": 0.774627552278775
+    },
+    {
+      "timestamp": "2026-09-24T23:00:00Z",
+      "wind_speed": 8.74,
+      "temperature": 18.2,
+      "predicted_power": 0.35528741350872967,
+      "lower_power": 0.0,
+      "upper_power": 0.8368026071101393
+    },
+    {
+      "timestamp": "2026-09-25T00:00:00Z",
+      "wind_speed": 8.28,
+      "temperature": 17.8,
+      "predicted_power": 0.3193559240790704,
+      "lower_power": 0.0,
+      "upper_power": 0.8008711176804801
+    },
+    {
+      "timestamp": "2026-09-25T01:00:00Z",
+      "wind_speed": 8.17,
+      "temperature": 17.1,
+      "predicted_power": 0.2832802830869633,
+      "lower_power": 0.0,
+      "upper_power": 0.764795476688373
+    },
+    {
+      "timestamp": "2026-09-25T02:00:00Z",
+      "wind_speed": 8.08,
+      "temperature": 18.3,
+      "predicted_power": 0.2832802830869633,
+      "lower_power": 0.0,
+      "upper_power": 0.764795476688373
+    },
+    {
+      "timestamp": "2026-09-25T03:00:00Z",
+      "wind_speed": 9.22,
+      "temperature": 19.5,
+      "predicted_power": 0.38834052194789936,
+      "lower_power": 0.0,
+      "upper_power": 0.8698557155493091
+    },
+    {
+      "timestamp": "2026-09-25T04:00:00Z",
+      "wind_speed": 8.41,
+      "temperature": 20.8,
+      "predicted_power": 0.33990020813363403,
+      "lower_power": 0.0,
+      "upper_power": 0.8214154017350437
+    },
+    {
+      "timestamp": "2026-09-25T05:00:00Z",
+      "wind_speed": 7.5,
+      "temperature": 21.6,
+      "predicted_power": 0.26003029620266194,
+      "lower_power": 0.0,
+      "upper_power": 0.7415454898040716
+    },
+    {
+      "timestamp": "2026-09-25T06:00:00Z",
+      "wind_speed": 6.8,
+      "temperature": 22.8,
+      "predicted_power": 0.2638209145359893,
+      "lower_power": 0.0,
+      "upper_power": 0.745336108137399
+    },
+    {
+      "timestamp": "2026-09-25T07:00:00Z",
+      "wind_speed": 5.56,
+      "temperature": 23.5,
+      "predicted_power": 0.17815906398260992,
+      "lower_power": 0.0,
+      "upper_power": 0.6596742575840197
+    },
+    {
+      "timestamp": "2026-09-25T08:00:00Z",
+      "wind_speed": 5.42,
+      "temperature": 25.0,
+      "predicted_power": 0.17664635340065654,
+      "lower_power": 0.0,
+      "upper_power": 0.6581615470020663
+    }
+  ],
+  "weather": {
+    "source": "open_meteo_live",
+    "model": "gfs_global",
+    "is_fallback": false,
+    "retrieved_at": "2026-09-23T08:26:13.548748+00:00",
+    "exact_run_id": null,
+    "wind_height_m": 80,
+    "temperature_height_m": 2,
+    "requested_latitude": 43.64515,
+    "requested_longitude": 78.535604,
+    "wind_unit": "m/s",
+    "temperature_unit": "C",
+    "reference": "https://open-meteo.com/en/docs",
+    "input_sha256": "fa2ef369f98c4436240173cf78192007f3f465e6ed143664e51acf45cce7a757"
+  },
+  "agent": {
+    "turbine_id": "turbine_1",
+    "run_id": "57716c20536d4ff08fdb1e25d3c08c7d",
+    "status": "COMPLETED",
+    "steps": [
+      {
+        "state": "FETCHING_WEATHER",
+        "timestamp": "2026-09-23T08:33:03.288413+00:00",
+        "message": "Resolve configuration, obtain forecast; retry up to 3 times"
+      },
+      {
+        "state": "VALIDATING_DATA",
+        "timestamp": "2026-09-23T08:33:03.367007+00:00",
+        "message": "Check hourly coverage, units, finite values and physical bounds"
+      },
+      {
+        "state": "PREPARING_FEATURES",
+        "timestamp": "2026-09-23T08:33:03.371390+00:00",
+        "message": "Build origin-relative lags, past rolling windows and target calendar features"
+      },
+      {
+        "state": "RUNNING_MODEL",
+        "timestamp": "2026-09-23T08:33:03.426625+00:00",
+        "message": "Run HistGradientBoostingRegressor, direct 1..48h (48 hours)"
+      },
+      {
+        "state": "VALIDATING_FORECAST",
+        "timestamp": "2026-09-23T08:33:03.465856+00:00",
+        "message": "Check complete horizon and normalized bounds: {'clipped_values': 0, 'reason': 'Normalized target documented and observed in [0,1]', 'suspicious_jumps': 0}"
+      },
+      {
+        "state": "COMPLETED",
+        "timestamp": "2026-09-23T08:33:03.478346+00:00",
+        "message": "Forecast validated and saved; frontend JSON ready"
+      }
+    ],
+    "forecast_origin": "2026-09-23T09:00:00+00:00",
+    "horizon_hours": 48,
+    "mode": "live",
+    "last_update": "2026-09-23T08:33:03.478346+00:00"
+  },
+  "warnings": [
+    "SCADA is stale: 5630.0 hours. Missing origin lags remain missing; no invented telemetry.",
+    "Live weather has newer lead times than the 72h archive used for training; live skill is not validated.",
+    "No recent SCADA features; model uses weather/calendar only. Interval coverage in this regime is unverified."
+  ],
+  "run_id": "57716c20536d4ff08fdb1e25d3c08c7d",
+  "mode": "live",
+  "power_unit": "normalized",
+  "timestamp_convention": "UTC interval start; each point covers one hour",
+  "forecast_summary": {
+    "next_24h_average": 0.2154345034344711,
+    "next_24h_peak": 0.4102371202235023,
+    "peak_time": "2026-09-23T12:00:00+00:00",
+    "horizon_peak": 0.4102371202235023
+  },
+  "model": {
+    "model_type": "HistGradientBoostingRegressor, direct 1..48h",
+    "trained_until": "2026-01-31T19:00:00+00:00",
+    "interval_method": "December holdout absolute residual quantiles by lead bucket; empirical, not guaranteed",
+    "interval_nominal_coverage": 0.9
+  },
+  "history_latest_timestamp": "2026-01-31T18:00:00+00:00",
+  "history_age_hours": 5630.0,
+  "sanity_checks": {
+    "clipped_values": 0,
+    "reason": "Normalized target documented and observed in [0,1]",
+    "suspicious_jumps": 0
+  }
+}

@@ -1,0 +1,87 @@
+[
+  {
+    "method": "GET",
+    "path": "/api/health",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/turbines",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/turbines/turbine_1",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/forecast/turbine_1?hours=48",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/forecast/turbine_2?hours=24",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/forecast/all?hours=48",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/turbines/turbine_1/details?hours=48",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/turbines/turbine_2/details?hours=24",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/backtest/metrics",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/backtest/turbine_1?limit=5",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/backtest/turbine_2?limit=5",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/validation/metrics",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/agent/status",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/openapi.json",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/forecast/turbine_1?hours=48&mode=live",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/forecast/turbine_2?hours=48&mode=live",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "path": "/api/forecast/recalculate",
+    "status": 200
+  }
+]

@@ -105,7 +105,7 @@ def build_details(pre, tid, t, nac, api):
  for k in range(3):
   a=k*math.tau/3;cyl(pre+f'YawMotor{k}',yaw,(1.3*math.cos(a),1.3*math.sin(a),.55),.21,.6,teal)
  # Service ladder at lower tower and electrical cabinet, visible via tower X-ray.
- ladder=group('ServiceLadder','service_ladder',(-1.45,0,1.5),(0,-4,0),t)
+ ladder=group('ServiceLadder','service_ladder',(-1.05,0,1.5),(0,-4,0),t)
  for y in [-.32,.32]:cyl(pre+'LadderRail'+str(y),ladder,(0,y,37),.035,74,steel)
  for k in range(185):
   o=cyl(pre+f'Rung{k}',ladder,(0,0,k*.4),.025,.68,steel);o.rotation_euler[0]=math.pi/2

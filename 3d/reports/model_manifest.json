@@ -2,13 +2,13 @@
   "blender_version": "5.2.0 LTS",
   "root_node": "WindFarm",
   "turbine_count": 2,
-  "mesh_objects": 1091,
+  "mesh_objects": 139,
   "triangles_glb": 248988,
   "material_count": 8,
   "animation_clips": [],
   "rotor_animation": "runtime local X rotation",
-  "glb_bytes": 7315632,
-  "sha256": "edf0d7ead7c38a978614f362123a81a8b3e7b95c332932d54ed10170a3fa9381",
+  "glb_bytes": 7093028,
+  "sha256": "8ce29dffe9b81c5807bd6a7915463cefb48ba95471a2613261c0dd402bd05995",
   "selectable_assemblies": [
     "turbine_1",
     "turbine_2"

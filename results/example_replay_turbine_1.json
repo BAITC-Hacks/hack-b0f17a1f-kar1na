@@ -1,0 +1,475 @@
+{
+  "turbine_id": "turbine_1",
+  "generated_at": "2026-09-23T08:33:01.730934Z",
+  "forecast_origin": "2026-01-31T19:00:00Z",
+  "horizon_hours": 48,
+  "forecast": [
+    {
+      "timestamp": "2026-01-31T19:00:00Z",
+      "wind_speed": 5.02,
+      "temperature": -0.4,
+      "predicted_power": 0.21096248166311063,
+      "lower_power": 0.0,
+      "upper_power": 0.721729370864389
+    },
+    {
+      "timestamp": "2026-01-31T20:00:00Z",
+      "wind_speed": 4.57,
+      "temperature": -1.6,
+      "predicted_power": 0.20006604446605644,
+      "lower_power": 0.0,
+      "upper_power": 0.7108329336673349
+    },
+    {
+      "timestamp": "2026-01-31T21:00:00Z",
+      "wind_speed": 4.39,
+      "temperature": -2.2,
+      "predicted_power": 0.18962518817274793,
+      "lower_power": 0.0,
+      "upper_power": 0.7003920773740264
+    },
+    {
+      "timestamp": "2026-01-31T22:00:00Z",
+      "wind_speed": 5.41,
+      "temperature": -2.1,
+      "predicted_power": 0.19137465080209806,
+      "lower_power": 0.0,
+      "upper_power": 0.7021415400033765
+    },
+    {
+      "timestamp": "2026-01-31T23:00:00Z",
+      "wind_speed": 5.98,
+      "temperature": -1.8,
+      "predicted_power": 0.1970586324426926,
+      "lower_power": 0.0,
+      "upper_power": 0.7078255216439711
+    },
+    {
+      "timestamp": "2026-02-01T00:00:00Z",
+      "wind_speed": 9.31,
+      "temperature": -3.1,
+      "predicted_power": 0.2667417277135055,
+      "lower_power": 0.0,
+      "upper_power": 0.777508616914784
+    },
+    {
+      "timestamp": "2026-02-01T01:00:00Z",
+      "wind_speed": 9.43,
+      "temperature": -3.3,
+      "predicted_power": 0.2804764747973199,
+      "lower_power": 0.0,
+      "upper_power": 0.7912433639985983
+    },
+    {
+      "timestamp": "2026-02-01T02:00:00Z",
+      "wind_speed": 9.63,
+      "temperature": -3.2,
+      "predicted_power": 0.29046400855646226,
+      "lower_power": 0.0,
+      "upper_power": 0.8012308977577407
+    },
+    {
+      "timestamp": "2026-02-01T03:00:00Z",
+      "wind_speed": 9.91,
+      "temperature": -2.5,
+      "predicted_power": 0.34293527010141317,
+      "lower_power": 0.0,
+      "upper_power": 0.8537021593026917
+    },
+    {
+      "timestamp": "2026-02-01T04:00:00Z",
+      "wind_speed": 9.98,
+      "temperature": -1.4,
+      "predicted_power": 0.3318669126261999,
+      "lower_power": 0.0,
+      "upper_power": 0.8426338018274784
+    },
+    {
+      "timestamp": "2026-02-01T05:00:00Z",
+      "wind_speed": 10.39,
+      "temperature": 0.8,
+      "predicted_power": 0.34550837459812134,
+      "lower_power": 0.0,
+      "upper_power": 0.8562752637993998
+    },
+    {
+      "timestamp": "2026-02-01T06:00:00Z",
+      "wind_speed": 11.16,
+      "temperature": 1.9,
+      "predicted_power": 0.5286130206295411,
+      "lower_power": 0.017846131428262635,
+      "upper_power": 1.0
+    },
+    {
+      "timestamp": "2026-02-01T07:00:00Z",
+      "wind_speed": 11.64,
+      "temperature": 2.9,
+      "predicted_power": 0.5675112257820762,
+      "lower_power": 0.056744336580797805,
+      "upper_power": 1.0
+    },
+    {
+      "timestamp": "2026-02-01T08:00:00Z",
+      "wind_speed": 11.72,
+      "temperature": 3.5,
+      "predicted_power": 0.640938049270565,
+      "lower_power": 0.13017116006928653,
+      "upper_power": 1.0
+    },
+    {
+      "timestamp": "2026-02-01T09:00:00Z",
+      "wind_speed": 11.45,
+      "temperature": 3.6,
+      "predicted_power": 0.5896480129551311,
+      "lower_power": 0.0788811237538527,
+      "upper_power": 1.0
+    },
+    {
+      "timestamp": "2026-02-01T10:00:00Z",
+      "wind_speed": 11.4,
+      "temperature": 3.1,
+      "predicted_power": 0.630601979285943,
+      "lower_power": 0.11983509008466453,
+      "upper_power": 1.0
+    },
+    {
+      "timestamp": "2026-02-01T11:00:00Z",
+      "wind_speed": 10.82,
+      "temperature": 1.6,
+      "predicted_power": 0.641693178932591,
+      "lower_power": 0.1309262897313126,
+      "upper_power": 1.0
+    },
+    {
+      "timestamp": "2026-02-01T12:00:00Z",
+      "wind_speed": 10.51,
+      "temperature": 0.0,
+      "predicted_power": 0.5562009954491522,
+      "lower_power": 0.04543410624787381,
+      "upper_power": 1.0
+    },
+    {
+      "timestamp": "2026-02-01T13:00:00Z",
+      "wind_speed": 9.97,
+      "temperature": -0.4,
+      "predicted_power": 0.5098006974335246,
+      "lower_power": 0.0,
+      "upper_power": 1.0
+    },
+    {
+      "timestamp": "2026-02-01T14:00:00Z",
+      "wind_speed": 9.75,
+      "temperature": -0.5,
+      "predicted_power": 0.472074741049319,
+      "lower_power": 0.0,
+      "upper_power": 0.9828416302505975
+    },
+    {
+      "timestamp": "2026-02-01T15:00:00Z",
+      "wind_speed": 9.71,
+      "temperature": -0.5,
+      "predicted_power": 0.472074741049319,
+      "lower_power": 0.0,
+      "upper_power": 0.9828416302505975
+    },
+    {
+      "timestamp": "2026-02-01T16:00:00Z",
+      "wind_speed": 9.75,
+      "temperature": -0.5,
+      "predicted_power": 0.45074462200226345,
+      "lower_power": 0.0,
+      "upper_power": 0.961511511203542
+    },
+    {
+      "timestamp": "2026-02-01T17:00:00Z",
+      "wind_speed": 10.24,
+      "temperature": -0.6,
+      "predicted_power": 0.4652355800364978,
+      "lower_power": 0.0,
+      "upper_power": 0.9760024692377762
+    },
+    {
+      "timestamp": "2026-02-01T18:00:00Z",
+      "wind_speed": 10.55,
+      "temperature": -0.8,
+      "predicted_power": 0.4896163225294338,
+      "lower_power": 0.0,
+      "upper_power": 1.0
+    },
+    {
+      "timestamp": "2026-02-01T19:00:00Z",
+      "wind_speed": 10.69,
+      "temperature": -1.1,
+      "predicted_power": 0.5194211564051373,
+      "lower_power": 0.0379059628037276,
+      "upper_power": 1.0
+    },
+    {
+      "timestamp": "2026-02-01T20:00:00Z",
+      "wind_speed": 10.74,
+      "temperature": -1.4,
+      "predicted_power": 0.4899020694857335,
+      "lower_power": 0.008386875884323797,
+      "upper_power": 0.9714172630871432
+    },
+    {
+      "timestamp": "2026-02-01T21:00:00Z",
+      "wind_speed": 10.75,
+      "temperature": -1.7,
+      "predicted_power": 0.47180384647376256,
+      "lower_power": 0.0,
+      "upper_power": 0.9533190400751723
+    },
+    {
+      "timestamp": "2026-02-01T22:00:00Z",
+      "wind_speed": 11.06,
+      "temperature": -2.0,
+      "predicted_power": 0.5097523018817921,
+      "lower_power": 0.028237108280382395,
+      "upper_power": 0.9912674954832018
+    },
+    {
+      "timestamp": "2026-02-01T23:00:00Z",
+      "wind_speed": 11.29,
+      "temperature": -2.1,
+      "predicted_power": 0.5108733648576185,
+      "lower_power": 0.029358171256208765,
+      "upper_power": 0.9923885584590282
+    },
+    {
+      "timestamp": "2026-02-02T00:00:00Z",
+      "wind_speed": 10.56,
+      "temperature": -0.9,
+      "predicted_power": 0.37605577232876974,
+      "lower_power": 0.0,
+      "upper_power": 0.8575709659301795
+    },
+    {
+      "timestamp": "2026-02-02T01:00:00Z",
+      "wind_speed": 10.47,
+      "temperature": -1.0,
+      "predicted_power": 0.3308587244797103,
+      "lower_power": 0.0,
+      "upper_power": 0.81237391808112
+    },
+    {
+      "timestamp": "2026-02-02T02:00:00Z",
+      "wind_speed": 10.26,
+      "temperature": -1.1,
+      "predicted_power": 0.3222011356314514,
+      "lower_power": 0.0,
+      "upper_power": 0.8037163292328611
+    },
+    {
+      "timestamp": "2026-02-02T03:00:00Z",
+      "wind_speed": 10.34,
+      "temperature": -0.5,
+      "predicted_power": 0.3271219205124652,
+      "lower_power": 0.0,
+      "upper_power": 0.8086371141138748
+    },
+    {
+      "timestamp": "2026-02-02T04:00:00Z",
+      "wind_speed": 10.7,
+      "temperature": 1.3,
+      "predicted_power": 0.4368696564129427,
+      "lower_power": 0.0,
+      "upper_power": 0.9183848500143523
+    },
+    {
+      "timestamp": "2026-02-02T05:00:00Z",
+      "wind_speed": 11.59,
+      "temperature": 3.5,
+      "predicted_power": 0.4729606662965683,
+      "lower_power": 0.0,
+      "upper_power": 0.954475859897978
+    },
+    {
+      "timestamp": "2026-02-02T06:00:00Z",
+      "wind_speed": 13.28,
+      "temperature": 6.4,
+      "predicted_power": 0.7299588026294803,
+      "lower_power": 0.2484436090280706,
+      "upper_power": 1.0
+    },
+    {
+      "timestamp": "2026-02-02T07:00:00Z",
+      "wind_speed": 13.82,
+      "temperature": 7.5,
+      "predicted_power": 0.8641959400115847,
+      "lower_power": 0.382680746410175,
+      "upper_power": 1.0
+    },
+    {
+      "timestamp": "2026-02-02T08:00:00Z",
+      "wind_speed": 13.46,
+      "temperature": 8.1,
+      "predicted_power": 0.8272824174115422,
+      "lower_power": 0.3457672238101325,
+      "upper_power": 1.0
+    },
+    {
+      "timestamp": "2026-02-02T09:00:00Z",
+      "wind_speed": 12.85,
+      "temperature": 8.0,
+      "predicted_power": 0.7256702678072714,
+      "lower_power": 0.2441550742058617,
+      "upper_power": 1.0
+    },
+    {
+      "timestamp": "2026-02-02T10:00:00Z",
+      "wind_speed": 11.5,
+      "temperature": 7.6,
+      "predicted_power": 0.6651277523790967,
+      "lower_power": 0.183612558777687,
+      "upper_power": 1.0
+    },
+    {
+      "timestamp": "2026-02-02T11:00:00Z",
+      "wind_speed": 10.53,
+      "temperature": 5.7,
+      "predicted_power": 0.5145047889948695,
+      "lower_power": 0.0329895953934598,
+      "upper_power": 0.9960199825962792
+    },
+    {
+      "timestamp": "2026-02-02T12:00:00Z",
+      "wind_speed": 8.18,
+      "temperature": 2.8,
+      "predicted_power": 0.3686080785124712,
+      "lower_power": 0.0,
+      "upper_power": 0.850123272113881
+    },
+    {
+      "timestamp": "2026-02-02T13:00:00Z",
+      "wind_speed": 6.53,
+      "temperature": 2.0,
+      "predicted_power": 0.29101911015213355,
+      "lower_power": 0.0,
+      "upper_power": 0.7725343037535433
+    },
+    {
+      "timestamp": "2026-02-02T14:00:00Z",
+      "wind_speed": 5.89,
+      "temperature": 1.9,
+      "predicted_power": 0.29110674146217635,
+      "lower_power": 0.0,
+      "upper_power": 0.7726219350635861
+    },
+    {
+      "timestamp": "2026-02-02T15:00:00Z",
+      "wind_speed": 5.28,
+      "temperature": 1.5,
+      "predicted_power": 0.2804036338818483,
+      "lower_power": 0.0,
+      "upper_power": 0.761918827483258
+    },
+    {
+      "timestamp": "2026-02-02T16:00:00Z",
+      "wind_speed": 5.88,
+      "temperature": 2.1,
+      "predicted_power": 0.27558618909156235,
+      "lower_power": 0.0,
+      "upper_power": 0.757101382692972
+    },
+    {
+      "timestamp": "2026-02-02T17:00:00Z",
+      "wind_speed": 6.37,
+      "temperature": 2.4,
+      "predicted_power": 0.2626152543690146,
+      "lower_power": 0.0,
+      "upper_power": 0.7441304479704243
+    },
+    {
+      "timestamp": "2026-02-02T18:00:00Z",
+      "wind_speed": 4.97,
+      "temperature": 2.0,
+      "predicted_power": 0.24529954993168218,
+      "lower_power": 0.0,
+      "upper_power": 0.7268147435330918
+    }
+  ],
+  "weather": {
+    "source": "open_meteo_previous_runs",
+    "model": "gfs_global",
+    "forecast_lead_hours": 72,
+    "publication_delay_allowance_hours": 12,
+    "latest_availability_bound": "2026-01-31T06:00:00+00:00",
+    "availability_basis": "fixed lead API semantics; exact publication time not supplied",
+    "exact_run_id": null,
+    "is_fallback": false,
+    "wind_height_m": 80,
+    "temperature_height_m": 2,
+    "requested_latitude": 43.64515,
+    "requested_longitude": 78.535604,
+    "wind_unit": "m/s",
+    "temperature_unit": "C",
+    "reference": "https://open-meteo.com/en/docs/previous-runs-api",
+    "input_sha256": "81f5f7fcf7d22e6b3f7e8851298b127d22830fd916b04c814edb5a742c9bc712"
+  },
+  "agent": {
+    "turbine_id": "turbine_1",
+    "run_id": "08aa7bddcff5438aa76e99fb3d8fa6ad",
+    "status": "COMPLETED",
+    "steps": [
+      {
+        "state": "FETCHING_WEATHER",
+        "timestamp": "2026-09-23T08:32:58.719769+00:00",
+        "message": "Resolve configuration, obtain forecast; retry up to 3 times"
+      },
+      {
+        "state": "VALIDATING_DATA",
+        "timestamp": "2026-09-23T08:32:58.820048+00:00",
+        "message": "Check hourly coverage, units, finite values and physical bounds"
+      },
+      {
+        "state": "PREPARING_FEATURES",
+        "timestamp": "2026-09-23T08:32:58.826372+00:00",
+        "message": "Build origin-relative lags, past rolling windows and target calendar features"
+      },
+      {
+        "state": "RUNNING_MODEL",
+        "timestamp": "2026-09-23T08:33:01.605210+00:00",
+        "message": "Run HistGradientBoostingRegressor, direct 1..48h (48 hours)"
+      },
+      {
+        "state": "VALIDATING_FORECAST",
+        "timestamp": "2026-09-23T08:33:01.711378+00:00",
+        "message": "Check complete horizon and normalized bounds: {'clipped_values': 0, 'reason': 'Normalized target documented and observed in [0,1]', 'suspicious_jumps': 0}"
+      },
+      {
+        "state": "COMPLETED",
+        "timestamp": "2026-09-23T08:33:01.736551+00:00",
+        "message": "Forecast validated and saved; frontend JSON ready"
+      }
+    ],
+    "forecast_origin": "2026-01-31T19:00:00+00:00",
+    "horizon_hours": 48,
+    "mode": "replay",
+    "last_update": "2026-09-23T08:33:01.736551+00:00"
+  },
+  "warnings": [],
+  "run_id": "08aa7bddcff5438aa76e99fb3d8fa6ad",
+  "mode": "replay",
+  "power_unit": "normalized",
+  "timestamp_convention": "UTC interval start; each point covers one hour",
+  "forecast_summary": {
+    "next_24h_average": 0.4109097055143786,
+    "next_24h_peak": 0.641693178932591,
+    "peak_time": "2026-02-02T07:00:00+00:00",
+    "horizon_peak": 0.8641959400115847
+  },
+  "model": {
+    "model_type": "HistGradientBoostingRegressor, direct 1..48h",
+    "trained_until": "2026-01-31T19:00:00+00:00",
+    "interval_method": "December holdout absolute residual quantiles by lead bucket; empirical, not guaranteed",
+    "interval_nominal_coverage": 0.9
+  },
+  "history_latest_timestamp": "2026-01-31T18:00:00+00:00",
+  "history_age_hours": 0.0,
+  "sanity_checks": {
+    "clipped_values": 0,
+    "reason": "Normalized target documented and observed in [0,1]",
+    "suspicious_jumps": 0
+  }
+}
