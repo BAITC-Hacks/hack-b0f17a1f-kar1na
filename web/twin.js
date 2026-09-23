@@ -25,9 +25,16 @@ export async function createTwin(onSelect){
    const pixelRatio=renderer.getPixelRatio();bodyClip.value.set(bleed*pixelRatio,bleed*pixelRatio,(bleed+w)*pixelRatio,(bleed+h)*pixelRatio);
    Object.assign(renderer.domElement.style,{width:`${w+2*bleed}px`,height:`${h+2*bleed}px`,left:`${-bleed}px`,top:`${-bleed}px`});
  }).observe(host);
- const gltf=await new GLTFLoader().loadAsync('/models/wind_farm.glb');scene.add(gltf.scene);gltf.scene.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});const farm=createWindFarmControls(THREE,gltf);let selected='turbine_1',zoomTarget=null;
- orbit.minDistance=8;
- const aimAtHead=()=>{zoomTarget=farm.getComponentFocusTarget(selected,'generator').center.clone();};
+ const gltf=await new GLTFLoader().loadAsync('/models/wind_farm.glb');scene.add(gltf.scene);gltf.scene.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});const farm=createWindFarmControls(THREE,gltf);let selected='turbine_1',zoomTarget=null,cameraTransition=null;
+ const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
+ function moveCamera(target,position,immediate=false){
+   zoomTarget=null;
+   if(immediate||reducedMotion.matches){cameraTransition=null;orbit.target.copy(target);camera.position.copy(position);orbit.update();return;}
+   cameraTransition={from:camera.position.clone(),fromTarget:orbit.target.clone(),to:position.clone(),toTarget:target.clone(),elapsed:0};
+ }
+ orbit.addEventListener('start',()=>{cameraTransition=null;});
+ orbit.minDistance=3;orbit.zoomSpeed=1.8;orbit.dampingFactor=.12;
+ const aimAtHead=()=>{if(!zoomTarget)zoomTarget=farm.getComponentFocusTarget(selected,'generator').center.clone();};
  renderer.domElement.addEventListener('wheel',aimAtHead,{passive:true,capture:true});
  renderer.domElement.addEventListener('touchstart',e=>{if(e.touches.length===2)aimAtHead();},{passive:true});
  // Shorten the airfoil span around its root, leaving the hub and collars intact.
@@ -45,24 +52,32 @@ export async function createTwin(onSelect){
  const setBlueprint=createBlueprint(gltf.scene,bodyClip);setBlueprint();
  const roots={turbine_1:gltf.scene.getObjectByName('Turbine_1'),turbine_2:gltf.scene.getObjectByName('Turbine_2')};
  const ground=gltf.scene.getObjectByName('Ground');if(ground)ground.visible=false;
- function portrait(id){
+ const assembledViews=Object.fromEntries(Object.keys(roots).map(id=>[id,farm.getFocusTarget(id)]));
+ const componentViews=Object.fromEntries(Object.keys(roots).map(id=>[id,Object.fromEntries(['generator','gearbox','main_shaft','rotor'].map(key=>[key,farm.getComponentFocusTarget(id,key)]))]));
+ function portrait(id,immediate=false){
    zoomTarget=null;
    for(const [key,root] of Object.entries(roots))if(root)root.visible=key===id;
-   const info=farm.getFocusTarget(id);
-   orbit.target.copy(info.center);
+   const info=assembledViews[id];
+
    const height=info.size.y, width=Math.max(info.size.x,info.size.z);
    const distance=Math.max(height,width/Math.max(camera.aspect,.5)) / (2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))) * 1.12;
-   camera.position.copy(orbit.target).add(new THREE.Vector3(-.65,.12,1).normalize().multiplyScalar(distance));
-   orbit.update();
+   moveCamera(info.center,info.center.clone().add(new THREE.Vector3(-.65,.12,1).normalize().multiplyScalar(distance)),immediate);
  }
- portrait(selected);
- function focus(info){zoomTarget=null;const size=Math.max(info.size.x,info.size.y,info.size.z);orbit.target.copy(info.center);camera.position.copy(info.center).add(new THREE.Vector3(-1,.55,1.4).normalize().multiplyScalar(size*2.2+5));}
- document.querySelector('#camera-reset').onclick=()=>{farm.resetInspection();farm.setNacelleExploded(selected,0,0);setBlueprint();portrait(selected);document.querySelector('#disassembly').value=0;};
- document.querySelector('#inspect-reset').onclick=()=>{farm.resetInspection();farm.setNacelleExploded(selected,0,0);setBlueprint();portrait(selected);document.querySelector('#disassembly').value=0;};
- document.querySelectorAll('[data-component]').forEach(b=>b.onclick=()=>{farm.setNacelleExploded(selected,0,0);farm.inspectComponent(selected,b.dataset.component);setBlueprint(b.dataset.component);document.querySelector('#disassembly').value=0;focus(farm.getComponentFocusTarget(selected,b.dataset.component));});
- document.querySelector('#disassembly').oninput=e=>{farm.resetInspection();farm.setNacelleExploded(selected,+e.target.value,0);setBlueprint(null,+e.target.value>0);if(+e.target.value>0)focus(farm.getDisassemblyFocusTarget(selected));else portrait(selected);};
- let down;renderer.domElement.addEventListener('pointerdown',e=>down=[e.clientX,e.clientY]);renderer.domElement.addEventListener('pointerup',e=>{if(!down||Math.hypot(e.clientX-down[0],e.clientY-down[1])>5)return;const r=renderer.domElement.getBoundingClientRect(),ray=new THREE.Raycaster();ray.setFromCamera(new THREE.Vector2((e.clientX-r.left)/r.width*2-1,1-(e.clientY-r.top)/r.height*2),camera);for(const hit of ray.intersectObjects(scene.children,true)){const id=farm.getTurbineId(hit.object);if(id){onSelect(id);break;}}});
- const clock=new THREE.Clock();renderer.setAnimationLoop(()=>{const dt=Math.min(clock.getDelta(),.1);if(!host.clientWidth)return;farm.update(dt);if(zoomTarget){orbit.target.lerp(zoomTarget,1-Math.exp(-10*dt));if(orbit.target.distanceToSquared(zoomTarget)<.0001){orbit.target.copy(zoomTarget);zoomTarget=null;}}orbit.update();renderer.render(scene,camera);});
+ portrait(selected,true);
+ function focus(info){zoomTarget=null;const size=Math.max(info.size.x,info.size.y,info.size.z);moveCamera(info.center,info.center.clone().add(new THREE.Vector3(-1,.55,1.4).normalize().multiplyScalar(size*2.2+5)));}
+ document.querySelector('#camera-reset').onclick=()=>{farm.resetInspection();farm.setNacelleExploded(selected,0,reducedMotion.matches?0:.75);setBlueprint();portrait(selected);document.querySelector('#disassembly').value=0;};
+ document.querySelector('#inspect-reset').onclick=()=>{farm.resetInspection();farm.setNacelleExploded(selected,0,reducedMotion.matches?0:.75);setBlueprint();portrait(selected);document.querySelector('#disassembly').value=0;};
+ document.querySelectorAll('[data-component]').forEach(b=>b.onclick=()=>{farm.setNacelleExploded(selected,0,reducedMotion.matches?0:.75);farm.inspectComponent(selected,b.dataset.component);setBlueprint(b.dataset.component);document.querySelector('#disassembly').value=0;focus(componentViews[selected][b.dataset.component]);});
+ document.querySelector('#disassembly').oninput=e=>{const amount=+e.target.value;farm.resetInspection();farm.setNacelleExploded(selected,amount,reducedMotion.matches?0:.18);setBlueprint(null,amount>0);};
+ let down;renderer.domElement.addEventListener('pointerdown',e=>down=[e.clientX,e.clientY]);renderer.domElement.addEventListener('pointerup',e=>{if(!down||Math.hypot(e.clientX-down[0],e.clientY-down[1])>5)return;const r=renderer.domElement.getBoundingClientRect(),ray=new THREE.Raycaster();ray.setFromCamera(new THREE.Vector2((e.clientX-r.left)/r.width*2-1,1-(e.clientY-r.top)/r.height*2),camera);for(const hit of ray.intersectObjects(scene.children,true)){const id=farm.getTurbineId(hit.object);if(id){if(id!==selected)onSelect(id);break;}}});
+ const clock=new THREE.Clock();renderer.setAnimationLoop(()=>{const dt=Math.min(clock.getDelta(),.1);if(!host.clientWidth)return;farm.update(dt);setBlueprint.update(reducedMotion.matches?1:dt);
+ if(cameraTransition){
+   const t=cameraTransition;t.elapsed+=dt;const progress=Math.min(1,t.elapsed/.9);
+   const eased=progress*progress*progress*(progress*(progress*6-15)+10);
+   camera.position.lerpVectors(t.from,t.to,eased);orbit.target.lerpVectors(t.fromTarget,t.toTarget,eased);
+   if(progress===1)cameraTransition=null;
+ }
+ if(zoomTarget){const shift=zoomTarget.clone().sub(orbit.target).multiplyScalar(1-Math.exp(-7*dt));orbit.target.add(shift);camera.position.add(shift);if(orbit.target.distanceToSquared(zoomTarget)<.0001)zoomTarget=null;}orbit.update();renderer.render(scene,camera);});
  status.textContent='Drag to orbit · scroll to zoom · click a turbine';
  return {select(id){selected=id;farm.selectTurbine(id);setBlueprint(null,farm.getExplodedAmount(id)>0);portrait(id);document.querySelector('#disassembly').value=farm.getExplodedAmount(id);},apply(id,p){farm.applyTurbineState(id,{windSpeed:p.wind_speed});},stop(){for(const id of ['turbine_1','turbine_2'])farm.setRotorSpeed(id,0);}};
  }catch(e){status.textContent=`3D unavailable: ${e.message}. Forecasts remain available.`;return null;}

@@ -25,10 +25,12 @@ export function createBlueprint(root, bodyClip) {
     const outline = new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry, 24), lineMaterial);
     outline.raycast = () => {};
     mesh.add(outline);
-    parts.push({mesh, outline});
+    parts.push({mesh, outline, opacity:0.94, color:new THREE.Color(0xf1f6ff), lineOpacity:0.85, lineColor:new THREE.Color(0x3562ce)});
   }
-  return (component = null, exploded = false) => {
-    for (const {mesh, outline} of parts) {
+  let initialized=false;
+  const setState = (component = null, exploded = false) => {
+    for (const part of parts) {
+      const {mesh, outline}=part;
       let active = false;
       for (let parent = mesh; parent; parent = parent.parent) {
         const id = parent.userData.component_id;
@@ -36,25 +38,45 @@ export function createBlueprint(root, bodyClip) {
       }
       const inspecting = !!component || exploded;
       const faded = inspecting && !active;
+      part.targetOpacity=faded ? 0.09 : 0.94;
+      part.targetColor=new THREE.Color(active && inspecting ? 0xd3e4ff : 0xf1f6ff);
+      part.targetLineOpacity=faded ? 0.14 : 0.85;
+      part.targetLineColor=new THREE.Color(active && inspecting ? 0x003bff : 0x3562ce);
+      if(!initialized){part.opacity=part.targetOpacity;part.color.copy(part.targetColor);part.lineOpacity=part.targetLineOpacity;part.lineColor.copy(part.targetLineColor);}
       for (const material of [mesh.material].flat()) {
-        material.color.setHex(active && inspecting ? 0xd3e4ff : 0xf1f6ff);
+        material.color.copy(part.color);
         material.emissive?.setHex(0x153365);
         material.emissiveIntensity = 0.12;
         material.roughness = 1;
         material.metalness = 0;
         material.envMapIntensity = 0;
         material.transparent = true;
-        material.opacity = faded ? 0.09 : 0.94;
+        material.opacity = part.opacity;
         material.depthWrite = !faded;
         material.polygonOffset = true;
         material.polygonOffsetFactor = 1;
         material.polygonOffsetUnits = 1;
         material.needsUpdate = true;
       }
-      outline.material.opacity = faded ? 0.14 : 0.85;
-      outline.material.color.setHex(active && inspecting ? 0x003bff : 0x3562ce);
+      outline.material.opacity = part.lineOpacity;
+      outline.material.color.copy(part.lineColor);
       mesh.renderOrder = faded ? 2 : 0;
       outline.renderOrder = faded ? 3 : 1;
     }
+    initialized=true;
   };
+  setState.update = dt => {
+    const alpha=1-Math.exp(-7*dt);
+    for(const part of parts){
+      part.opacity=THREE.MathUtils.lerp(part.opacity,part.targetOpacity,alpha);
+      part.lineOpacity=THREE.MathUtils.lerp(part.lineOpacity,part.targetLineOpacity,alpha);
+      part.color.lerp(part.targetColor,alpha);part.lineColor.lerp(part.targetLineColor,alpha);
+      for(const material of [part.mesh.material].flat()){
+        material.opacity=part.opacity;material.color.copy(part.color);
+      }
+      part.outline.material.opacity=part.lineOpacity;
+      part.outline.material.color.copy(part.lineColor);
+    }
+  };
+  return setState;
 }

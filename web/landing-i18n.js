@@ -1,3 +1,4 @@
+import {initDashboardLanguage} from './dashboard-i18n.js';
 // Translate text nodes in place so links, typography and event handlers stay intact.
 const translations = [
  ['About','О проекте','Жоба туралы'],
@@ -60,11 +61,13 @@ const attributes = [
  [landing.querySelector('.landing-head nav'),'aria-label',{en:'Landing navigation',ru:'Навигация по лендингу',kk:'Лендинг навигациясы'}],
  [landing.querySelector('.landing-footer nav'),'aria-label',{en:'Footer navigation',ru:'Навигация в подвале',kk:'Төменгі навигация'}],
 ];
+const setDashboardLanguage=initDashboardLanguage(language=>setLanguage(language));
 function setLanguage(language) {
  const lang = ['en','ru','kk'].includes(language) ? language : 'en';
  selector.value = lang;
  landing.lang = lang;
- document.documentElement.lang = landing.hidden ? 'en' : lang;
+ document.documentElement.lang = lang;
+ setDashboardLanguage(lang);
  for (const {node, original, key} of nodes) node.textContent = original.replace(key, dictionary.get(key)[lang]);
  for (const [node, attribute, labels] of attributes) node.setAttribute(attribute, labels[lang]);
  try { localStorage.setItem('windai-language', lang); } catch { /* Private browsing can disable storage. */ }
@@ -74,6 +77,4 @@ let savedLanguage = 'en';
 try { savedLanguage = localStorage.getItem('windai-language') || 'en'; } catch { /* Keep the default. */ }
 setLanguage(savedLanguage);
 selector.addEventListener('change', () => setLanguage(selector.value));
-// The demo is a separate English-language interface.
-document.querySelector('#application').lang = 'en';
-addEventListener('hashchange', () => { document.documentElement.lang = landing.hidden ? 'en' : selector.value; });
+addEventListener('hashchange', () => { document.documentElement.lang = selector.value; });

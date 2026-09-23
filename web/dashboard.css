@@ -134,3 +134,9 @@
 
 /* Soft center behind the turbine; preserve the landscape at the edges. */
 #application #twin-viewport::after{content:'';position:absolute;inset:0;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);mask-image:radial-gradient(ellipse 38% 42% at 50% 50%,#000 0%,#000 35%,transparent 100%);-webkit-mask-image:radial-gradient(ellipse 38% 42% at 50% 50%,#000 0%,#000 35%,transparent 100%);pointer-events:none;z-index:0}
+#application #dashboard-language{font:600 12px Manrope,Arial,sans-serif;color:#0025d5;background:transparent;border:1px solid #0025d530;border-radius:0;padding:10px 6px;cursor:pointer}
+#application #dashboard-language:focus-visible{outline:2px solid #0025d5;outline-offset:3px}
+@media(max-width:720px){#application #dashboard-language{font-size:11px;padding:8px 3px}}
+
+#application:lang(ru) .app-nav,#application:lang(kk) .app-nav{gap:12px}
+#application:lang(ru) .twin-controls button,#application:lang(kk) .twin-controls button{font-size:9px}
