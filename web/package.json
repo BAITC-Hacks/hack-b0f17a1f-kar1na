@@ -1,1 +1,1 @@
-{"name":"windai-site","private":true,"type":"module","scripts":{"dev":"vite --host 127.0.0.1","build":"vite build"},"dependencies":{"three":"0.180.0","vite":"6.3.6"}}
+{"name":"windai-site","private":true,"type":"module","scripts":{"dev":"vite --host 127.0.0.1","build":"vite build"},"dependencies":{"three":"0.180.0","vite":"6.4.3"}}

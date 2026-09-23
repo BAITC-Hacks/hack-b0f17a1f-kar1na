@@ -37,3 +37,6 @@ results/forecasts/
 *.swo
 .DS_Store
 Thumbs.db
+
+# Frontend dependencies
+node_modules/
