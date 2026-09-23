@@ -57,6 +57,9 @@ class ForecastAgent:
         if origin!=origin.floor('h'): raise ValueError('origin must be aligned to an hour')
         if mode=='replay' and origin>pd.Timestamp.now(tz='UTC'):
             raise ValueError('Replay origin cannot be in the future')
+        now=pd.Timestamp.now(tz='UTC')
+        if mode=='live' and not now.floor('h')<=origin<=now.ceil('h'):
+            raise ValueError('Live origin must be the current or next hour')
         lock=self._run_locks[turbine_id]
         if not lock.acquire(blocking=False): raise AgentBusyError(f'{turbine_id}: forecast already running')
         run_id=uuid.uuid4().hex
@@ -68,7 +71,8 @@ class ForecastAgent:
             warnings=[]
             self._step(turbine_id,'FETCHING_WEATHER','Resolve configuration, obtain forecast; retry up to 3 times')
             history=read_hourly(turbine_id)
-            history=history.loc[history.index<origin]
+            history_cutoff=min(origin,now.floor('h')) if mode=='live' else origin
+            history=history.loc[history.index<history_cutoff]
             if weather_override is not None:
                 weather=weather_override
                 issued=utc(weather.metadata['issued_at'])

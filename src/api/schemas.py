@@ -60,3 +60,18 @@ class AgentRequest(BaseModel):
     mode: Literal['replay','live'] = 'replay'
     forecast_origin: Optional[AwareDatetime] = None
     message: str = Field(default='Построй прогноз и оцени риски.', min_length=1, max_length=1500)
+
+    @model_validator(mode='after')
+    def validate_origin(self):
+        if self.forecast_origin is not None:
+            from src.config import utc
+            import pandas as pd
+            origin=utc(self.forecast_origin)
+            now=pd.Timestamp.now(tz='UTC')
+            if origin!=origin.floor('h'):
+                raise ValueError('forecast_origin must be aligned to an hour')
+            if self.mode=='replay' and origin>now:
+                raise ValueError('Replay origin cannot be in the future')
+            if self.mode=='live' and not now.floor('h')<=origin<=now.ceil('h'):
+                raise ValueError('Live origin must be the current or next hour')
+        return self

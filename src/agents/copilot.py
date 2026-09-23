@@ -110,7 +110,8 @@ class Copilot:
             nonlocal forecast
             if name == 'inspect_inputs':
                 h = read_hourly(turbine_id)
-                h = h.loc[h.index < origin]
+                cutoff=min(origin,pd.Timestamp.now(tz='UTC').floor('h')) if mode=='live' else origin
+                h = h.loc[h.index < cutoff]
                 valid = h.dropna(subset=['power', 'wind_speed', 'temperature'])
                 window = h.reindex(pd.date_range(origin-pd.Timedelta(hours=24), periods=24, freq='h'))
                 return {'history_rows': len(h), 'latest_complete_hour': valid.index[-1].isoformat() if len(valid) else None,

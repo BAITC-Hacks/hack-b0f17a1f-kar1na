@@ -2,7 +2,6 @@
 import json
 import logging
 import os
-import io
 from contextlib import asynccontextmanager
 from typing import Literal, Optional
 import pandas as pd

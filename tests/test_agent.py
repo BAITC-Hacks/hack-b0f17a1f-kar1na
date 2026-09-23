@@ -7,7 +7,7 @@ import pytest
 from fastapi.testclient import TestClient
 from src.config import local_date, TURBINES
 from src.agents.forecast_agent import ForecastAgent
-from src.agents.copilot import Copilot, OpenAIUnavailable, ResponsesClient
+from src.agents.copilot import Copilot, OpenAIUnavailable, ResponsesClient, astana_context
 from src.agents.monitor import ForecastMonitor
 from src.services.weather_provider import OpenMeteoProvider, WeatherResult, WeatherError
 
@@ -60,6 +60,24 @@ def test_missing_key_does_not_use_network(monkeypatch):
     monkeypatch.delenv('OPENAI_API_KEY', raising=False)
     with pytest.raises(OpenAIUnavailable, match='не настроен'):
         ResponsesClient().create()
+
+
+def test_llm_receives_astana_times_not_utc_arithmetic():
+    assert astana_context({'origin':'2026-01-31T19:00:00+00:00'})=={'origin':'2026-02-01T00:00:00+05:00'}
+
+
+def test_live_cannot_be_replayed_via_fallback(tmp_path):
+    with pytest.raises(ValueError,match='Live origin'):
+        ForecastAgent(tmp_path).run('turbine_1',mode='live',origin=local_date('2026-02-01'))
+
+
+def test_quality_question_requires_validation_tool(tmp_path):
+    class MissingValidation(ToolClient):
+        def create(self,**body):
+            # A model that insists on answering without evidence must not be marked successful.
+            return super().create(**body)
+    result=Copilot(ForecastAgent(tmp_path/'f'),MissingValidation(['inspect_inputs','run_forecast','assess_forecast']),tmp_path/'a').run('turbine_1',message='Какова точность модели?')
+    assert result['status']=='degraded'
 
 
 def test_upstream_error_body_not_exposed(monkeypatch):
