@@ -88,9 +88,9 @@
 #application .turbine-panel>.panel-top,#application .twin-watermark,#application #model-status{z-index:2}
 #application .telemetry-panel,#application .forecast-panel,#application .agent-panel{position:relative;z-index:2}
 
-/* Fade only the landscape, independently of the model and its controls. */
+/* Crisp monochrome artwork stays separate from the interactive model. */
 #application #twin-viewport{background:none}
-#application #twin-viewport::before{content:'';position:absolute;inset:0;background:url('/assets/dashboard-landscape.png') center/cover;opacity:.85;pointer-events:none}
+#application #twin-viewport::before{content:'';position:absolute;inset:0;background:url('/assets/dashboard-landscape.png') center/cover;opacity:1;filter:grayscale(1);pointer-events:none;}
 
 /* Soft, spacious analytics cards in WindAI's blue palette. */
 #application .lower-dashboard{margin:20px 2.5% 32px;padding:24px;border-radius:26px;background:radial-gradient(ellipse at 30% 5%,#dce9ff90,transparent 60%),linear-gradient(140deg,#eff5ff90,#f8faff);}
@@ -140,7 +140,6 @@
 @media(max-width:600px){#application .summary-strip{grid-template-columns:repeat(2,1fr)}#application .summary-tile:last-child{grid-column:1/-1}#application .lower-dashboard{margin:18px 4%;padding:12px}#application .lower-dashboard .panel{padding:18px}#application .lower-dashboard .overview-details{grid-template-columns:1fr}#application .detail-forecast-panel .chart{height:210px}#application .detail-horizon{display:none}}
 
 /* Soft center behind the turbine; preserve the landscape at the edges. */
-#application #twin-viewport::after{content:'';position:absolute;inset:0;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);mask-image:radial-gradient(ellipse 38% 42% at 50% 50%,#000 0%,#000 35%,transparent 100%);-webkit-mask-image:radial-gradient(ellipse 38% 42% at 50% 50%,#000 0%,#000 35%,transparent 100%);pointer-events:none;z-index:0}
 #application #dashboard-language{font:600 12px Manrope,Arial,sans-serif;color:#0025d5;background:transparent;border:1px solid #0025d530;border-radius:0;padding:10px 6px;cursor:pointer}
 #application #dashboard-language:focus-visible{outline:2px solid #0025d5;outline-offset:3px}
 @media(max-width:720px){#application #dashboard-language{font-size:11px;padding:8px 3px}}
@@ -182,7 +181,7 @@
 @media(max-width:720px){#application .overview-footer .footer-links{grid-template-columns:1fr 1fr;gap:30px 20px;padding:32px 6%}#application .overview-footer .footer-links a,#application .footer-link-group>span{font-size:15px}#application .footer-link-group h2{font-size:10px;margin-bottom:6px}#application .footer-art{height:190px;min-height:0}#application .footer-art-label{font-size:7px;letter-spacing:.16em}#application .footer-label-clean{left:6%;top:13%}#application .footer-label-forecast{left:45%;top:13%}#application .footer-label-wind{right:6%;top:13%}#application .footer-label-coordinates{left:6%;top:48%}#application .footer-label-power,#application .footer-label-point{display:none}#application .footer-bottom{padding:20px 6%;font-size:9px;letter-spacing:.12em;gap:16px}#application .footer-bottom a{gap:6px;white-space:nowrap}}
 @media(prefers-reduced-motion:reduce){html:root{scroll-behavior:auto}}
 
-/* Light landscape with soft focus behind the interactive model. */
+/* Labels remain legible over the monochrome landscape. */
 #application .turbine-panel>.panel-top h2{color:#0c1635}
 #application .turbine-panel>.panel-top .online{color:#008b74}
 #application .twin-watermark{color:#4c6ba9;text-shadow:none}
@@ -239,7 +238,6 @@ html{scroll-behavior:smooth}
 #application .app-nav a.active:after{content:'';position:absolute;bottom:0;left:50%;width:5px;height:5px;background:#073bff;border-radius:50%}
 #application .app-nav a:hover{background:#e8efff}
 #application .content-view{border-top:1px solid #cfdbef;padding-top:55px;padding-bottom:55px}
-#application #twin-viewport::after{content:'';display:block;position:absolute;inset:0;z-index:0;backdrop-filter:blur(10px);background:#e9f1ff26;pointer-events:none}
 #application #twin-viewport canvas{position:relative;z-index:1}
 #application #model-status,#application .twin-watermark{z-index:2}
 .agent-capabilities{margin-bottom:28px}.capability-intro h2{font-size:24px;color:#183565}.capability-intro p{color:#62789c;line-height:1.6;max-width:760px}
@@ -252,12 +250,12 @@ html{scroll-behavior:smooth}
 @media(max-width:540px){.capability-grid{grid-template-columns:1fr}.capability-grid>button,.capability-grid>a{padding:18px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.capability-grid>button,.capability-grid>a{transition:none}}
 /* Keep the renderer's intrinsic canvas size from growing its flex parent. */
-#application .turbine-panel{height:660px;min-height:0}
+#application .turbine-panel{height:660px;min-height:0;border:0;background:transparent;box-shadow:none}
 #application #twin-viewport{height:100%;min-height:0;flex:1 1 0;overflow:hidden}
 #application #twin-viewport canvas{position:absolute}
 @media(max-width:540px){#application .turbine-panel{height:540px}}
 
-#application #twin-viewport::before{filter:blur(9px);transform:scale(1.04)}
+
 
 /* Data plots: quiet grid, distinct series and readable scales at every width. */
 #application .chart{position:relative;min-width:0;background:linear-gradient(180deg,#fff9,#f6f9ff66);border-radius:10px}
@@ -275,3 +273,29 @@ html{scroll-behavior:smooth}
 #application .chart-key .line-key{background:#315bea;height:3px;width:22px;border-radius:2px}
 #application .chart-key .band-key{background:#315bea20;border:1px solid #315bea40;border-radius:3px;width:22px;height:10px}
 @media(max-width:600px){#application .panel-top{flex-wrap:wrap;gap:12px}#application .history-tabs{flex-wrap:wrap}#application .chart{min-height:240px}#application .plot-label{font-size:10px}}
+
+
+/* Editorial photo intervals echo the monochrome landscape of the digital twin. */
+#application .landscape-interval{display:grid;grid-template-columns:1.55fr .8fr;gap:20px;height:176px;margin:0 0 20px;overflow:hidden}
+#application .landscape-interval img{display:block;width:100%;height:100%;min-width:0;object-fit:cover;filter:grayscale(1);border:1px solid #d4d7dd}
+#application .landscape-interval img:first-child{object-position:80% 48%}
+#application .landscape-interval img:last-child{object-position:50% 28%}
+#application .analytics-grid>.landscape-interval{grid-column:1/-1;margin:0;height:150px}
+#application .detail-forecast-panel h2,
+#application .lower-history-grid .history-panel h2,
+#application .analytics-grid .wide h2{font-family:Georgia,'Times New Roman',serif;font-style:italic;font-weight:400;font-size:24px;line-height:1.15;letter-spacing:-.025em;text-transform:none;color:#244be0}
+#application .view-heading h1{font-family:Georgia,'Times New Roman',serif;font-style:italic;font-weight:400}
+@media(max-width:600px){
+ #application .landscape-interval{height:120px;gap:10px;grid-template-columns:1.3fr 1fr}
+ #application .analytics-grid>.landscape-interval{height:110px}
+ #application .detail-forecast-panel h2,#application .lower-history-grid .history-panel h2,#application .analytics-grid .wide h2{font-size:22px}
+}
+
+/* User-supplied transparent title artwork replaces the twin's text labels. */
+#application .turbine-panel{overflow:visible;z-index:3}
+#application .turbine-panel>.panel-top{align-items:flex-start;gap:12px;z-index:5}
+#application .turbine-panel>.panel-top .twin-image-heading{width:min(390px,calc(100% - 85px));margin:0;line-height:0;transform:translateX(clamp(-110px,-7vw,-60px))}
+#application .twin-image-heading img{display:block;width:100%;height:auto;object-fit:contain}
+#application .turbine-panel>.panel-top .online{flex-shrink:0;padding-top:5px}
+
+@media(max-width:600px){#application .turbine-panel>.panel-top .twin-image-heading{transform:translateX(-20px)}}
