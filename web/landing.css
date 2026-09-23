@@ -23,3 +23,8 @@
 @media(max-width:720px){#landing .scroll-journey:before{height:44px;background-size:24px 24px}}
 #landing .diamond-white-fade{position:absolute;top:0;left:0;right:0;height:190px;z-index:1;pointer-events:none;background:linear-gradient(to bottom,#fff 0%,rgba(255,255,255,.96) 18%,rgba(255,255,255,.68) 42%,rgba(255,255,255,.24) 72%,transparent 100%)}
 @media(max-width:720px){#landing .diamond-white-fade{height:135px}}
+#landing .landing-head .brand .windai-logo{display:block;width:156px;height:auto;color:#061024}#landing .footer-brand .windai-logo{display:block;width:205px;height:auto;color:#061024}.app-identity .brand .windai-logo{display:block;width:133px;height:auto;color:#edf5ff}.windai-logo{overflow:visible;flex-shrink:0}
+@media(max-width:720px){#landing .landing-head .brand .windai-logo{width:128px}#landing .footer-brand .windai-logo{width:165px}.app-identity .brand .windai-logo{width:115px}}
+/* Match the closing headline to the opening editorial typography. */
+#landing .closing-copy h2{font-family:'Libre Caslon Display','Times New Roman',serif;font-style:italic;font-weight:400;letter-spacing:-.06em;line-height:.95}
+#landing .closing-copy h2 em{font-family:inherit;font-style:italic;font-weight:400}
