@@ -14,7 +14,7 @@ export async function createTwin(onSelect){
  const environment=pmrem.fromScene(room,.04);scene.environment=environment.texture;scene.environmentIntensity=.45;room.dispose();pmrem.dispose();
  const camera=new THREE.PerspectiveCamera(40,1,.1,1800);camera.position.set(-220,155,285);
  const orbit=new OrbitControls(camera,renderer.domElement);orbit.target.set(0,55,0);orbit.enableDamping=true;orbit.maxPolarAngle=Math.PI*.49;
- scene.add(new THREE.HemisphereLight(0xdcefff,0x718096,1.15));const sun=new THREE.DirectionalLight(0xfff5e8,2.6);sun.position.set(-100,180,70);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-100;sun.shadow.camera.right=100;sun.shadow.camera.top=160;sun.shadow.camera.bottom=-100;sun.shadow.camera.far=500;sun.shadow.normalBias=.06;scene.add(sun);
+ scene.add(new THREE.HemisphereLight(0xdcefff,0x4167b4,1.6));const sun=new THREE.DirectionalLight(0xf2f7ff,2.8);sun.position.set(-100,180,70);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-100;sun.shadow.camera.right=100;sun.shadow.camera.top=160;sun.shadow.camera.bottom=-100;sun.shadow.camera.far=500;sun.shadow.normalBias=.06;scene.add(sun);
  const bodyClip={value:new THREE.Vector4()};
  // Extend the transparent render surface without changing the panel's framing.
  new ResizeObserver(()=>{

@@ -83,7 +83,7 @@
 
 /* Fade only the landscape, independently of the model and its controls. */
 #application #twin-viewport{background:none}
-#application #twin-viewport::before{content:'';position:absolute;inset:0;background:url('/assets/dashboard-landscape.png') center/cover;opacity:.85;pointer-events:none}
+#application #twin-viewport::before{content:'';position:absolute;inset:0;background:#0734ee url('/assets/dashboard-blueprint.png') center/cover;opacity:1;pointer-events:none}
 
 /* Soft, spacious analytics cards in WindAI's blue palette. */
 #application .lower-dashboard{margin:20px 2.5% 32px;padding:24px;border-radius:26px;background:radial-gradient(ellipse at 30% 5%,#dce9ff90,transparent 60%),linear-gradient(140deg,#eff5ff90,#f8faff);}
@@ -174,3 +174,9 @@
 #overview .footer-bottom a>span:last-child{font-size:21px;line-height:1}
 @media(max-width:720px){#overview .overview-footer .footer-links{grid-template-columns:1fr 1fr;gap:30px 20px;padding:32px 6%}#overview .overview-footer .footer-links a,#overview .footer-link-group>span{font-size:15px}#overview .footer-link-group h2{font-size:10px;margin-bottom:6px}#overview .footer-art{height:190px;min-height:0}#overview .footer-art-label{font-size:7px;letter-spacing:.16em}#overview .footer-label-clean{left:6%;top:13%}#overview .footer-label-forecast{left:45%;top:13%}#overview .footer-label-wind{right:6%;top:13%}#overview .footer-label-coordinates{left:6%;top:48%}#overview .footer-label-power,#overview .footer-label-point{display:none}#overview .footer-bottom{padding:20px 6%;font-size:9px;letter-spacing:.12em;gap:16px}#overview .footer-bottom a{gap:6px;white-space:nowrap}}
 @media(prefers-reduced-motion:reduce){html:root{scroll-behavior:auto}}
+
+/* Crisp cobalt collage and white drafting model. */
+#application #twin-viewport::after{display:none}
+#application .turbine-panel>.panel-top{color:#fff}
+#application .turbine-panel>.panel-top h2,#application .turbine-panel>.panel-top .online,#application .twin-watermark{color:#fff;text-shadow:0 1px 8px #0028b8}
+#application .twin-watermark{font-weight:600;letter-spacing:.23em}

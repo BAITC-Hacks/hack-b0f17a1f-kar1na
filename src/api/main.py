@@ -13,10 +13,11 @@ from src.config import ROOT
 from src.config import TURBINES, RESULTS, MODELS, PROCESSED, LOCAL_TZ, DISPLAY_TIMEZONE, TIMEZONE_LABEL
 from src.agents.copilot import Copilot
 from src.agents.monitor import ForecastMonitor
+from src.agents.turbine_insights import TurbineInsights
 from src.agents.forecast_agent import ForecastAgent, AgentBusyError
 from src.data.preprocessing import read_hourly
 from src.services.weather_provider import WeatherError, WeatherResult
-from src.api.schemas import ForecastResponse, RecalculateRequest, AgentRequest
+from src.api.schemas import ForecastResponse, RecalculateRequest, AgentRequest, InspectRequest
 from src.utils import clean_json
 
 logging.basicConfig(level=logging.INFO,format='%(asctime)s %(levelname)s %(name)s %(message)s')
@@ -33,6 +34,7 @@ app.add_middleware(CORSMiddleware,allow_origins=os.getenv('CORS_ORIGINS','http:/
 agent=ForecastAgent()
 copilot=Copilot(agent)
 monitor=ForecastMonitor(agent)
+insights=TurbineInsights(agent)
 
 @app.exception_handler(WeatherError)
 async def weather_error(request,exc):
@@ -115,6 +117,10 @@ def run_agent(request: AgentRequest):
 @app.post('/api/agent/check-updates')
 def check_updates():
     return monitor.tick()
+
+@app.post('/api/agent/inspect')
+def inspect_turbine(request: InspectRequest):
+    return insights.inspect(**request.model_dump())
 
 @app.post('/api/forecast/recalculate',response_model=ForecastResponse)
 def recalculate(request: RecalculateRequest):

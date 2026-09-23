@@ -1,8 +1,8 @@
 import * as THREE from 'three';
-import {weatherTurbine} from './twin-materials.js';
+import {blueprintSurface} from './twin-materials.js';
 
 export function createBlueprint(root, bodyClip) {
-  weatherTurbine(root);
+  blueprintSurface(root);
   const parts = [];
   const meshes = [];
   root.traverse(object => { if (object.isMesh) meshes.push(object); });
@@ -30,7 +30,7 @@ export function createBlueprint(root, bodyClip) {
     const outline = new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry, 24), lineMaterial);
     outline.raycast = () => {};
     mesh.add(outline);
-    parts.push({mesh, outline, opacity:0.94, color:new THREE.Color(0xe5e8e6), lineOpacity:0.85, lineColor:new THREE.Color(0x3562ce)});
+    parts.push({mesh, outline, opacity:0.94, color:new THREE.Color(0xf5f8ff), lineOpacity:0.85, lineColor:new THREE.Color(0x2452cf)});
   }
   let initialized=false;
   const setState = (component = null, exploded = false) => {
@@ -44,17 +44,17 @@ export function createBlueprint(root, bodyClip) {
       const inspecting = !!component || exploded;
       const faded = inspecting && !active;
       part.targetOpacity=faded ? 0.09 : 1;
-      part.targetColor=new THREE.Color(active && inspecting ? 0xd3e4ff : 0xe5e8e6);
+      part.targetColor=new THREE.Color(active && inspecting ? 0xd3e4ff : 0xf5f8ff);
       part.targetLineOpacity=faded ? 0.14 : 0.48;
-      part.targetLineColor=new THREE.Color(active && inspecting ? 0x003bff : 0x3562ce);
+      part.targetLineColor=new THREE.Color(active && inspecting ? 0x003bff : 0x2452cf);
       if(!initialized){part.opacity=part.targetOpacity;part.color.copy(part.targetColor);part.lineOpacity=part.targetLineOpacity;part.lineColor.copy(part.targetLineColor);}
       for (const material of [mesh.material].flat()) {
         material.color.copy(part.color);
         material.emissive?.setHex(0x153365);
-        material.emissiveIntensity = 0.015;
-        material.roughness = 0.82;
-        material.metalness = 0.08;
-        material.envMapIntensity = 0.38;
+        material.emissiveIntensity = 0.07;
+        material.roughness = 0.48;
+        material.metalness = 0.16;
+        material.envMapIntensity = 0.65;
         material.transparent = true;
         material.opacity = part.opacity;
         material.depthWrite = !faded;

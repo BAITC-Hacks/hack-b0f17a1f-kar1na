@@ -75,3 +75,13 @@ class AgentRequest(BaseModel):
             if self.mode=='live' and not now.floor('h')<=origin<=now.ceil('h'):
                 raise ValueError('Live origin must be the current or next hour')
         return self
+
+
+class InspectRequest(BaseModel):
+    model_config=ConfigDict(extra='forbid')
+    turbine_id: Literal['turbine_1','turbine_2']
+    component: Literal['overview','generator','gearbox','main_shaft','rotor','nacelle']='overview'
+    hours: Literal[24,48]=24
+    mode: Literal['replay','live']='replay'
+    question: str=Field(default='',max_length=1000)
+    language: Literal['ru','en','kk']='ru'
