@@ -1,0 +1,31 @@
+{
+  "hash": "0c82fec8",
+  "configHash": "7eda235e",
+  "lockfileHash": "e3b0c442",
+  "browserHash": "a6e75467",
+  "optimized": {
+    "three": {
+      "src": "../../web/node_modules/three/build/three.module.js",
+      "file": "three.js",
+      "fileHash": "aa883578",
+      "needsInterop": false
+    },
+    "three/addons/controls/OrbitControls.js": {
+      "src": "../../web/node_modules/three/examples/jsm/controls/OrbitControls.js",
+      "file": "three_addons_controls_OrbitControls__js.js",
+      "fileHash": "608076f9",
+      "needsInterop": false
+    },
+    "three/addons/loaders/GLTFLoader.js": {
+      "src": "../../web/node_modules/three/examples/jsm/loaders/GLTFLoader.js",
+      "file": "three_addons_loaders_GLTFLoader__js.js",
+      "fileHash": "c3edf028",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-DLGT4YEF": {
+      "file": "chunk-DLGT4YEF.js"
+    }
+  }
+}

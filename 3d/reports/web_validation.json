@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "three_revision": "180",
+  "checks": [
+    "independent highlight",
+    "selection switch",
+    "all internal inspections and restoration",
+    "clear restores materials",
+    "independent rotation and child picking",
+    "focus bounds and deterministic reset"
+  ]
+}

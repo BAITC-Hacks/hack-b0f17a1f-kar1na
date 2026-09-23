@@ -1,0 +1,29 @@
+{
+  "blender_version": "5.2.0 LTS",
+  "root_node": "WindFarm",
+  "turbine_count": 2,
+  "mesh_objects": 79,
+  "triangles_glb": 17288,
+  "material_count": 8,
+  "animation_clips": [],
+  "rotor_animation": "runtime local X rotation",
+  "glb_bytes": 569964,
+  "sha256": "d0cce13adeb57ba7cc2b37af9e029085b6db7cdf0f0fbb7f79d643d10a94fedd",
+  "selectable_assemblies": [
+    "turbine_1",
+    "turbine_2"
+  ],
+  "component_ids": [
+    "blade_1",
+    "blade_2",
+    "blade_3",
+    "gearbox",
+    "generator",
+    "hub",
+    "main_shaft",
+    "nacelle",
+    "nacelle_shell",
+    "rotor",
+    "tower"
+  ]
+}

@@ -1,0 +1,320 @@
+{
+  "turbine_1": {
+    "file": "/Users/karina/Downloads/hack-b0f17a1f-kar1na-main/data/raw/turbine_1.csv",
+    "sha256": "c4c341582fb2dd348b7187f0128cff265fe055f469413871ebb5db50eef58b5b",
+    "encoding": "UTF-8 (no BOM)",
+    "separator": ",",
+    "source_columns": [
+      "ID",
+      "Статистическое время",
+      "Средняя скорость ветра(m/s)",
+      "Нормализованная активная мощность",
+      "Средняя температура окружающей среды(°C)"
+    ],
+    "source_dtypes": {
+      "ID": "int64",
+      "Статистическое время": "object",
+      "Средняя скорость ветра(m/s)": "float64",
+      "Нормализованная активная мощность": "float64",
+      "Средняя температура окружающей среды(°C)": "float64"
+    },
+    "rows": 142360,
+    "date_start": "2023-03-10T19:00:00+00:00",
+    "date_end": "2026-01-31T18:50:00+00:00",
+    "nulls": {
+      "timestamp": 0,
+      "wind_speed": 0,
+      "power": 0,
+      "temperature": 0
+    },
+    "invalid_numeric_cells": {
+      "wind_speed": 0,
+      "power": 0,
+      "temperature": 0
+    },
+    "duplicate_rows": 0,
+    "duplicate_timestamps": 0,
+    "out_of_order": 0,
+    "interval_seconds": {
+      "600.0": 142292,
+      "1200.0": 13,
+      "1800.0": 11,
+      "2400.0": 7,
+      "3000.0": 5,
+      "27000.0": 3,
+      "20400.0": 3,
+      "13800.0": 2,
+      "7200.0": 2,
+      "19800.0": 2,
+      "10200.0": 2,
+      "4800.0": 1,
+      "101400.0": 1,
+      "6600.0": 1,
+      "28200.0": 1,
+      "184800.0": 1,
+      "11400.0": 1,
+      "21600.0": 1,
+      "17400.0": 1,
+      "27600.0": 1,
+      "21000.0": 1,
+      "1621200.0": 1,
+      "3596400.0": 1,
+      "18600.0": 1,
+      "42600.0": 1,
+      "7800.0": 1,
+      "8400.0": 1,
+      "4200.0": 1
+    },
+    "statistics": {
+      "wind_speed": {
+        "count": 142360.0,
+        "mean": 6.4453041584714805,
+        "std": 3.7556908850318,
+        "min": 0.0,
+        "1%": 0.53,
+        "5%": 1.08,
+        "25%": 3.25,
+        "50%": 6.14,
+        "75%": 9.36,
+        "95%": 12.76,
+        "99%": 14.72,
+        "max": 22.97
+      },
+      "power": {
+        "count": 142360.0,
+        "mean": 0.37119717617308234,
+        "std": 0.36859940603930696,
+        "min": 0.0,
+        "1%": 0.01,
+        "5%": 0.01,
+        "25%": 0.02,
+        "50%": 0.23,
+        "75%": 0.72,
+        "95%": 0.99,
+        "99%": 0.99,
+        "max": 1.0
+      },
+      "temperature": {
+        "count": 142360.0,
+        "mean": 15.6384896038213,
+        "std": 12.453435120314236,
+        "min": -19.26,
+        "1%": -10.3641,
+        "5%": -4.17,
+        "25%": 5.35,
+        "50%": 16.29,
+        "75%": 25.72,
+        "95%": 34.8,
+        "99%": 38.78,
+        "max": 43.48
+      }
+    },
+    "correlations": {
+      "wind_speed": {
+        "wind_speed": 1.0,
+        "power": 0.9418489334869549,
+        "temperature": -0.1652794010513655
+      },
+      "power": {
+        "wind_speed": 0.9418489334869549,
+        "power": 1.0,
+        "temperature": -0.15215598808038597
+      },
+      "temperature": {
+        "wind_speed": -0.1652794010513655,
+        "power": -0.15215598808038597,
+        "temperature": 1.0
+      }
+    },
+    "zero_power_rows": 534,
+    "high_wind_low_power_rows": 761,
+    "preprocessing": {
+      "policy": "Invalid cells -> NaN; duplicate timestamps averaged; hourly mean requires >=4/6 valid samples; no target imputation.",
+      "invalid_power": 0,
+      "invalid_wind_speed": 0,
+      "invalid_temperature": 0,
+      "missing_10min_timestamps": 9992,
+      "hourly_rows": 25392,
+      "hourly_missing": {
+        "wind_speed": 1664,
+        "power": 1664,
+        "temperature": 1664
+      },
+      "incomplete_hours": 1725,
+      "fully_missing_hours": 1629,
+      "longest_raw_gap_hours": 999.0
+    }
+  },
+  "turbine_2": {
+    "file": "/Users/karina/Downloads/hack-b0f17a1f-kar1na-main/data/raw/turbine_2.csv",
+    "sha256": "820578cd18bb557cd30c2e102f3ae5a386dfc6c489a5a15743339c2b017305e5",
+    "encoding": "UTF-8 (no BOM)",
+    "separator": ",",
+    "source_columns": [
+      "ID",
+      "Статистическое время",
+      "Средняя скорость ветра(m/s)",
+      "Нормализованная активная мощность",
+      "Средняя температура окружающей среды(°C)"
+    ],
+    "source_dtypes": {
+      "ID": "int64",
+      "Статистическое время": "object",
+      "Средняя скорость ветра(m/s)": "float64",
+      "Нормализованная активная мощность": "float64",
+      "Средняя температура окружающей среды(°C)": "float64"
+    },
+    "rows": 149499,
+    "date_start": "2023-03-10T19:00:00+00:00",
+    "date_end": "2026-01-31T18:50:00+00:00",
+    "nulls": {
+      "timestamp": 0,
+      "wind_speed": 0,
+      "power": 0,
+      "temperature": 0
+    },
+    "invalid_numeric_cells": {
+      "wind_speed": 0,
+      "power": 0,
+      "temperature": 0
+    },
+    "duplicate_rows": 0,
+    "duplicate_timestamps": 0,
+    "out_of_order": 0,
+    "interval_seconds": {
+      "600.0": 149320,
+      "1200.0": 58,
+      "1800.0": 22,
+      "3000.0": 11,
+      "3600.0": 10,
+      "4200.0": 9,
+      "2400.0": 9,
+      "21000.0": 3,
+      "13200.0": 3,
+      "13800.0": 3,
+      "6600.0": 3,
+      "6000.0": 3,
+      "10200.0": 3,
+      "9600.0": 3,
+      "27000.0": 3,
+      "17400.0": 2,
+      "28200.0": 2,
+      "4800.0": 2,
+      "27600.0": 2,
+      "20400.0": 2,
+      "7200.0": 2,
+      "14400.0": 2,
+      "23400.0": 2,
+      "11400.0": 2,
+      "15000.0": 1,
+      "101400.0": 1,
+      "12600.0": 1,
+      "19800.0": 1,
+      "36000.0": 1,
+      "21600.0": 1,
+      "184800.0": 1,
+      "42600.0": 1,
+      "207000.0": 1,
+      "109200.0": 1,
+      "24600.0": 1,
+      "7800.0": 1,
+      "9000.0": 1,
+      "12000.0": 1,
+      "45600.0": 1,
+      "94800.0": 1,
+      "5400.0": 1
+    },
+    "statistics": {
+      "wind_speed": {
+        "count": 149499.0,
+        "mean": 6.462796473555006,
+        "std": 3.7978853584969583,
+        "min": 0.11,
+        "1%": 0.53,
+        "5%": 1.06,
+        "25%": 3.24,
+        "50%": 6.13,
+        "75%": 9.44,
+        "95%": 12.83,
+        "99%": 14.81,
+        "max": 21.43
+      },
+      "power": {
+        "count": 149499.0,
+        "mean": 0.36589756453220423,
+        "std": 0.36626585677234974,
+        "min": 0.0,
+        "1%": 0.0,
+        "5%": 0.01,
+        "25%": 0.02,
+        "50%": 0.22,
+        "75%": 0.72,
+        "95%": 0.97,
+        "99%": 0.99,
+        "max": 1.0
+      },
+      "temperature": {
+        "count": 149499.0,
+        "mean": 16.18228115238229,
+        "std": 12.422905418038464,
+        "min": -19.08,
+        "1%": -10.02,
+        "5%": -3.96,
+        "25%": 5.95,
+        "50%": 17.19,
+        "75%": 26.27,
+        "95%": 34.81100000000006,
+        "99%": 38.75,
+        "max": 43.97
+      }
+    },
+    "correlations": {
+      "wind_speed": {
+        "wind_speed": 1.0,
+        "power": 0.9475903594975157,
+        "temperature": -0.15337155003025535
+      },
+      "power": {
+        "wind_speed": 0.9475903594975157,
+        "power": 1.0,
+        "temperature": -0.12944816489203145
+      },
+      "temperature": {
+        "wind_speed": -0.15337155003025535,
+        "power": -0.12944816489203145,
+        "temperature": 1.0
+      }
+    },
+    "zero_power_rows": 2680,
+    "high_wind_low_power_rows": 496,
+    "preprocessing": {
+      "policy": "Invalid cells -> NaN; duplicate timestamps averaged; hourly mean requires >=4/6 valid samples; no target imputation.",
+      "invalid_power": 0,
+      "invalid_wind_speed": 0,
+      "invalid_temperature": 0,
+      "missing_10min_timestamps": 2853,
+      "hourly_rows": 25392,
+      "hourly_missing": {
+        "wind_speed": 473,
+        "power": 473,
+        "temperature": 473
+      },
+      "incomplete_hours": 607,
+      "fully_missing_hours": 388,
+      "longest_raw_gap_hours": 57.5
+    }
+  },
+  "comparison": {
+    "power_correlation": {
+      "turbine_1": {
+        "turbine_1": 1.0,
+        "turbine_2": 0.9710306840806802
+      },
+      "turbine_2": {
+        "turbine_1": 0.9710306840806802,
+        "turbine_2": 1.0
+      }
+    },
+    "paired_hours": 23562
+  }
+}
