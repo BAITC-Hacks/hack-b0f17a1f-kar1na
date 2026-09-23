@@ -90,7 +90,7 @@ scene.view_settings.view_transform='AgX'
 bpy.ops.wm.save_as_mainfile(filepath=str(P/'models/wind_farm.blend'))
 bpy.ops.object.select_all(action='DESELECT');root.select_set(True)
 for o in root.children_recursive:o.select_set(True)
-bpy.ops.export_scene.gltf(filepath=str(P/'models/wind_farm.glb'),use_selection=True,export_format='GLB',export_extras=True,export_animations=False)
+bpy.ops.export_scene.gltf(filepath=str(P/'models/wind_farm.glb'),use_selection=True,export_format='GLB',export_extras=True,export_animations=False,export_apply=True)
 scene.render.filepath=str(P/'renders/assembled.png');bpy.ops.render.render(write_still=True)
 # Cutaway preview by hiding shell only in this unsaved render state.
 for i in [1,2]:bpy.data.objects[f'T{i}_NacelleShell'].hide_render=True
