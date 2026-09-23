@@ -17,8 +17,8 @@ export async function createTwin(onSelect){
  function portrait(id){
    for(const [key,root] of Object.entries(roots))if(root)root.visible=key===id;
    const info=farm.getComponentFocusTarget(id,'generator');
-   orbit.target.copy(info.center).add(new THREE.Vector3(0,-12,0));
-   camera.position.copy(orbit.target).add(new THREE.Vector3(-135,50,150));
+   orbit.target.copy(info.center).add(new THREE.Vector3(0,-5,0));
+   camera.position.copy(orbit.target).add(new THREE.Vector3(-62,24,76));
  }
  portrait(selected);
  function focus(info){const size=Math.max(info.size.x,info.size.y,info.size.z);orbit.target.copy(info.center);camera.position.copy(info.center).add(new THREE.Vector3(-1,.55,1.4).normalize().multiplyScalar(size*2.2+5));}
