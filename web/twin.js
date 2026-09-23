@@ -17,13 +17,13 @@ export async function createTwin(onSelect){
  function portrait(id){
    for(const [key,root] of Object.entries(roots))if(root)root.visible=key===id;
    const info=farm.getComponentFocusTarget(id,'generator');
-   orbit.target.copy(info.center).add(new THREE.Vector3(0,-5,0));
-   camera.position.copy(orbit.target).add(new THREE.Vector3(-62,24,76));
+   orbit.target.copy(info.center).add(new THREE.Vector3(0,-2,0));
+   camera.position.copy(orbit.target).add(new THREE.Vector3(-28,10,35));
  }
  portrait(selected);
  function focus(info){const size=Math.max(info.size.x,info.size.y,info.size.z);orbit.target.copy(info.center);camera.position.copy(info.center).add(new THREE.Vector3(-1,.55,1.4).normalize().multiplyScalar(size*2.2+5));}
  document.querySelector('#camera-reset').onclick=()=>{farm.resetInspection();for(const root of Object.values(roots))if(root)root.visible=true;camera.position.set(-220,155,285);orbit.target.set(0,55,0);};
- document.querySelector('#inspect-reset').onclick=()=>{farm.resetInspection();focus(farm.getFocusTarget(selected));};
+ document.querySelector('#inspect-reset').onclick=()=>{farm.resetInspection();portrait(selected);};
  document.querySelectorAll('[data-component]').forEach(b=>b.onclick=()=>{farm.inspectComponent(selected,b.dataset.component);focus(farm.getComponentFocusTarget(selected,b.dataset.component));});
  document.querySelector('#disassembly').oninput=e=>{farm.resetInspection();farm.setNacelleExploded(selected,+e.target.value,0);focus(farm.getDisassemblyFocusTarget(selected));};
  let down;renderer.domElement.addEventListener('pointerdown',e=>down=[e.clientX,e.clientY]);renderer.domElement.addEventListener('pointerup',e=>{if(!down||Math.hypot(e.clientX-down[0],e.clientY-down[1])>5)return;const r=renderer.domElement.getBoundingClientRect(),ray=new THREE.Raycaster();ray.setFromCamera(new THREE.Vector2((e.clientX-r.left)/r.width*2-1,1-(e.clientY-r.top)/r.height*2),camera);for(const hit of ray.intersectObjects(scene.children,true)){const id=farm.getTurbineId(hit.object);if(id){onSelect(id);break;}}});
